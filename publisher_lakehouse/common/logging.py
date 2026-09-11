@@ -23,6 +23,23 @@ _error_lock = Lock()
 _output_level = logging.INFO
 
 
+class _LazyStderr:
+    """Resolve ``sys.stderr`` per write instead of freezing it at configure time.
+
+    A run that redirects stderr after configuring logging — or a test that
+    captures it — must still receive the events.
+    """
+
+    def write(self, data: str) -> int:
+        return sys.stderr.write(data)
+
+    def flush(self) -> None:
+        sys.stderr.flush()
+
+
+_LOG_STREAM = _LazyStderr()
+
+
 def _collect_error_event(
     _logger: Any,
     method_name: str,
@@ -49,7 +66,12 @@ def _filter_output_level(
 
 
 def configure_logging(log_level: str = "INFO", *, clear_errors: bool = True) -> None:
-    """Configure newline-delimited JSON logging to standard output."""
+    """Configure newline-delimited JSON logging to standard error.
+
+    The frozen browser layer prints human-readable progress to stdout, so the
+    machine-readable stream has to be stderr.  Anything that reads this run's
+    logs programmatically reads stderr.
+    """
 
     global _output_level
 
@@ -73,9 +95,9 @@ def configure_logging(log_level: str = "INFO", *, clear_errors: bool = True) -> 
             structlog.processors.JSONRenderer(),
         ],
         # Keep all events flowing through the collector.  The processor above
-        # applies the configured stdout threshold only after ERROR capture.
+        # applies the configured output threshold only after ERROR capture.
         wrapper_class=structlog.make_filtering_bound_logger(logging.DEBUG),
-        logger_factory=structlog.PrintLoggerFactory(file=sys.stdout),
+        logger_factory=structlog.PrintLoggerFactory(file=_LOG_STREAM),
         cache_logger_on_first_use=False,
     )
 

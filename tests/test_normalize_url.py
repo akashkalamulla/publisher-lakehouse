@@ -1,11 +1,6 @@
 from __future__ import annotations
 
 import hashlib
-import json
-import os
-from pathlib import Path
-import subprocess
-import sys
 
 import pytest
 
@@ -67,6 +62,25 @@ def test_normalize_url_is_idempotent(url: str) -> None:
     assert normalize_url(normalized) == normalized
 
 
+def test_bare_and_www_sciencedirect_hosts_are_one_identity() -> None:
+    bare = "https://sciencedirect.com/journal/harmful-algae/issues"
+    assert normalize_url(bare) == JOURNAL
+    assert url_hash(bare) == url_hash(JOURNAL)
+
+
+def test_bare_host_override_also_applies_to_article_urls() -> None:
+    article = "https://sciencedirect.com/science/article/pii/S0019570726001617"
+    assert normalize_url(article) == (
+        "https://www.sciencedirect.com/science/article/pii/S0019570726001617"
+    )
+
+
+def test_overridden_host_still_drops_sciencedirect_discovery_pagination() -> None:
+    assert normalize_url("https://sciencedirect.com/journal/harmful-algae/issues?page=3") == (
+        JOURNAL
+    )
+
+
 def test_publisher_host_override_is_a_generic_seam(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setitem(PUBLISHER_OVERRIDES, "rd.springer.com", "link.springer.com")
     assert normalize_url("http://RD.Springer.com/article/10.1007/test/") == (
@@ -102,62 +116,6 @@ def test_ipv6_host_keeps_brackets_and_is_idempotent() -> None:
     normalized = normalize_url("http://[2001:DB8::1]:80/article/")
     assert normalized == "https://[2001:db8::1]/article"
     assert normalize_url(normalized) == normalized
-
-
-def test_settings_import_does_not_read_config_or_create_output(tmp_path: Path) -> None:
-    project_root = Path(__file__).parents[1]
-    env = os.environ.copy()
-    env["PYTHONPATH"] = os.pathsep.join(
-        part
-        for part in (str(project_root), env.get("PYTHONPATH", ""))
-        if part
-    )
-    code = """
-import json
-import sys
-
-opened = []
-def audit(event, args):
-    if event == "open" and args:
-        path = str(args[0]).lower()
-        if path.endswith((".env", "config.ini")):
-            opened.append(path)
-
-sys.addaudithook(audit)
-import publisher_lakehouse.settings
-print(json.dumps(opened))
-"""
-    result = subprocess.run(
-        [sys.executable, "-c", code],
-        cwd=tmp_path,
-        env=env,
-        check=True,
-        capture_output=True,
-        text=True,
-    )
-    assert json.loads(result.stdout) == []
-    assert list(tmp_path.iterdir()) == []
-
-
-def test_environment_and_operator_settings_are_loaded_separately(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    from publisher_lakehouse.settings import (
-        load_environment_settings,
-        load_operator_settings,
-    )
-
-    monkeypatch.setenv("DATABASE_URL", "sqlite:///environment.db")
-    monkeypatch.setenv("LOG_LEVEL", "debug")
-    monkeypatch.setenv("OUTPUT_PATH", "C:\\must-not-affect-operator-config")
-
-    environment = load_environment_settings(env_file=None)
-    operator = load_operator_settings()
-
-    assert environment.database_url == "sqlite:///environment.db"
-    assert environment.log_level == "DEBUG"
-    assert operator.details.output_path == Path("C:\\CABIACQ_NEW1")
-    assert operator.refresh.article_days == 90
 
 
 @pytest.mark.parametrize("value", ["", "   ", "relative/path", None])

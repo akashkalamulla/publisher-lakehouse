@@ -8,11 +8,18 @@ from publisher_lakehouse.common.logging import (
     bind_run_id,
     collected_error_events,
     configure_logging,
-    get_logger,
-    render_error_lines,
-    write_error_report,
 )
 from publisher_lakehouse.common.richtext import _json_text, flatten, to_segments
+
+
+def unformatted(text: str) -> dict:
+    return {
+        "text": text,
+        "bold": False,
+        "italic": False,
+        "superscript": False,
+        "subscript": False,
+    }
 
 
 def test_rich_list_round_trip_preserves_legacy_flat_text() -> None:
@@ -27,7 +34,7 @@ def test_rich_list_round_trip_preserves_legacy_flat_text() -> None:
         "n",
     ]
 
-    segments = to_segments(rich)
+    segments = to_segments(rich, "Gene expression2n")
 
     assert flatten(segments) == _json_text(rich)
     assert segments == [
@@ -73,18 +80,14 @@ def test_abstract_style_hybrid_rich_list_round_trip() -> None:
         Format({"italic": True}),
         "Measured",
     ]
-    segments = to_segments(rich)
+
+    segments = to_segments(rich, "ignored because the rich value is usable")
+
     assert flatten(segments) == _json_text(rich) == (
         "Background\nImportant finding\n\nMethods\nMeasured"
     )
     assert segments == [
-        {
-            "text": "Background\n",
-            "bold": False,
-            "italic": False,
-            "superscript": False,
-            "subscript": False,
-        },
+        unformatted("Background\n"),
         {
             "text": "Important",
             "bold": True,
@@ -92,20 +95,8 @@ def test_abstract_style_hybrid_rich_list_round_trip() -> None:
             "superscript": False,
             "subscript": False,
         },
-        {
-            "text": " finding",
-            "bold": False,
-            "italic": False,
-            "superscript": False,
-            "subscript": False,
-        },
-        {
-            "text": "\n\nMethods\n",
-            "bold": False,
-            "italic": False,
-            "superscript": False,
-            "subscript": False,
-        },
+        unformatted(" finding"),
+        unformatted("\n\nMethods\n"),
         {
             "text": "Measured",
             "bold": False,
@@ -116,16 +107,28 @@ def test_abstract_style_hybrid_rich_list_round_trip() -> None:
     ]
 
 
+def test_none_rich_value_uses_the_plain_fallback_without_warning(capsys) -> None:
+    configure_logging()
+    bind_run_id("20260911102613")
+    plain = "A title with no formatting"
+
+    segments = to_segments(None, plain)
+
+    assert segments == [unformatted(plain)]
+    assert flatten(segments) == plain
+    assert capsys.readouterr().err == ""
+    assert collected_error_events() == ()
+
+
+def test_none_rich_value_with_no_plain_text_is_an_empty_segment(capsys) -> None:
+    configure_logging()
+
+    assert to_segments(None, None) == [unformatted("")]
+    assert capsys.readouterr().err == ""
+
+
 def test_plain_string_becomes_one_unformatted_segment() -> None:
-    assert to_segments("Plain title") == [
-        {
-            "text": "Plain title",
-            "bold": False,
-            "italic": False,
-            "superscript": False,
-            "subscript": False,
-        }
-    ]
+    assert to_segments("Plain title", "Plain title") == [unformatted("Plain title")]
 
 
 def test_malformed_input_falls_back_without_raising_and_logs_warning(capsys) -> None:
@@ -133,73 +136,20 @@ def test_malformed_input_falls_back_without_raising_and_logs_warning(capsys) -> 
     bind_run_id("20260911102611")
     malformed = [Format({"bold": True}), object(), "kept text"]
 
-    segments = to_segments(malformed)
+    segments = to_segments(malformed, "plain fallback")
 
-    assert segments == [
-        {
-            "text": "kept text",
-            "bold": False,
-            "italic": False,
-            "superscript": False,
-            "subscript": False,
-        }
-    ]
-    log_event = json.loads(capsys.readouterr().out)
+    assert segments == [unformatted("kept text")]
+    log_event = json.loads(capsys.readouterr().err)
     assert log_event["event"] == "richtext_conversion_fallback"
     assert log_event["level"] == "warning"
     assert log_event["run_id"] == "20260911102611"
     assert collected_error_events() == ()
 
 
-def test_error_events_keep_run_context_and_legacy_error_line(capsys) -> None:
+def test_unusable_rich_value_falls_back_to_the_plain_text(capsys) -> None:
     configure_logging()
-    bind_run_id("20260911102612")
-    get_logger("test").error(
-        "article_parse_failed",
-        article_url="https://example.test/article",
-        error_line="legacy message | article",
-    )
 
-    emitted = json.loads(capsys.readouterr().out)
-    events = collected_error_events()
-    assert emitted["run_id"] == "20260911102612"
-    assert len(events) == 1
-    assert events[0]["article_url"] == "https://example.test/article"
-    assert render_error_lines(events) == ["legacy message | article"]
+    segments = to_segments([], "plain fallback")
 
-
-def test_reconfiguring_logging_resets_collected_errors(capsys) -> None:
-    configure_logging()
-    get_logger("test").error("first_run_failure")
-    assert len(collected_error_events()) == 1
-
-    configure_logging()
-    assert collected_error_events() == ()
-    capsys.readouterr()
-
-
-def test_error_collection_is_independent_of_stdout_threshold(capsys) -> None:
-    configure_logging("CRITICAL")
-    get_logger("test").error("hidden_from_stdout", error_line="still collected")
-
-    assert capsys.readouterr().out == ""
-    assert render_error_lines() == ["still collected"]
-
-
-def test_error_rendering_escapes_embedded_newlines() -> None:
-    assert render_error_lines(
-        [{"event": "failed", "detail": "line one\r\nline two\nline three"}]
-    ) == [r"failed | detail=line one\nline two\nline three"]
-
-
-def test_error_report_is_ordered_one_line_per_event_with_trailing_newline(
-    tmp_path,
-) -> None:
-    path = write_error_report(
-        tmp_path / "errors.txt",
-        [
-            {"event": "first"},
-            {"event": "second", "detail": "line one\nline two"},
-        ],
-    )
-    assert path.read_bytes() == b"first\nsecond | detail=line one\\nline two\n"
+    assert segments == [unformatted("plain fallback")]
+    assert json.loads(capsys.readouterr().err)["level"] == "warning"

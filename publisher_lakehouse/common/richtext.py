@@ -41,9 +41,9 @@ def _segment(text: str, fmt: Format | None = None) -> RichTextSegment:
     }
 
 
-def _fallback(rich: Any, reason: str) -> list[RichTextSegment]:
+def _fallback(rich: Any, plain_text: Any, reason: str) -> list[RichTextSegment]:
     try:
-        text = _json_text(rich)
+        text = _json_text(rich) or _json_text(plain_text)
     except Exception:
         text = ""
     try:
@@ -55,18 +55,26 @@ def _fallback(rich: Any, reason: str) -> list[RichTextSegment]:
     return [_segment(text)]
 
 
-def to_segments(rich: Any) -> list[RichTextSegment]:
+def to_segments(rich: Any, plain_text: Any) -> list[RichTextSegment]:
     """Convert a legacy XlsxWriter rich list without changing its flat text.
+
+    ``html_to_rich_text`` returns ``None`` for the rich value whenever the
+    source had no formatting *or* produced fewer than four runs, which is the
+    common case.  That is not an error, so callers pass the plain text
+    alongside it and a ``None`` rich value becomes one unformatted segment
+    without a warning.
 
     Besides regular ``Format, str`` pairs, the legacy abstract builder can
     place unformatted heading or separator strings between pairs.  Those are
     retained as unformatted segments.
     """
 
+    if rich is None:
+        return [_segment(_json_text(plain_text))]
     if isinstance(rich, str):
         return [_segment(rich)]
     if not isinstance(rich, list) or not rich:
-        return _fallback(rich, "expected a non-empty list or string")
+        return _fallback(rich, plain_text, "expected a non-empty list or string")
 
     try:
         segments: list[RichTextSegment] = []
@@ -81,17 +89,17 @@ def to_segments(rich: Any) -> list[RichTextSegment]:
             if isinstance(value, Format):
                 saw_format = True
                 if index + 1 >= len(rich) or not isinstance(rich[index + 1], str):
-                    return _fallback(rich, "format is not followed by text")
+                    return _fallback(rich, plain_text, "format is not followed by text")
                 segments.append(_segment(rich[index + 1], value))
                 index += 2
                 continue
-            return _fallback(rich, f"unexpected item at index {index}")
+            return _fallback(rich, plain_text, f"unexpected item at index {index}")
 
         if not saw_format:
-            return _fallback(rich, "list contains no format objects")
+            return _fallback(rich, plain_text, "list contains no format objects")
         return segments
     except Exception as exc:
-        return _fallback(rich, f"converter raised {type(exc).__name__}")
+        return _fallback(rich, plain_text, f"converter raised {type(exc).__name__}")
 
 
 def flatten(segments: list[RichTextSegment]) -> str:

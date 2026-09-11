@@ -21,7 +21,9 @@ DEFAULT_CONFIG_FILE = PROJECT_ROOT / "config" / "config.ini"
 class EnvironmentSettings(BaseSettings):
     """Secrets and deployment-specific values loaded only from the environment."""
 
-    database_url: str = "sqlite:///data/manifest.db"
+    # No default: PostgreSQL is the target, and a SQLite default here would be
+    # exactly the silent fallback that hides a broken connection string.
+    database_url: str
     data_dir: Path = Path("data")
     log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = "INFO"
     capture_fixtures: bool = False
