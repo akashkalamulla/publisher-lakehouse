@@ -1,0 +1,4 @@
+beautifulsoup4==4.15.0
+lxml==6.1.3
+XlsxWriter==3.2.9
+zendriver==0.16.0
