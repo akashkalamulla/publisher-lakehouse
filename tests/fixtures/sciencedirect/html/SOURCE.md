@@ -1,6 +1,6 @@
 # ScienceDirect HTML fixtures
 
-Captured 2026-09-12T03:51:10.322958Z from the article URLs in the golden JSON files
+Captured 2026-09-12T16:14:57.269941Z from the article URLs in the golden JSON files
 (`tests/fixtures/golden/sciencedirect/`) plus manual extras.
 
 Regenerate with:
@@ -18,6 +18,10 @@ Regenerate with:
 | many_authors.html | S0019570725001842 | Indian Journal of Tuberculosis | many_authors, missing_email | none |
 | missing_email_02.html | S0019570726000879 | Indian Journal of Tuberculosis | missing_email, ordinary | none |
 | empty_abstract_05.html | S1684118226000678 | Journal of Microbiology, Immunology and Infection | empty_abstract, many_authors, missing_email | none |
+| foreign_title_and_abstract.html | S2214567225000997 | Revue Vétérinaire Clinique | foreign_title_and_abstract | none |
+| bookseries_chapter_editor.html | S0065308X26000023 | Advances in Parasitology | bookseries_chapter_editor | none |
+| article_id_no_pages.html | S2214109X26001361 | The Lancet Global Health | article_id_no_pages | none |
+| richtext_sub_and_superscript.html | S1002016025000335 | Pedosphere | richtext_sub_and_superscript | abstract: <sub>, <sup>, <em> |
 
 ## Open question: corporate_authors and editors
 

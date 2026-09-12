@@ -5,10 +5,12 @@
 # URL can be omitted and will be derived as the journal issues/bookseries volumes page.
 # Canonical /science/article/pii/... URLs do not contain that slug, so they need
 # the second URL.
-#
-# Still needed:
-#   foreign_title / foreign_abstract:
-#     https://www.sciencedirect.com/journal/revue-veterinaire-clinique/issues
-#     https://www.sciencedirect.com/journal/cahiers-de-nutrition-et-de-dietetique/issues
-#   bookseries path shape:
-#     https://www.sciencedirect.com/bookseries/advances-in-parasitology/volumes
+# foreign_title_and_abstract
+# bookseries_chapter_editor
+# article_id_no_pages
+# richtext_sub_and_superscript
+
+https://www.sciencedirect.com/science/article/pii/S2214567225000997 https://www.sciencedirect.com/journal/revue-veterinaire-clinique/vol/61/issue/2 # foreign_title_and_abstract
+https://www.sciencedirect.com/science/chapter/bookseries/pii/S0065308X26000023 https://www.sciencedirect.com/bookseries/advances-in-parasitology/vol/131/suppl/C # bookseries_chapter_editor
+https://www.sciencedirect.com/science/article/pii/S2214109X26001361 https://www.sciencedirect.com/journal/the-lancet-global-health/vol/14/issue/6 # article_id_no_pages
+https://www.sciencedirect.com/science/article/pii/S1002016025000335 https://www.sciencedirect.com/journal/pedosphere/vol/36/issue/3 # richtext_sub_and_superscript
