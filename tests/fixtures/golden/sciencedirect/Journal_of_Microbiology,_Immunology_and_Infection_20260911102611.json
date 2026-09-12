@@ -1,0 +1,1473 @@
+{
+  "articles": [
+    {
+      "journal_title": "Journal of Microbiology, Immunology and Infection",
+      "journal_url": "https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/issues",
+      "volume": "59",
+      "issue": "4",
+      "issue_url": "https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/vol/59/issue/4",
+      "issue_publication_month": "August",
+      "issue_publication_day": "",
+      "issue_publication_year": "2026",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S1684118226000368",
+      "article_publication_month": "August",
+      "article_publication_day": "",
+      "article_publication_year": "2026",
+      "start_page": "425",
+      "last_page": "437",
+      "article_id": "",
+      "english_title": "The 2025 guidance on the surveillance and control of Candida infections: Recommendations from the China invasive fungal surveillance net (CHIF-NET) study group",
+      "foreign_title": "",
+      "doi": "10.1016/j.jmii.2026.03.003",
+      "english_abstract": "Candida infections are among the most common fungal diseases worldwide and are associated with notable morbidity and mortality, particularly in immunocompromised and critically ill patients. Moreover, the emergence and spread of antifungal resistance pose an increasing threat to global public health. Therefore, evidence-based recommendations are urgently needed to guide the surveillance and control of Candida infections. A multidisciplinary guidance development group comprising experts of infectious diseases, clinical microbiology, pharmacology, infection control, and guideline methodology jointly developed the present clinical practice guidance. The process followed internationally recognized grading of recommendations, assessment, development and evaluation (GRADE) framework. Clinical questions were formulated based on priority issues or areas of uncertainty in current practice, and corresponding recommendations were developed after systematic review and synthesis of the best available evidence. The strength of recommendations was classified as strong or conditional (weak), and the certainty of evidence was graded from high to low. The guidance provides recommendations on diagnostic strategies, antifungal therapy, and infection prevention and control measures for Candida infections, integrating both global evidence and national clinical experience. The target users include clinicians, microbiologists, infection control practitioners, and policymakers involved in the management of fungal diseases. The guidance aims to support optimized clinical decision-making, improve antifungal stewardship, and strengthen infection control strategies to address the growing challenge posed by Candida infections.",
+      "non_english_abstract": "",
+      "article_type": "Review article",
+      "author_keyword": "",
+      "reference_count": "160",
+      "copyright_year": "2026",
+      "license_type": "http://creativecommons.org/licenses/by-nc-nd/4.0/",
+      "funding_status": "",
+      "authors": [
+        {
+          "name": "Meng Xiao",
+          "affiliation": "Department of Laboratory Medicine, State Key Laboratory of Complex Severe and Rare Diseases, Peking Union Medical College Hospital, Chinese Academy of Medical Sciences, Beijing, 100730, China",
+          "email": ""
+        },
+        {
+          "name": "Li Zhang",
+          "affiliation": "Department of Laboratory Medicine, State Key Laboratory of Complex Severe and Rare Diseases, Peking Union Medical College Hospital, Chinese Academy of Medical Sciences, Beijing, 100730, China",
+          "email": ""
+        },
+        {
+          "name": "He Wang",
+          "affiliation": "Dynamiker Sub-Center of Beijing Key Laboratory for Mechanisms Research and Precision Diagnosis of Invasive Fungal Disease, Tianjin, 300467, China",
+          "email": ""
+        },
+        {
+          "name": "Xin Fan",
+          "affiliation": "Department of Infectious Diseases and Clinical Microbiology, Beijing Institute of Respiratory Medicine and Beijing Chao-Yang Hospital, Capital Medical University, Beijing, 100020, China",
+          "email": ""
+        },
+        {
+          "name": "Menglan Zhou",
+          "affiliation": "Department of Laboratory Medicine, State Key Laboratory of Complex Severe and Rare Diseases, Peking Union Medical College Hospital, Chinese Academy of Medical Sciences, Beijing, 100730, China",
+          "email": ""
+        },
+        {
+          "name": "Jing Lin",
+          "affiliation": "Department of Infectious Diseases, State Key Laboratory of Complex Severe and Rare Diseases, Peking Union Medical College Hospital, Chinese Academy of Medical Sciences, Beijing, 100730, China",
+          "email": ""
+        },
+        {
+          "name": "Li Zhang",
+          "affiliation": "Department of Infectious Diseases, State Key Laboratory of Complex Severe and Rare Diseases, Peking Union Medical College Hospital, Chinese Academy of Medical Sciences, Beijing, 100730, China",
+          "email": ""
+        },
+        {
+          "name": "Jun Xia",
+          "affiliation": "Nottingham Ningbo GRADE Centre, University of Nottingham Ningbo China, Ningbo, 315100, China",
+          "email": ""
+        },
+        {
+          "name": "Zhiyong Zong",
+          "affiliation": "Center of Infectious Diseases, West China Hospital, Sichuan University, Chengdu, 610041, China",
+          "email": ""
+        },
+        {
+          "name": "Wenkui Sun",
+          "affiliation": "Department of Respiratory and Critical Care Medicine, The First Affiliated Hospital of Nanjing Medical University, Nanjing, 210029, China",
+          "email": ""
+        },
+        {
+          "name": "Jun Wang",
+          "affiliation": "National Clinical Research Center for Hematologic Diseases, Jiangsu Institute of Hematology, Jiangsu Key Laboratory of Hematologic Diseases, The First Affiliated Hospital of Soochow University, Suzhou, 215006, China",
+          "email": ""
+        },
+        {
+          "name": "Jiao Liu",
+          "affiliation": "Department of Critical Care Medicine, Shanghai Jiaotong University, School of Medicine Affiliate Ruijin Hospital, Shanghai, 201801, China",
+          "email": ""
+        },
+        {
+          "name": "Xin Su",
+          "affiliation": "Department of Respiratory and Critical Medicine, Nanjing Drum Tower Hospital, Affiliated Hospital of Medical School, Nanjing University, Nanjing, 210008, China",
+          "email": ""
+        },
+        {
+          "name": "Yuqian Sun",
+          "affiliation": "Peking University People's Hospital, Peking University Institute of Hematology, Beijing, 100044, China",
+          "email": ""
+        },
+        {
+          "name": "Fan Yang",
+          "affiliation": "Institute of Antibiotics, Huashan Hospital, Fudan University, Shanghai, 200040, China",
+          "email": ""
+        },
+        {
+          "name": "Na Cui",
+          "affiliation": "Department of Critical Care Medicine, Beijing Chao-Yang Hospital, Capital Medical University, Beijing, 100020, China",
+          "email": ""
+        },
+        {
+          "name": "Sizhou Feng",
+          "affiliation": "Department of Hematopoietic Stem Cell Transplantation, State Key Laboratory of Experimental Hematology, National Clinical Research Center for Blood Diseases, Haihe Laboratory of Cell Ecosystem, Institute of Hematology & Blood Diseases Hospital, Chinese Academy of Medical Sciences, Tianjin, 300020, China",
+          "email": ""
+        },
+        {
+          "name": "Yi Shi",
+          "affiliation": "Department of Respiratory and Critical Care Medicine, Jinling Hospital, Medical School of Nanjing University, Nanjing, 210002, China",
+          "email": ""
+        },
+        {
+          "name": "Lixin Xie",
+          "affiliation": "Senior Department of Pulmonary and Critical Care Medicine, Chinese PLA General Hospital, Beijing, 100091, China",
+          "email": ""
+        },
+        {
+          "name": "Chao Zhuo",
+          "affiliation": "Department of Infectious Diseases, State Key Laboratory of Respiratory Diseases, The First Affiliated Hospital of Guangzhou Medical University, Guangzhou, 510120, China",
+          "email": ""
+        },
+        {
+          "name": "Minggui Wang",
+          "affiliation": "Institute of Antibiotics, Huashan Hospital, Fudan University, and Key Laboratory of Clinical Pharmacology of Antibiotics, National Health Commission of People's Republic of China, Shanghai, 200040, China",
+          "email": ""
+        },
+        {
+          "name": "Ruoyu Li",
+          "affiliation": "Department of Dermatology and Venerology, Peking University First Hospital, National Clinical Research Center for Skin and Immune Diseases, Research Center for Medical Mycology, Peking University, Beijing, 100034, China",
+          "email": ""
+        },
+        {
+          "name": "Yingchun Xu",
+          "affiliation": "Department of Laboratory Medicine, State Key Laboratory of Complex Severe and Rare Diseases, Peking Union Medical College Hospital, Chinese Academy of Medical Sciences, Beijing, 100730, China",
+          "email": "xuyc@pumch.cn"
+        },
+        {
+          "name": "Zhengyin Liu",
+          "affiliation": "Department of Infectious Diseases, State Key Laboratory of Complex Severe and Rare Diseases, Peking Union Medical College Hospital, Chinese Academy of Medical Sciences, Beijing, 100730, China",
+          "email": "liuzhy@pumch.cn"
+        }
+      ],
+      "editors": [],
+      "corporate_authors": []
+    },
+    {
+      "journal_title": "Journal of Microbiology, Immunology and Infection",
+      "journal_url": "https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/issues",
+      "volume": "59",
+      "issue": "4",
+      "issue_url": "https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/vol/59/issue/4",
+      "issue_publication_month": "August",
+      "issue_publication_day": "",
+      "issue_publication_year": "2026",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S1684118225001963",
+      "article_publication_month": "August",
+      "article_publication_day": "",
+      "article_publication_year": "2026",
+      "start_page": "438",
+      "last_page": "443",
+      "article_id": "",
+      "english_title": "Predictive value of interferon-gamma release assays and tuberculin skin test for latent tuberculosis infection: A systematic review and meta-analysis of head-to-head comparative tests",
+      "foreign_title": "",
+      "doi": "10.1016/j.jmii.2025.11.003",
+      "english_abstract": "Background\nThis study aimed to evaluate the ability of tuberculin skin test (TST) and interferon-gamma release assay (IGRA) to predict progression of latent tuberculosis (LTBI) to active tuberculosis.\n\nMethods\nWe searched PubMed, Embase, Web of Science, and the Cochrane Library for cohort studies published until October 6, 2024, that used both IGRA and TST to detect LTBI and reported data on active TB development. We assessed the predictive value of IGRA and TST for disease progression by calculating the risk ratio (RR), which compares the progression rates between positive and negative individuals for each test.\n\nResults\nOut of 2650 potentially eligible studies, 260 were reviewed in full text, and 44 studies with 25637 individuals were included. The pooled RR for disease progression was higher with IGRA than with TST (5.38 [95 % CI: 3.44–8.40] vs. 3.03 [95 % CI: 1.20–4.10]), although this difference did not reach statistical significance (p = 0.0713). PPV with IGRA vs TST: 2.50 % [95 % CI: 1.20 %–4.10 %] vs 1.30 % [95 % CI: 0.60 %–2.40 %] (p = 0.4852). NPV with IGRA vs TST: 99.70 % [95 % CI: 99.40 %–99.90 %] vs 99.60 % [95 % CI: 99.30 %–99.90 %] (p = 0.9630). Furthermore, the PPV of IGRA was similar to the progression rate of IGRA+/TST+ (2.00 % [95 % CI: 0.05 %–4.40 %] vs. 2.50 % [95 % CI: 0.40 %–6.10 %]). Finally, while IGRA identified fewer positive individuals (23.90 % [95 % CI: 18.50 %–29.80 %] vs. 52.20 % [95 % CI: 34.30 %–69.80 %]), the number of positive individuals progressing was similar (265 vs. 268), with similar results also observed in the untreated population.\n\nConclusions\nIGRA appears to have superior predictive value for TB progression compared to TST. Additionally, incorporating TST alongside IGRA does not seem to significantly enhance predictive accuracy. IGRA effectively reduces the number of individuals requiring treatment while seemingly not missing those at risk of progression.",
+      "non_english_abstract": "",
+      "article_type": "Research article",
+      "author_keyword": "Latent tuberculosis infection|Interferon-gamma release assay|Tuberculin skin test|Head-to-head comparison",
+      "reference_count": "21",
+      "copyright_year": "2025",
+      "license_type": "http://creativecommons.org/licenses/by-nc-nd/4.0/",
+      "funding_status": "This work was supported by the Medical Joint Special Project of Kunming University of Science and Technology ( KUST-AN2023008Y ) and the Talent Project of Kunming Health Commission ( 2022-sw (Lead)-10 ).",
+      "authors": [
+        {
+          "name": "Qing-Hua Gao",
+          "affiliation": "Department of Pulmonary and Critical Care Medicine, The Affiliated Anning First People's Hospital of Kunming University of Science and Technology, Kunming, Yunnan Province, 650302, China",
+          "email": ""
+        },
+        {
+          "name": "Hong-Bo Chen",
+          "affiliation": "Department of Pulmonary and Critical Care Medicine, The Affiliated Anning First People's Hospital of Kunming University of Science and Technology, Kunming, Yunnan Province, 650302, China",
+          "email": ""
+        },
+        {
+          "name": "Yun Huang",
+          "affiliation": "Faculty of Life Science and Technology, Kunming University of Science and Technology, Kunming, 650500, China",
+          "email": ""
+        },
+        {
+          "name": "Shun-Li Cai",
+          "affiliation": "Faculty of Life Science and Technology, Kunming University of Science and Technology, Kunming, 650500, China",
+          "email": ""
+        },
+        {
+          "name": "Li-Ping Chen",
+          "affiliation": "Department of Pulmonary and Critical Care Medicine, The Affiliated Anning First People's Hospital of Kunming University of Science and Technology, Kunming, Yunnan Province, 650302, China",
+          "email": ""
+        },
+        {
+          "name": "Yong-Ning Yi",
+          "affiliation": "Department of Pulmonary and Critical Care Medicine, The Affiliated Anning First People's Hospital of Kunming University of Science and Technology, Kunming, Yunnan Province, 650302, China",
+          "email": ""
+        },
+        {
+          "name": "Qiao-Li Zhang",
+          "affiliation": "Department of Pulmonary and Critical Care Medicine, The Affiliated Anning First People's Hospital of Kunming University of Science and Technology, Kunming, Yunnan Province, 650302, China",
+          "email": ""
+        },
+        {
+          "name": "Xin Guo",
+          "affiliation": "Faculty of Life Science and Technology, Kunming University of Science and Technology, Kunming, 650500, China",
+          "email": ""
+        },
+        {
+          "name": "Xue-Song Chen",
+          "affiliation": "Department of Pain Medicine, The Affiliated Anning First People's Hospital of Kunming University of Science and Technology, Kunming, Yunnan Province, 650302, China",
+          "email": ""
+        },
+        {
+          "name": "Yan Dong",
+          "affiliation": "Department of Pain Medicine, The Affiliated Anning First People's Hospital of Kunming University of Science and Technology, Kunming, Yunnan Province, 650302, China",
+          "email": ""
+        },
+        {
+          "name": "Gui-Lan Xia",
+          "affiliation": "Department of Pathology, The Affiliated Anning First People's Hospital of Kunming University of Science and Technology, Kunming, Yunnan Province, 650302, China",
+          "email": ""
+        },
+        {
+          "name": "Guo-Zhong Zhou",
+          "affiliation": "Department of Science and Research, The Affiliated Anning First People's Hospital of Kunming University of Science and Technology, Kunming, Yunnan Province, 650302, China\\School of Basic Medical Sciences, Kunming University of Science and Technology, Kunming, Yunnan Province, 650500, China",
+          "email": "20220247@kust.edu.cn"
+        },
+        {
+          "name": "Jian He",
+          "affiliation": "Department of Pulmonary and Critical Care Medicine, The Affiliated Anning First People's Hospital of Kunming University of Science and Technology, Kunming, Yunnan Province, 650302, China\\Department of Science and Research, The Affiliated Anning First People's Hospital of Kunming University of Science and Technology, Kunming, Yunnan Province, 650302, China",
+          "email": "ignatias@163.com"
+        }
+      ],
+      "editors": [],
+      "corporate_authors": []
+    },
+    {
+      "journal_title": "Journal of Microbiology, Immunology and Infection",
+      "journal_url": "https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/issues",
+      "volume": "59",
+      "issue": "4",
+      "issue_url": "https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/vol/59/issue/4",
+      "issue_publication_month": "August",
+      "issue_publication_day": "",
+      "issue_publication_year": "2026",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S1684118225001987",
+      "article_publication_month": "August",
+      "article_publication_day": "",
+      "article_publication_year": "2026",
+      "start_page": "444",
+      "last_page": "450",
+      "article_id": "",
+      "english_title": "The differences of clinical features and neutrophils’ stress between IL-17 positive and negative patients of type 1 diabetes mellitus",
+      "foreign_title": "",
+      "doi": "10.1016/j.jmii.2025.11.005",
+      "english_abstract": "Background\nType 1 diabetes mellitus (T1D) is an autoimmune disorder characterized by immune-mediated destruction of pancreatic β-cells, resulting in lifelong insulin dependence. Interleukin-17A (IL-17A), associated with T1D progression and complications, can mobilize and activate neutrophils to release lytic enzymes, reactive oxygen species, and cytokines, thereby promoting systemic inflammation and cell destruction; such neutrophil-driven responses have also been implicated in autoimmune diseases, including diabetes. This study aimed to compare the clinical characteristics and neutrophil stress of IL-17A–positive and –negative T1D patients.\n\nMethods\n37 patients were enrolled between May 2023 and April 2024 at Department of Pediatric Endocrinology, Changhua Christian Children's Hospital. In addition to clinical characteristics, peripheral blood neutrophils were isolated to analyze antioxidant-related protein, autophagy, and respiratory bursts. Serum cytokine profiles were also assessed.\n\nResults\n27 patients were IL-17A-positive. At disease onset, they were younger and had lower absolute neutrophil counts. Years later, they showed higher LDL, with HDL declining over time and TG trending upward. All participants were Vitamin D insufficiency, and IL-17A levels correlated positively with vitamin D levels. Neutrophils in the peripheral blood displayed reduced xCT, GPX4, and HO-1, increased LC3II/LC3I ratios with decreased p62, and greater ROS production upon stimulation. Serum IL-5 levels were significantly higher, with eotaxin trending higher.\n\nConclusion\nIL-17A-positive T1D is associated with earlier onset. As the disease progresses, it leads to an increased risk of dyslipidemia and the development of type 2 inflammation. Furthermore, the neutrophils in these patients suggestive of ferroptosis, defining a distinct phenotype for potential targeted therapy.",
+      "non_english_abstract": "",
+      "article_type": "Research article",
+      "author_keyword": "Dyslipidemia|Ferroptosis|IL-17|Neutrophil|ROS|T1D",
+      "reference_count": "40",
+      "copyright_year": "2025",
+      "license_type": "http://creativecommons.org/licenses/by/4.0/",
+      "funding_status": "",
+      "authors": [
+        {
+          "name": "Kan-Hsuan Lin",
+          "affiliation": "Frontier Molecular Medical Research Center in Children, Changhua Christian Children Hospital, 135 Nanhsiung Street, Changhua County, Changhua, 500, Taiwan\\Institute of Biomedical Sciences, National Chung Hsing University, Taichung City, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Yi-Lei Wu",
+          "affiliation": "Department of Pediatric Endocrinology, Changhua Christian Children's Hospital, Changhua, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Chin-Hui Tseng",
+          "affiliation": "Department of Pediatric Endocrinology, Changhua Christian Children's Hospital, Changhua, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Yi-Giien Tsai",
+          "affiliation": "Department of Post-Baccalaureate Medicine, College of Medicine, National Chung Hsing University, Taichung City, Taiwan\\Department of Pediatrics, Changhua Christian Children's Hospital, Changhua, Taiwan\\School of Medicine, Kaohsiung Medical University, Kaohsiung City, Taiwan\\School of Medicine, Chung Shan Medical University, Taichung, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Cheng-Han Lee",
+          "affiliation": "Frontier Molecular Medical Research Center in Children, Changhua Christian Children Hospital, 135 Nanhsiung Street, Changhua County, Changhua, 500, Taiwan\\Department of Pediatrics, Changhua Christian Children's Hospital, Changhua, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Rei-Cheng Yang",
+          "affiliation": "Frontier Molecular Medical Research Center in Children, Changhua Christian Children Hospital, 135 Nanhsiung Street, Changhua County, Changhua, 500, Taiwan\\School of Medicine, Kaohsiung Medical University, Kaohsiung City, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Chien-Sheng Hsu",
+          "affiliation": "Frontier Molecular Medical Research Center in Children, Changhua Christian Children Hospital, 135 Nanhsiung Street, Changhua County, Changhua, 500, Taiwan\\Institute of Biomedical Sciences, National Chung Hsing University, Taichung City, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Chao-Jen Lin",
+          "affiliation": "Frontier Molecular Medical Research Center in Children, Changhua Christian Children Hospital, 135 Nanhsiung Street, Changhua County, Changhua, 500, Taiwan\\Department of Post-Baccalaureate Medicine, College of Medicine, National Chung Hsing University, Taichung City, Taiwan\\Department of Pediatrics, Changhua Christian Children's Hospital, Changhua, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Jun-Kai Kao",
+          "affiliation": "Frontier Molecular Medical Research Center in Children, Changhua Christian Children Hospital, 135 Nanhsiung Street, Changhua County, Changhua, 500, Taiwan\\Institute of Biomedical Sciences, National Chung Hsing University, Taichung City, Taiwan\\Doctoral Program in Tissue Engineering and Regenerative Medicine, National Chung Hsing University, Taichung City, Taiwan\\Department of Post-Baccalaureate Medicine, College of Medicine, National Chung Hsing University, Taichung City, Taiwan",
+          "email": "96777@cch.org.tw"
+        }
+      ],
+      "editors": [],
+      "corporate_authors": []
+    },
+    {
+      "journal_title": "Journal of Microbiology, Immunology and Infection",
+      "journal_url": "https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/issues",
+      "volume": "59",
+      "issue": "4",
+      "issue_url": "https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/vol/59/issue/4",
+      "issue_publication_month": "August",
+      "issue_publication_day": "",
+      "issue_publication_year": "2026",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S1684118225001975",
+      "article_publication_month": "August",
+      "article_publication_day": "",
+      "article_publication_year": "2026",
+      "start_page": "451",
+      "last_page": "456",
+      "article_id": "",
+      "english_title": "Value of quantitative SARS-CoV-2 spike antibodies in assessing risk of severe COVID-19: A retrospective cohort study",
+      "foreign_title": "",
+      "doi": "10.1016/j.jmii.2025.11.004",
+      "english_abstract": "Background\nSince coronavirus disease 2019 (COVID-19) pandemic, its variants have challenged vaccine effectiveness and immunity, particularly among high-risk individuals. Assessment of the risk of severe COVID-19 in these populations is crucial for informed therapeutic decisions. We aim to correlate early quantitative SARS-CoV-2 spike antibody (S ab) levels in SARS-CoV-2 infections with the risk of severe COVID-19.\n\nMethods\nWe conducted a retrospective cohort study of hospitalized patients with early-stage COVID-19 and S ab titers between April 2021 and June 2022. S ab titers were stratified into four categories: <500 units/milliliter (U/mL), 500 to <1500 U/mL, 1500 to <5000 U/mL and ≥5000 U/mL, and their effects on the risk of severe COVID-19 were analyzed. Severe COVID-19 was defined as the development of pneumonia requiring oxygen supplementation, intensive care unit (ICU) admission, or death.\n\nResults\nAmong the 1665 patients with early-stage COVID-19, 61(3.66 %) developed severe COVID-19. S ab titers were significantly lower in patients who developed severe COVID-19; 72.13 % of these patients had titers below 500 U/mL, whereas 24.19 % of the patients in the non-severe group (P < 0.01) had titers below 500 U/mL during the Delta and Omicron periods. Patients with S ab titers ≥5000 U/mL had an adjusted odds ratio of 0.12 (95 % CI: 0.05–0.33, P < 0.01) for severe COVID-19 compared with those with titers <500 U/mL, independent of vaccination status, variant period, and comorbidities.\n\nConclusion\nS ab titers less than 500 U/mL are associated with an increased risk of severe COVID-19. The quantitative S ab titer may serve as a practical surrogate for SARS-CoV-2 immunity.",
+      "non_english_abstract": "",
+      "article_type": "Research article",
+      "author_keyword": "Antibodies|COVID-19|Immunity|SARS-CoV-2|Spike protein",
+      "reference_count": "27",
+      "copyright_year": "2025",
+      "license_type": "http://creativecommons.org/licenses/by-nc-nd/4.0/",
+      "funding_status": "The authors declare that no funds, grants, or other support was received during the preparation of this manuscript.",
+      "authors": [
+        {
+          "name": "Chan Maung Nyein",
+          "affiliation": "Division of Infectious Diseases, Department of General Medicine, Khoo Teck Puat Hospital, Singapore",
+          "email": ""
+        },
+        {
+          "name": "Shafiq Sahib",
+          "affiliation": "Clinical Epidemiology Unit, Khoo Teck Puat Hospital, Singapore",
+          "email": ""
+        },
+        {
+          "name": "Yi Lin",
+          "affiliation": "Clinical Epidemiology Unit, Khoo Teck Puat Hospital, Singapore",
+          "email": ""
+        },
+        {
+          "name": "Xier Emily Yeo",
+          "affiliation": "Clinical Epidemiology Unit, Khoo Teck Puat Hospital, Singapore",
+          "email": ""
+        },
+        {
+          "name": "Say Tat Ooi",
+          "affiliation": "Division of Infectious Diseases, Department of General Medicine, Khoo Teck Puat Hospital, Singapore\\Clinical Epidemiology Unit, Khoo Teck Puat Hospital, Singapore",
+          "email": "ooi.say.tat@nhghealth.com.sg"
+        }
+      ],
+      "editors": [],
+      "corporate_authors": []
+    },
+    {
+      "journal_title": "Journal of Microbiology, Immunology and Infection",
+      "journal_url": "https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/issues",
+      "volume": "59",
+      "issue": "4",
+      "issue_url": "https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/vol/59/issue/4",
+      "issue_publication_month": "August",
+      "issue_publication_day": "",
+      "issue_publication_year": "2026",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S1684118225001951",
+      "article_publication_month": "August",
+      "article_publication_day": "",
+      "article_publication_year": "2026",
+      "start_page": "457",
+      "last_page": "462",
+      "article_id": "",
+      "english_title": "HCV micro-elimination in diabetes care: A multicenter, prospective quality improvement program in Taiwan",
+      "foreign_title": "",
+      "doi": "10.1016/j.jmii.2025.11.002",
+      "english_abstract": "Background\nPeople with diabetes (PWD) exhibit a higher prevalence of Hepatitis C virus (HCV) infection, making them a crucial population for HCV screening and micro-elimination efforts. In light of the first published interdisciplinary consensus on managing/screening HCV in PWD, this study aims to evaluate the results and identify effective strategies for incorporating HCV screening and treatment into an existing diabetes care model managed by case managers.\n\nMethods\nThis multicenter prospective program, initiated by a diabetes society, involved eighteen centers in Taiwan. Each center developed strategies to enhance HCV screening and streamline linkage to HCV care for PWD. Data on screening, diagnosis, and direct-acting antiviral (DAA) treatment were collected. Hospitals were ranked by the average number of monthly DAA treatments, and the strategies of the top five centers were compared with others.\n\nResults\nOver a median period of 6.1 months, 28,436 patients were screened, and 1379 (4.8 %) tested positive for anti-HCV antibodies (Ab). A total of 333 (24.1 %) patients were positive for HCV RNA, of whom 288 (86.4 %) received DAA treatment. Overall, 25 strategies were adopted, with the more effective being: the involvement of multidisciplinary healthcare professionals in the program, automation of information technology to search for HCV history, and patient recall for HCV Ab screening.\n\nConclusions\nThis program pioneered the evaluation of integrating of HCV screening and treatment in PWD, providing strategic insights into HCV micro-elimination through efficient patient identification and collaborative HCV management.",
+      "non_english_abstract": "",
+      "article_type": "Research article",
+      "author_keyword": "Diabetes mellitus|Direct-acting antivirals|Hepatitis C|Micro-elimination|Strategy",
+      "reference_count": "19",
+      "copyright_year": "2025",
+      "license_type": "http://creativecommons.org/licenses/by-nc-nd/4.0/",
+      "funding_status": "The authors declare that no funds, grants, or other support were received during the preparation of this manuscript.",
+      "authors": [
+        {
+          "name": "Yu-Cheng Liang",
+          "affiliation": "Department of Internal Medicine, National Cheng Kung University Hospital, College of Medicine, National Cheng Kung University, Tainan, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Jun-Sing Wang",
+          "affiliation": "Diabetes Center, Taichung Veterans General Hospital, Taichung, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Chun-Chuan Lee",
+          "affiliation": "Department of Internal Medicine, MacKay Memorial Hospital, Taipei, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Chun-Jen Liu",
+          "affiliation": "Department of Internal Medicine, National Taiwan University Hospital, College of Medicine, National Taiwan University, Taipei, Taiwan\\Taiwan Association for the Study of Liver, Taipei, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Yi-Sun Yang",
+          "affiliation": "Department of Internal Medicine, Chung-Shan Medical University Hospital, Taichung, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Jia-Juen Lin",
+          "affiliation": "Department of Internal Medicine, Chung-Shan Medical University Hospital, Taichung, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Lay-San Lim",
+          "affiliation": "Department of Internal Medicine, Kaohsiung Chang Gung Memorial Hospital, and Chang Gung University College of Medicine, Kaohsiung, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Shu-Chuan Chen",
+          "affiliation": "Department of Internal Medicine, Kaohsiung Chang Gung Memorial Hospital, and Chang Gung University College of Medicine, Kaohsiung, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Hui-I Yu",
+          "affiliation": "Department of Internal Medicine, Ditmanson Medical Foundation Chia-Yi Christian Hospital, Chiayi, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Ming-Yan Tsai",
+          "affiliation": "Department of Internal Medicine, National Cheng Kung University Hospital, College of Medicine, National Cheng Kung University, Tainan, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Ming-Nan Chien",
+          "affiliation": "Department of Internal Medicine, MacKay Memorial Hospital, Taipei, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Wei-Che Chen",
+          "affiliation": "Department of Internal Medicine, MacKay Memorial Hospital, Taipei, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Yung-Hsiang Lin",
+          "affiliation": "Department of Internal Medicine, Chang Gung Memorial Hospital, Chiayi Branch, Chiayi, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Hsiao-Yun Yeh",
+          "affiliation": "Department of Internal Medicine, Chang Gung Memorial Hospital, Chiayi Branch, Chiayi, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Hsiu-Fen Huang",
+          "affiliation": "Department of Internal Medicine, National Taiwan University Hospital, College of Medicine, National Taiwan University, Taipei, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Sheng-Chiang Su",
+          "affiliation": "Department of Internal Medicine, Tri-Service General Hospital, Taipei, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Shi-yu Chen",
+          "affiliation": "Department of Internal Medicine, Tri-Service General Hospital, Taipei, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Shih-Che Hua",
+          "affiliation": "Department of Internal Medicine, Sisters of Our Lady of China Catholic Medical Foundation, St. Martin De Porres Hospital, Chiayi, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Chia-Ni Li",
+          "affiliation": "Department of Internal Medicine, Sisters of Our Lady of China Catholic Medical Foundation, St. Martin De Porres Hospital, Chiayi, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Ching-Chu Chen",
+          "affiliation": "Department of Medicine, China Medical University Hospital, Taichung, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Kuei-Mei Yeh",
+          "affiliation": "Department of Medicine, China Medical University Hospital, Taichung, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Hsiu-Chen Liu",
+          "affiliation": "Diabetes Center, Taichung Veterans General Hospital, Taichung, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Chung-Ze Wu",
+          "affiliation": "Department of Internal Medicine, College of Medicine, Taipei Medical University, Taipei, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Horng-Yih Ou",
+          "affiliation": "Department of Internal Medicine, National Cheng Kung University Hospital, College of Medicine, National Cheng Kung University, Tainan, Taiwan\\Taiwanese Association of Diabetes Educators, Taipei, Taiwan",
+          "email": "mikonlon@gmail.com"
+        },
+        {
+          "name": "Chih-Yuan Wang",
+          "affiliation": "Department of Internal Medicine, National Taiwan University Hospital, College of Medicine, National Taiwan University, Taipei, Taiwan\\Taiwanese Association of Diabetes Educators, Taipei, Taiwan",
+          "email": "cyw1965@gmail.com"
+        }
+      ],
+      "editors": [],
+      "corporate_authors": []
+    },
+    {
+      "journal_title": "Journal of Microbiology, Immunology and Infection",
+      "journal_url": "https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/issues",
+      "volume": "59",
+      "issue": "4",
+      "issue_url": "https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/vol/59/issue/4",
+      "issue_publication_month": "August",
+      "issue_publication_day": "",
+      "issue_publication_year": "2026",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S1684118225002178",
+      "article_publication_month": "August",
+      "article_publication_day": "",
+      "article_publication_year": "2026",
+      "start_page": "463",
+      "last_page": "470",
+      "article_id": "",
+      "english_title": "Alternation of the oral, gastric and stool microbiome in patients with reflux esophagitis and Barrett's esophagus",
+      "foreign_title": "",
+      "doi": "10.1016/j.jmii.2025.12.007",
+      "english_abstract": "Background\nThe imbalance of human microbiota has been associated with various inflammatory disease. Compared to intestinal flora, the esophageal microbiome has been understudied,and it remains unclear whether dysbiosis is related to reflux esophagitis (RE) and Barrett's esophagus (BE).This study aimed to synthesize findings on microbial composition changes across different regions of the gastrointestinal tract and their relationship with chronic esophageal reflux diseases.\n\nMethods\nWe recruited 29 RE patients (10 Grade A; 10 Grade B; 9 Grade C), 9 BE patients, and 10 healthy volunteers to study microbial composition in saliva, gastric juice, and stool using 16S rRNA gene pyrosequencing and analyzed serum inflammatory cytokines using ELISA.\n\nResults\nMicrobiota alpha diversity exhibited no significant changes between groups. In terms of taxonomy, RE and BE patients had more gram-negative anaerobic bacteria in salivary microbiota. Notably, increased Tannerellaceae abundance correlated with elevated serum IL-6 levels, which have been linked to chronic inflammation. Helicobacter was more abundant in gastric fluid of controls. Stool analysis revealed BE patients had higher abundance of phylum Bacteroidetes, and the genus Prevotella, while Fusobacterium was more prevalent in controls.\n\nConclusions\nThe increased abundance of Tannerellaceae in saliva was correlated with elevated serum IL-6 levels and may be a contributing factor in chronic esophageal reflux disease. BE patients had a higher abundance of Prevotella, a gram-negative bacterium, which may be linked to early stage esophageal inflammation in chronic reflux disease. Conversely, the increased abundance of Helicobacter in gastric juice may serve as a protective factor.",
+      "non_english_abstract": "",
+      "article_type": "Research article",
+      "author_keyword": "Gastroesophageal reflux disease|Barrett's esophagus|Esophageal microbiota|gastric microbiota|Stool microbiota",
+      "reference_count": "40",
+      "copyright_year": "2026",
+      "license_type": "http://creativecommons.org/licenses/by-nc-nd/4.0/",
+      "funding_status": "This study was support by grants MOST 106-2314-B-182A-116 (NMRPG8G0201) from the National Science and Technology Council , Taiwan.",
+      "authors": [
+        {
+          "name": "Chih-Chien Yao",
+          "affiliation": "Division of Hepatogastroenterology, Department of Internal Medicine, Kaohsiung Chang Gung Memorial Hospital, Kaohsiung, Taiwan\\Center for General Education, Cheng Shiu University, Kaohsiung, Taiwan",
+          "email": "chihchienyao@gmail.com"
+        },
+        {
+          "name": "Wei-Chen Tai",
+          "affiliation": "Division of Hepatogastroenterology, Department of Internal Medicine, Kaohsiung Chang Gung Memorial Hospital, Kaohsiung, Taiwan\\Chang Gung University College of Medicine, Taoyuan City, Taiwan\\Kaohsiung Municipal Ta-Tung Hospital, Kaohsiung, Taiwan\\Department of Leisure and Sport Management, Cheng Shiu University, Kaohsiung, Taiwan",
+          "email": "luketai1019@gmail.com"
+        },
+        {
+          "name": "Chih-Ming Liang",
+          "affiliation": "Division of Hepatogastroenterology, Department of Internal Medicine, Kaohsiung Chang Gung Memorial Hospital, Kaohsiung, Taiwan\\Chang Gung University College of Medicine, Taoyuan City, Taiwan",
+          "email": "gimy54861439@gmail.com"
+        },
+        {
+          "name": "Ming-Chao Tsai",
+          "affiliation": "Division of Hepatogastroenterology, Department of Internal Medicine, Kaohsiung Chang Gung Memorial Hospital, Kaohsiung, Taiwan\\Chang Gung University College of Medicine, Taoyuan City, Taiwan",
+          "email": "tony0779@gmail.com"
+        },
+        {
+          "name": "Yu-Chieh Tsai",
+          "affiliation": "Division of Hepatogastroenterology, Department of Internal Medicine, Kaohsiung Chang Gung Memorial Hospital, Kaohsiung, Taiwan",
+          "email": "plshfrost@hotmail.com"
+        },
+        {
+          "name": "Cheng-Kun Wu",
+          "affiliation": "Division of Hepatogastroenterology, Department of Internal Medicine, Kaohsiung Chang Gung Memorial Hospital, Kaohsiung, Taiwan\\Chang Gung University College of Medicine, Taoyuan City, Taiwan",
+          "email": "eggclimb@cgmh.org.tw"
+        },
+        {
+          "name": "Pao-Yuan Huang",
+          "affiliation": "Division of Hepatogastroenterology, Department of Internal Medicine, Kaohsiung Chang Gung Memorial Hospital, Kaohsiung, Taiwan",
+          "email": "paoyuan813@gmail.com"
+        },
+        {
+          "name": "Chien-Hung Chen",
+          "affiliation": "Division of Hepatogastroenterology, Department of Internal Medicine, Kaohsiung Chang Gung Memorial Hospital, Kaohsiung, Taiwan\\Chang Gung University College of Medicine, Taoyuan City, Taiwan",
+          "email": "e580306@ms31.hinet.net"
+        },
+        {
+          "name": "Yuan-Hung Kuo",
+          "affiliation": "Division of Hepatogastroenterology, Department of Internal Medicine, Kaohsiung Chang Gung Memorial Hospital, Kaohsiung, Taiwan\\Chang Gung University College of Medicine, Taoyuan City, Taiwan",
+          "email": "0104kuo@cgmh.org.tw"
+        },
+        {
+          "name": "Seng-Kee Chuah",
+          "affiliation": "Division of Hepatogastroenterology, Department of Internal Medicine, Kaohsiung Chang Gung Memorial Hospital, Kaohsiung, Taiwan\\Chang Gung University College of Medicine, Taoyuan City, Taiwan",
+          "email": "sengkeechuah@yahoo.com.tw"
+        },
+        {
+          "name": "Wei-Shiung Lian",
+          "affiliation": "Core Laboratory for Phenomics and Diagnostics, Department of Medical Research, Kaohsiung Chang Gung Memorial Hospital and Chang Gung University College of Medicine, Kaohsiung, Taiwan\\Center for Mitochondrial Research and Medicine, College of Medicine, Chang Gung University, Kaohsiung Chang Gung Memorial Hospital, Kaohsiung, Taiwan",
+          "email": "lianws@cgmh.org.tw"
+        },
+        {
+          "name": "Yi-Chun Chiu",
+          "affiliation": "Division of Hepatogastroenterology, Department of Internal Medicine, Kaohsiung Chang Gung Memorial Hospital, Kaohsiung, Taiwan",
+          "email": "chiuku@ms14.hinet.net"
+        },
+        {
+          "name": "Chung-Mou Kuo",
+          "affiliation": "Division of Hepatogastroenterology, Department of Internal Medicine, Kaohsiung Chang Gung Memorial Hospital, Kaohsiung, Taiwan",
+          "email": "kuo51116@gmail.com"
+        },
+        {
+          "name": "Keng-Liang Wu",
+          "affiliation": "Wu Kengliang Gastrointestinal Hepatobiliary Clinic, Taiwan",
+          "email": "kengliang.wu0129@gmail.com"
+        }
+      ],
+      "editors": [],
+      "corporate_authors": []
+    },
+    {
+      "journal_title": "Journal of Microbiology, Immunology and Infection",
+      "journal_url": "https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/issues",
+      "volume": "59",
+      "issue": "4",
+      "issue_url": "https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/vol/59/issue/4",
+      "issue_publication_month": "August",
+      "issue_publication_day": "",
+      "issue_publication_year": "2026",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S1684118225001914",
+      "article_publication_month": "August",
+      "article_publication_day": "",
+      "article_publication_year": "2026",
+      "start_page": "471",
+      "last_page": "477",
+      "article_id": "",
+      "english_title": "Clinical and microbiological insights into endogenous endophthalmitis: A ten-year study highlighting mNGS efficacy",
+      "foreign_title": "",
+      "doi": "10.1016/j.jmii.2025.10.002",
+      "english_abstract": "Background\nEndophthalmitis is an ophthalmic emergency. In recent years, the incidence of endogenous endophthalmitis (EE) has increased. This study aims to elucidate the clinical characteristics and risk factors associated with the visual prognosis of EE.\n\nMethods\nThis study included 111 patients (121 eyes) diagnosed with EE who received intraocular and systemic treatment at Huashan Hospital, Fudan University, between January 2014 to December 2023. We conducted a comprehensive review of the demographic and clinical characteristics of the cohort and analyzed the risk factors linked to poor visual prognosis.\n\nResults\nA total of 111 patients (121 eyes) were included in this study, of whom 101 eyes (83.5 %) had identifiable pathogenic microorganisms, with Klebsiella pneumoniae (KP) was the most common pathogen. Compared to conventional culture methods (sensitivity 47.6 %), metagenomic next-generation sequencing (mNGS) demonstrated significantly higher sensitivity (97.6 %) in vitreous samples. Outcome analysis indicated that mNGS played a critical role in guiding clinical antibiotic adjustments, and patients receiving targeted therapy showed significant visual improvement (P = 0.002), with stable systemic recovery. Furthermore, vitreous surgery had a positive effect on visual prognosis (P < 0.001). Regression analysis revealed that poor initial visual acuity (VA) (OR: 20.622, 95 % CI: 3.894–109.2) and KP infection (OR: 3.398, 95 % CI: 1.096–10.538) were independent risk factors for poor final VA.\n\nConclusion\nOur findings identify KP as the most common causative pathogen of EE. Infections caused by KP and poor initial VA are significant risk factors for poor visual outcomes. Looking ahead, mNGS holds promise as a crucial tool for the clinical diagnosis of EE.",
+      "non_english_abstract": "",
+      "article_type": "Research article",
+      "author_keyword": "Endogenous endophthalmitis|Diagnosis|Vitreous fluid culture|Metagenomic next-generation sequencing|Trans pars plana vitrectomy|Visual outcome",
+      "reference_count": "34",
+      "copyright_year": "2025",
+      "license_type": "http://creativecommons.org/licenses/by/4.0/",
+      "funding_status": "",
+      "authors": [
+        {
+          "name": "Xin Wang",
+          "affiliation": "Department of Ophthalmology, Huashan Hospital, Fudan University, No. 12, Middle Urumqi Road, Jing A District, Shanghai, 200040, China",
+          "email": ""
+        },
+        {
+          "name": "Pei Zhang",
+          "affiliation": "Department of Ophthalmology, Huashan Hospital, Fudan University, No. 12, Middle Urumqi Road, Jing A District, Shanghai, 200040, China\\Department of Ophthalmology, Shanghai Fourth Rehabilitation Hospital, Shanghai, China",
+          "email": ""
+        },
+        {
+          "name": "Jin-Shan Suo",
+          "affiliation": "Department of Ophthalmology, Huashan Hospital, Fudan University, No. 12, Middle Urumqi Road, Jing A District, Shanghai, 200040, China",
+          "email": ""
+        },
+        {
+          "name": "Qing-Jian Li",
+          "affiliation": "Department of Ophthalmology, Huashan Hospital, Fudan University, No. 12, Middle Urumqi Road, Jing A District, Shanghai, 200040, China",
+          "email": ""
+        },
+        {
+          "name": "Luo-Ziyi Wang",
+          "affiliation": "Department of Ophthalmology, Huashan Hospital, Fudan University, No. 12, Middle Urumqi Road, Jing A District, Shanghai, 200040, China",
+          "email": ""
+        },
+        {
+          "name": "Yu Zhang",
+          "affiliation": "Department of Ophthalmology, Huashan Hospital, Fudan University, No. 12, Middle Urumqi Road, Jing A District, Shanghai, 200040, China",
+          "email": "beautyashley@126.com"
+        },
+        {
+          "name": "Zhi-Liang Wang",
+          "affiliation": "Department of Ophthalmology, Huashan Hospital, Fudan University, No. 12, Middle Urumqi Road, Jing A District, Shanghai, 200040, China",
+          "email": "ophwzl@163.com"
+        }
+      ],
+      "editors": [],
+      "corporate_authors": []
+    },
+    {
+      "journal_title": "Journal of Microbiology, Immunology and Infection",
+      "journal_url": "https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/issues",
+      "volume": "59",
+      "issue": "4",
+      "issue_url": "https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/vol/59/issue/4",
+      "issue_publication_month": "August",
+      "issue_publication_day": "",
+      "issue_publication_year": "2026",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S168411822500194X",
+      "article_publication_month": "August",
+      "article_publication_day": "",
+      "article_publication_year": "2026",
+      "start_page": "478",
+      "last_page": "485",
+      "article_id": "",
+      "english_title": "Emergency department-initiated outpatient parenteral antimicrobial therapy in Taiwan: A retrospective cohort study on clinical outcomes and cost analysis",
+      "foreign_title": "",
+      "doi": "10.1016/j.jmii.2025.11.001",
+      "english_abstract": "Background\nED-initiated outpatient parenteral antimicrobial therapy (OPAT) aims to reduce admissions and relieve ED boarding. In practice, however, OPAT may be used as a “middle-ground” alternative to oral therapy, complicating assessment of its true value. Because studies using matched inpatient and outpatient comparators with longitudinal endpoints are scarce, we evaluated the effectiveness, safety, and medical costs of an ED-initiated OPAT program in Taiwan.\n\nMethods\nThis retrospective cohort study analyzed ED-initiated OPAT patients from two teaching hospitals (2017–2019). Using coarsened exact matching, we created two comparison groups: inpatient-matched (assessing effectiveness) and outpatient-matched (assessing safety). The primary outcome was net hospital days saved over 30 days, derived from daily hospital-prevalence trajectories. Secondary outcomes were 14-day cumulative incidence of ED revisits/readmission and a stratified cost analysis over the treatment course.\n\nResults\nOf 1409 OPAT patients, 986 were matched. In the inpatient-matched cohort (n = 416), OPAT saved a net 8.9 hospital-days per patient over 30 days. In the outpatient-matched cohort (n = 570), OPAT showed a transiently higher risk of return visits at day 7 (risk difference +5 %; p = 0.008) without increases in severe adverse events or 14-day readmissions. OPAT reduced costs by NT$34,367 per patient when substituting for hospitalization but increased costs when compared with standard outpatient care.\n\nConclusions\nFor appropriately selected patients requiring admission-level care, ED-initiated OPAT can be a cost-saving substitute for hospitalization. Given limited safety data, benefits remain conditional on rigorous patient selection to avoid overuse and on structured early reassessment to mitigate early revisit risks.",
+      "non_english_abstract": "",
+      "article_type": "Research article",
+      "author_keyword": "Cost-analysis|ED-Initiated OPAT|Outpatient parenteral antimicrobial therapy|Net benefit of OPAT|Trajectory analysis",
+      "reference_count": "37",
+      "copyright_year": "2025",
+      "license_type": "http://creativecommons.org/licenses/by/4.0/",
+      "funding_status": "This work was supported by Chang Gung Memorial Hospital, Taiwan (grant number CGRPG1N0011).",
+      "authors": [
+        {
+          "name": "Yu-Kai Chen",
+          "affiliation": "Department of Emergency Medicine, New Taipei Municipal Tucheng Hospital, New Taipei City, Taiwan\\Department of Emergency Medicine, Chang Gung Memorial Hospital Linkou, Taoyuan City, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Ching-Tai Huang",
+          "affiliation": "Division of Infectious Diseases, Chang Gung Memorial Hospital Linkou, Taoyuan City, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Feng-Lin Wang",
+          "affiliation": "Department of Emergency Medicine, Chang Gung Memorial Hospital Linkou, Taoyuan City, Taiwan\\Superintendent, Saint Paul's Hospital, Taoyuan City, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Yi-Ling Chan",
+          "affiliation": "Department of Emergency Medicine, Chang Gung Memorial Hospital Linkou, Taoyuan City, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Tien-Ming Chan",
+          "affiliation": "Division of Rheumatology, Allergy and Immunology, Chang Gung Memorial Hospital Linkou, Taoyuan City, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Tse-Hsuan Su",
+          "affiliation": "Department of Emergency Medicine, Chang Gung Memorial Hospital Linkou, Taoyuan City, Taiwan\\School of Traditional Chinese Medicine, College of Medicine, Chang Gung University, Taoyuan City, Taiwan\\Graduate Institute of Epidemiology and Preventive Medicine, College of Public Health, National Taiwan University, Taipei City, Taiwan",
+          "email": "tsehsuan@cgmh.org.tw"
+        }
+      ],
+      "editors": [],
+      "corporate_authors": []
+    },
+    {
+      "journal_title": "Journal of Microbiology, Immunology and Infection",
+      "journal_url": "https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/issues",
+      "volume": "59",
+      "issue": "4",
+      "issue_url": "https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/vol/59/issue/4",
+      "issue_publication_month": "August",
+      "issue_publication_day": "",
+      "issue_publication_year": "2026",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S1684118225002002",
+      "article_publication_month": "August",
+      "article_publication_day": "",
+      "article_publication_year": "2026",
+      "start_page": "486",
+      "last_page": "493",
+      "article_id": "",
+      "english_title": "Clinical features and microbiological analysis of risk factors for mortality among patients with carbapenem-resistant Klebsiella pneumoniae bacteremia: A changing virulence landscape",
+      "foreign_title": "",
+      "doi": "10.1016/j.jmii.2025.12.001",
+      "english_abstract": "Objective\nThe global rise of carbapenem-resistant Klebsiella pneumoniae bloodstream infection (CRKP-BSI) is alarming due to its link to increased morbidity and mortality from limited treatment options. This study evaluated the impact of virulence plasmid carriage on CRKP-BSI mortality.\n\nMethods\nA matched case-control study was conducted among 93 CRKP patients, 23 of whom tested positive for virulence plasmids. The clinical and bacterial characteristics of CRKP-induced BSIs with and without virulence plasmids were analyzed.\n\nResults\nVirulence plasmids were present in 24.7 % of CRKP strains, with a 61.1 % mortality rate among patients with virulence plasmid-positive CRKP (pV-CRKP) infections. The ST11-KL64 subtype was predominant in Jiangxi Province. Molecular typing revealed pV-CRKP strains primarily had two identical genotypes, yet virulence plasmids were present across various PFGE genotypes, indicating polymorphic distribution. Logistic regression identified community-acquired infection, neurology department admission, and stroke as independent risk factors. G. mellonella and biofilm assays showed most CRKP strains with virulence plasmids exhibited increased virulence, though some strains did not.\n\nConclusion\nVirulence plasmids generally heighten CRKP strain virulence and directly affect the 7-day survival rate. Certain strains carry virulence plasmids without increased virulence. Community-acquired infection, neurology department admission, and stroke are independent risk factors for pV-CRKP strains. The presence of IncFrepB among pV-CRKP may promote the spread of virulence genes in ST11-type CRKP.",
+      "non_english_abstract": "",
+      "article_type": "Research article",
+      "author_keyword": "Carbapenem-resistantKlebsiella pneumoniae|Bloodstream infection|Virulence plasmids|Risk factors|High mortality|Clonal dissemination",
+      "reference_count": "35",
+      "copyright_year": "2025",
+      "license_type": "http://creativecommons.org/licenses/by-nc-nd/4.0/",
+      "funding_status": "This research was funded by the National Natural Science Foundation of China (grant number 82102411 , 82260403 , 32370195 ); the Clinical Research Nurture Project of the First Affiliated Hospital of Nanchang University (grant number YFYLCYJPY202001 , YFYLCYJPY202201 ), the project of graduate innovation in Nanchang University (grant number YC2023–S178 ).",
+      "authors": [
+        {
+          "name": "Binghui Huo",
+          "affiliation": "Department of Clinical Microbiology, The First Affiliated Hospital, Jiangxi Medical College, Nanchang University, Yong Wai Zheng Jie No. 17, Nanchang, 330006, PR China\\Department of Clinical Laboratory, Peking University People's Hospital, Beijing, PR China\\School of Public Health, Jiangxi Medical College, Nanchang University, Bayi Avenue No. 461, Nanchang, 330006, PR China",
+          "email": ""
+        },
+        {
+          "name": "Yuxuan Liu",
+          "affiliation": "Department of Clinical Microbiology, The First Affiliated Hospital, Jiangxi Medical College, Nanchang University, Yong Wai Zheng Jie No. 17, Nanchang, 330006, PR China\\School of Public Health, Jiangxi Medical College, Nanchang University, Bayi Avenue No. 461, Nanchang, 330006, PR China",
+          "email": ""
+        },
+        {
+          "name": "DanDan Wei",
+          "affiliation": "Department of Clinical Microbiology, The First Affiliated Hospital, Jiangxi Medical College, Nanchang University, Yong Wai Zheng Jie No. 17, Nanchang, 330006, PR China",
+          "email": ""
+        },
+        {
+          "name": "Peng Liu",
+          "affiliation": "Department of Clinical Microbiology, The First Affiliated Hospital, Jiangxi Medical College, Nanchang University, Yong Wai Zheng Jie No. 17, Nanchang, 330006, PR China",
+          "email": ""
+        },
+        {
+          "name": "Linping Fan",
+          "affiliation": "Department of Clinical Microbiology, The First Affiliated Hospital, Jiangxi Medical College, Nanchang University, Yong Wai Zheng Jie No. 17, Nanchang, 330006, PR China",
+          "email": ""
+        },
+        {
+          "name": "QiSen Huang",
+          "affiliation": "Department of Clinical Microbiology, The First Affiliated Hospital, Jiangxi Medical College, Nanchang University, Yong Wai Zheng Jie No. 17, Nanchang, 330006, PR China",
+          "email": ""
+        },
+        {
+          "name": "Shanshan Huang",
+          "affiliation": "Department of Clinical Microbiology, The First Affiliated Hospital, Jiangxi Medical College, Nanchang University, Yong Wai Zheng Jie No. 17, Nanchang, 330006, PR China",
+          "email": ""
+        },
+        {
+          "name": "Yang Liu",
+          "affiliation": "Department of Clinical Microbiology, The First Affiliated Hospital, Jiangxi Medical College, Nanchang University, Yong Wai Zheng Jie No. 17, Nanchang, 330006, PR China\\School of Public Health, Jiangxi Medical College, Nanchang University, Bayi Avenue No. 461, Nanchang, 330006, PR China\\China-Japan Friendship Jiangxi Hospital, National Regional Center for Respiratory Medicine, Nanchang City, 330200, Jiangxi, PR China\\Jiangxi Medicine Academy of Nutrition and Health Management, Nanchang, 330038, PR China\\Department of Clinical Laboratory, Medical Center of Burn Plastic and Wound Repair, The First Affiliated Hospital of Nanchang University, Nanchang, 330209, PR China",
+          "email": "ly13767160474@sina.com"
+        }
+      ],
+      "editors": [],
+      "corporate_authors": []
+    },
+    {
+      "journal_title": "Journal of Microbiology, Immunology and Infection",
+      "journal_url": "https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/issues",
+      "volume": "59",
+      "issue": "4",
+      "issue_url": "https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/vol/59/issue/4",
+      "issue_publication_month": "August",
+      "issue_publication_day": "",
+      "issue_publication_year": "2026",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S1684118225002026",
+      "article_publication_month": "August",
+      "article_publication_day": "",
+      "article_publication_year": "2026",
+      "start_page": "494",
+      "last_page": "502",
+      "article_id": "",
+      "english_title": "Cinchonidine enhances intracellular erythromycin activity against Rhodococcus equi",
+      "foreign_title": "",
+      "doi": "10.1016/j.jmii.2025.12.003",
+      "english_abstract": "Background\nRhodococcus equi is a facultative intracellular pathogen that causes severe infections in foals and immunocompromised individuals. Its ability to survive within macrophages renders conventional antibiotics ineffective and promotes multidrug resistance. Novel therapeutic strategies are needed.\n\nMethods\nWe screened a library of 3251 natural compounds to identify antibacterial candidates targeting R. equi. Strains included wild-type 103S+, an mrx-deficient triple mutant, and a biosensor-expressing strain carrying the Mrx1-roGFP2 probe. Minimal inhibitory concentrations, checkerboard synergy assays, and time-kill kinetics were performed. Intracellular efficacy was assessed in infected J774.A1 murine macrophages. Redox stress induction was quantified using confocal microscopy.\n\nResults\nThirty-eight compounds selectively inhibited the mrx-deficient mutant, suggesting redox-mediated mechanisms. While most natural compound combinations showed limited intracellular activity, the pairing of erythromycin (ERY) and cinchonidine (CIN) exhibited synergy, significantly reducing intracellular bacterial load. Time-kill assays revealed bactericidal activity at 8 × MIC. Biosensor analysis confirmed that ERY-CIN synergy correlated with elevated oxidative stress, supporting a redox-based mechanism.\n\nConclusions\nOur findings highlight CIN as a redox-active adjuvant that potentiates erythromycin's intracellular efficacy against R. equi. This combinatorial approach targets redox homeostasis and enhances bacterial clearance, providing a promising strategy against multidrug-resistant intracellular pathogens.",
+      "non_english_abstract": "",
+      "article_type": "Research article",
+      "author_keyword": "Rhodococcus equi|Natural compounds|Redox stress|Synergy|Intracellular infection|Oxidative stress",
+      "reference_count": "37",
+      "copyright_year": "2025",
+      "license_type": "http://creativecommons.org/licenses/by/4.0/",
+      "funding_status": "",
+      "authors": [
+        {
+          "name": "Farzaneh Javadimarand",
+          "affiliation": "Departamento de Biología Molecular, Área de Microbiología, Universidad de León, 24071, León, Spain",
+          "email": ""
+        },
+        {
+          "name": "Pablo Castañera",
+          "affiliation": "Departamento de Biología Molecular, Área de Microbiología, Universidad de León, 24071, León, Spain",
+          "email": ""
+        },
+        {
+          "name": "Blanca Lorente-Torres",
+          "affiliation": "Departamento de Biología Molecular, Área de Microbiología, Universidad de León, 24071, León, Spain",
+          "email": ""
+        },
+        {
+          "name": "Helena Á. Ferrero",
+          "affiliation": "Departamento de Biología Molecular, Área de Microbiología, Universidad de León, 24071, León, Spain",
+          "email": ""
+        },
+        {
+          "name": "Sergio Fernández-Martínez",
+          "affiliation": "Departamento de Biología Molecular, Área de Microbiología, Universidad de León, 24071, León, Spain",
+          "email": ""
+        },
+        {
+          "name": "Jesús Llano-Verdeja",
+          "affiliation": "Departamento de Biología Molecular, Área de Microbiología, Universidad de León, 24071, León, Spain",
+          "email": ""
+        },
+        {
+          "name": "Jesús F. Aparicio",
+          "affiliation": "Departamento de Biología Molecular, Área de Microbiología, Universidad de León, 24071, León, Spain",
+          "email": ""
+        },
+        {
+          "name": "Luis M. Mateos",
+          "affiliation": "Departamento de Biología Molecular, Área de Microbiología, Universidad de León, 24071, León, Spain\\Instituto de Biología Molecular, Genómica y Proteómica (INBIOMIC), Universidad de León, 24071, León, Spain",
+          "email": ""
+        },
+        {
+          "name": "Álvaro Mourenza",
+          "affiliation": "Departamento de Biología Molecular, Área de Microbiología, Universidad de León, 24071, León, Spain",
+          "email": "amouf@unileon.es"
+        },
+        {
+          "name": "Michal Letek",
+          "affiliation": "Departamento de Biología Molecular, Área de Microbiología, Universidad de León, 24071, León, Spain\\Instituto de Desarrollo Ganadero y Sanidad Animal (INDEGSAL), Universidad de León, 24071, León, Spain",
+          "email": "michal.letek@unileon.es"
+        }
+      ],
+      "editors": [],
+      "corporate_authors": []
+    },
+    {
+      "journal_title": "Journal of Microbiology, Immunology and Infection",
+      "journal_url": "https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/issues",
+      "volume": "59",
+      "issue": "4",
+      "issue_url": "https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/vol/59/issue/4",
+      "issue_publication_month": "August",
+      "issue_publication_day": "",
+      "issue_publication_year": "2026",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S1684118225002014",
+      "article_publication_month": "August",
+      "article_publication_day": "",
+      "article_publication_year": "2026",
+      "start_page": "503",
+      "last_page": "508",
+      "article_id": "",
+      "english_title": "Toxocara seroprevalence among suspected patients across different geographical regions in Vietnam: A retrospective study",
+      "foreign_title": "",
+      "doi": "10.1016/j.jmii.2025.12.002",
+      "english_abstract": "Background\nToxocara sp. is the most common nematode in zoonotic helminth diseases worldwide. However, data on this issue remain limited in Vietnam, particularly regarding Toxocara seroprevalence in various geographical regions.\n\nMethods\nA retrospective study was conducted on 46,284 venous blood samples from suspected toxocariasis patients across various geographical regions, which were tested at the laboratories of the Medlatec Healthcare System in Vietnam in 2023. The presence of total IgE levels and Toxocara IgG antibodies was determined using ELISA kits. Risk factors such as age, gender, geographical region, high IgE concentration (>130 IU/mL), and eosinophilia (>500 cells/μl) were evaluated.\n\nResults\nToxocara IgG antibodies were found in 47.63 % of patients (95 % CI: 47.18–48.09). The seroprevalence of human toxocariasis was significantly different between individuals over 60 years of age and those under 60 years. The rates of IgG antibodies against Toxocara also varied significantly between different geographical regions. Accordingly, the highest seroprevalence was observed in the North Central region (59.79 %), followed by the Northern Mountainous region (51.34 %), Red River Delta (42.79 %), South West (39.91 %), South Central (36.97 %), Central Highlands (35.78 %), and South East (33.10 %), respectively. A significant association was found between eosinophilia, high IgE concentrations, and Toxocara seropositivity (p < 0.001).\n\nConclusion\nThe seropositivity rate to Toxocara spp. in different geographical regions in Vietnam in the year 2023 was relatively high. Further studies are needed to better understand the clinical relevance of these findings and to evaluate the feasibility and cost-effectiveness of targeted screening and control strategies.",
+      "non_english_abstract": "",
+      "article_type": "Research article",
+      "author_keyword": "Seroprevalence|Toxocariasis|Geographical regions|Vietnam",
+      "reference_count": "47",
+      "copyright_year": "2025",
+      "license_type": "http://creativecommons.org/licenses/by-nc-nd/4.0/",
+      "funding_status": "This work was funded by Medlatec healthcare system , Ha Noi, Vietnam through Medlatec Group Research and Innovation Fund (Grant no. 28/QĐ-SUB , to TVC).",
+      "authors": [
+        {
+          "name": "Trinh Thi Que",
+          "affiliation": "Department of Medical Biochemistry, Medlatec Laboratory Center, Medlatec Healthcare system, Hanoi, 100000, Viet Nam",
+          "email": ""
+        },
+        {
+          "name": "Tran Van Chieu",
+          "affiliation": "Department of Medical Biochemistry, Medlatec Laboratory Center, Medlatec Healthcare system, Hanoi, 100000, Viet Nam",
+          "email": ""
+        },
+        {
+          "name": "Trieu Thuy Anh",
+          "affiliation": "Department of Medical Biochemistry, Medlatec Laboratory Center, Medlatec Healthcare system, Hanoi, 100000, Viet Nam",
+          "email": ""
+        },
+        {
+          "name": "Pham Van Ngai",
+          "affiliation": "Department of Medical Biochemistry, Medlatec Laboratory Center, Medlatec Healthcare system, Hanoi, 100000, Viet Nam",
+          "email": ""
+        },
+        {
+          "name": "Pham Van Tran",
+          "affiliation": "Department of Medical Biochemistry, 103 Military Hospital, Military Medical University, Hanoi, 100000, Viet Nam",
+          "email": ""
+        },
+        {
+          "name": "Nguyen Thai Son",
+          "affiliation": "Department of Medical Biochemistry, Medlatec Laboratory Center, Medlatec Healthcare system, Hanoi, 100000, Viet Nam",
+          "email": ""
+        },
+        {
+          "name": "Do Ngoc Anh",
+          "affiliation": "Department of Medical Parasitology, Military Medical University, Hanoi, 100000, Viet Nam",
+          "email": "anhdn_vmmu1@vmmu.edu.vn"
+        }
+      ],
+      "editors": [],
+      "corporate_authors": []
+    },
+    {
+      "journal_title": "Journal of Microbiology, Immunology and Infection",
+      "journal_url": "https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/issues",
+      "volume": "59",
+      "issue": "4",
+      "issue_url": "https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/vol/59/issue/4",
+      "issue_publication_month": "August",
+      "issue_publication_day": "",
+      "issue_publication_year": "2026",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S1684118226000010",
+      "article_publication_month": "August",
+      "article_publication_day": "",
+      "article_publication_year": "2026",
+      "start_page": "509",
+      "last_page": "516",
+      "article_id": "",
+      "english_title": "Natural killer cells are required for imiquimod-induced psoriasis-like skin inflammation in mice",
+      "foreign_title": "",
+      "doi": "10.1016/j.jmii.2025.12.008",
+      "english_abstract": "Background/purpose(s)\nPsoriasis is a skin-specific autoimmune disease that causes scaling, erythema and thickening. The disease involves immune cell infiltration and keratinocyte proliferation in skin lesions. Previous studies have demonstrated that Th17 cells and IL-22 play prominent roles in the pathogenesis of psoriasis via IL-17, IL-22 and IL-23 signaling. However, the role of innate cells in this process remains unclear.\n\nMethods\nIn this study, using the TLR7/8 agonist imiquimod (IMQ) in a well-established murine model, we demonstrated that natural killer (NK) cells play an important role in the pathogenesis of psoriasis. Non-obese diabetic (NOD) mice are prone to Th1 and Th17 responses, and the lack of NK cell activity and macrophages in these animals contribute to their value as a model for type I diabetes.\n\nResults\nThe NOD mice treated with IMQ (NOD-IMQ) exhibit markedly attenuated skin lesions compared to BALB/c mice treated with IMQ (BALB/c-IMQ). An analysis of immune cell types revealed that the number of macrophages, plasmacytoid dendritic cells (pDCs), neutrophils and Th1, Th2, Th17, Treg, and NK cells increased in the BALB/c-IMQ mice compared to the NOD-IMQ mice. Testing NK cell activity and macrophage function, NK cell cytotoxicity and macrophage phagocytosis, but not macrophage migration, were decreased in the NOD mice compared with the BALB/c mice. After NK cell depletion, normal BALB/c-IMQ mice exhibited milder skin lesions than the NOD-IMQ mice.\n\nConclusion\nThese results suggest that NK cells play a critical role in IMQ-induced skin inflammation. Controlling NK cell activity may be a potential therapeutic approach for psoriasis.",
+      "non_english_abstract": "",
+      "article_type": "Research article",
+      "author_keyword": "Imiquimod|Natural killer cells|Non-obese diabetic mice|Psoriasis",
+      "reference_count": "44",
+      "copyright_year": "2026",
+      "license_type": "http://creativecommons.org/licenses/by-nc-nd/4.0/",
+      "funding_status": "",
+      "authors": [
+        {
+          "name": "Shiu-Ju Yang",
+          "affiliation": "Department of Microbiology and Immunology, National Cheng Kung University Medical College, Tainan, Taiwan\\Institute of Infectious Diseases and Vaccinology, National Health Research Institutes, Miaoli, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Ming-Fei Liu",
+          "affiliation": "Section of Allergy, Immunology and Rheumatology, Department of Internal Medicine, National Cheng Kung University Medical College, Tainan, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Shih-Yao Chen",
+          "affiliation": "Department of Nursing, College of Nursing, Chung Hwa University of Medical Technology, Tainan, Taiwan\\Department of Orthopaedics, College of Medicine, National Cheng Kung University, Tainan, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Mei-Lin Yang",
+          "affiliation": "Department of Microbiology and Immunology, National Cheng Kung University Medical College, Tainan, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Chi-Chang Shieh",
+          "affiliation": "Institute of Clinical Medicine, National Cheng Kung University Medical College, Tainan, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Chao-Liang Wu",
+          "affiliation": "Department of Medical Research, Ditmanson Medical Foundation Chia-Yi Christian Hospital, Chiayi City, Taiwan\\Department of Biochemistry and Molecular Biology, National Cheng Kung University Medical College, Tainan, Taiwan",
+          "email": "wumolbio@mail.ncku.edu.tw"
+        },
+        {
+          "name": "Hung-Ping Wang",
+          "affiliation": "Division of Rheumatology, Department of Internal Medicine, Ditmanson Medical Foundation Chia-Yi Christian Hospital, Chiayi City, Taiwan",
+          "email": "06398@cych.org.tw"
+        },
+        {
+          "name": "Ai-Li Shiau",
+          "affiliation": "Department of Microbiology and Immunology, National Cheng Kung University Medical College, Tainan, Taiwan",
+          "email": "alshiau@mail.ncku.edu.tw"
+        }
+      ],
+      "editors": [],
+      "corporate_authors": []
+    },
+    {
+      "journal_title": "Journal of Microbiology, Immunology and Infection",
+      "journal_url": "https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/issues",
+      "volume": "59",
+      "issue": "4",
+      "issue_url": "https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/vol/59/issue/4",
+      "issue_publication_month": "August",
+      "issue_publication_day": "",
+      "issue_publication_year": "2026",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S1684118226000034",
+      "article_publication_month": "August",
+      "article_publication_day": "",
+      "article_publication_year": "2026",
+      "start_page": "517",
+      "last_page": "520",
+      "article_id": "",
+      "english_title": "A case of avian influenza A (H5N6) presented with secondary infection in Anhui Province, China, 2024",
+      "foreign_title": "",
+      "doi": "10.1016/j.jmii.2026.01.002",
+      "english_abstract": "A case of H5N6 avian influenza was reported in Anhui Province, China. The viral titers in the patient's lungs and pharynx decreased rapidly after oseltamivir treatment, yet it still fatal. The whole genome sequencing suggested that it derived from four distinct sources and classified within the 2.3.4.4b clade.",
+      "non_english_abstract": "",
+      "article_type": "Short communication",
+      "author_keyword": "Avian influenza virus|H5N6|Epidemiology|Genetic evolution",
+      "reference_count": "13",
+      "copyright_year": "2026",
+      "license_type": "http://creativecommons.org/licenses/by-nc-nd/4.0/",
+      "funding_status": "",
+      "authors": [
+        {
+          "name": "Wan-Rong Luo",
+          "affiliation": "Anhui Provincial Center for Disease Control and Prevention, Hefei, 230601, China\\Anhui Provincial Academy of Preventive Medicine, Hefei, 230601, China",
+          "email": ""
+        },
+        {
+          "name": "Jun-Ling Yu",
+          "affiliation": "Anhui Provincial Center for Disease Control and Prevention, Hefei, 230601, China\\Anhui Provincial Academy of Preventive Medicine, Hefei, 230601, China",
+          "email": ""
+        },
+        {
+          "name": "Yun Sun",
+          "affiliation": "The Second Hospital of Anhui Medical University, Hefei, 230601, China",
+          "email": ""
+        },
+        {
+          "name": "Lei Gong",
+          "affiliation": "Anhui Provincial Center for Disease Control and Prevention, Hefei, 230601, China\\Anhui Provincial Academy of Preventive Medicine, Hefei, 230601, China",
+          "email": ""
+        },
+        {
+          "name": "Sai Hou",
+          "affiliation": "Anhui Provincial Center for Disease Control and Prevention, Hefei, 230601, China\\Anhui Provincial Academy of Preventive Medicine, Hefei, 230601, China",
+          "email": ""
+        },
+        {
+          "name": "Zhong-Hua Lu",
+          "affiliation": "The Second Hospital of Anhui Medical University, Hefei, 230601, China",
+          "email": ""
+        },
+        {
+          "name": "Wei-Xi Fang",
+          "affiliation": "Anhui Provincial Center for Disease Control and Prevention, Hefei, 230601, China\\Anhui Provincial Academy of Preventive Medicine, Hefei, 230601, China",
+          "email": ""
+        },
+        {
+          "name": "Hong-Ya Gui",
+          "affiliation": "Anhui Provincial Center for Disease Control and Prevention, Hefei, 230601, China\\Anhui Provincial Academy of Preventive Medicine, Hefei, 230601, China",
+          "email": ""
+        },
+        {
+          "name": "Xue Zhou",
+          "affiliation": "Anhui Provincial Center for Disease Control and Prevention, Hefei, 230601, China\\Anhui Provincial Academy of Preventive Medicine, Hefei, 230601, China",
+          "email": ""
+        },
+        {
+          "name": "Peng Wang",
+          "affiliation": "Anhui Provincial Center for Disease Control and Prevention, Hefei, 230601, China\\Anhui Provincial Academy of Preventive Medicine, Hefei, 230601, China",
+          "email": ""
+        },
+        {
+          "name": "Jun He",
+          "affiliation": "Anhui Provincial Center for Disease Control and Prevention, Hefei, 230601, China\\Anhui Provincial Academy of Preventive Medicine, Hefei, 230601, China\\Anhui Medical University, Hefei, 230032, China",
+          "email": "834259180@qq.com"
+        },
+        {
+          "name": "Jun Ye",
+          "affiliation": "The Second Hospital of Anhui Medical University, Hefei, 230601, China",
+          "email": "yejun2004088@126.com"
+        },
+        {
+          "name": "Jia-Bing Wu",
+          "affiliation": "Anhui Provincial Center for Disease Control and Prevention, Hefei, 230601, China\\Anhui Provincial Academy of Preventive Medicine, Hefei, 230601, China",
+          "email": "heliosking@sina.com"
+        }
+      ],
+      "editors": [],
+      "corporate_authors": []
+    },
+    {
+      "journal_title": "Journal of Microbiology, Immunology and Infection",
+      "journal_url": "https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/issues",
+      "volume": "59",
+      "issue": "4",
+      "issue_url": "https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/vol/59/issue/4",
+      "issue_publication_month": "August",
+      "issue_publication_day": "",
+      "issue_publication_year": "2026",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S1684118226000411",
+      "article_publication_month": "August",
+      "article_publication_day": "",
+      "article_publication_year": "2026",
+      "start_page": "521",
+      "last_page": "524",
+      "article_id": "",
+      "english_title": "Comparison of BD MAX and GeneXpert for rapid detection of tuberculosis and rifampin–isoniazid resistance",
+      "foreign_title": "",
+      "doi": "10.1016/j.jmii.2026.03.008",
+      "english_abstract": "Evaluated in 87 respiratory specimens, BD MAX showed 100% sensitivity and 90.3% specificity in AFS-positive samples (n = 56). In 31 AFS-negative/Xpert Ultra-positive cases, it detected 25 of 29 culture-positive cases. Among these respiratory specimens, BD MAX correctly identified isoniazid resistance in all six HR-TB cases.",
+      "non_english_abstract": "",
+      "article_type": "Short communication",
+      "author_keyword": "Mycobacterium tuberculosis|Drug resistance|Isoniazid|Molecular diagnostics|BD MAX assay",
+      "reference_count": "10",
+      "copyright_year": "2026",
+      "license_type": "http://creativecommons.org/licenses/by-nc-nd/4.0/",
+      "funding_status": "",
+      "authors": [
+        {
+          "name": "Chun-Li Lee",
+          "affiliation": "Department of Laboratory Medicine, National Taiwan University Hospital, College of Medicine, National Taiwan University, Taipei, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Xiang-Jun Chen",
+          "affiliation": "Department of Laboratory Medicine, National Taiwan University Hospital, College of Medicine, National Taiwan University, Taipei, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Yun-Shan Lu",
+          "affiliation": "Department of Laboratory Medicine, National Taiwan University Hospital, College of Medicine, National Taiwan University, Taipei, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Yu-Cheng Lin",
+          "affiliation": "Department of Laboratory Medicine, National Taiwan University Hospital, College of Medicine, National Taiwan University, Taipei, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Tai-Fen Lee",
+          "affiliation": "Department of Laboratory Medicine, National Taiwan University Hospital, College of Medicine, National Taiwan University, Taipei, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Chin-Chung Shu",
+          "affiliation": "Department of Internal Medicine, National Taiwan University Hospital, College of Medicine, National Taiwan University, Taipei, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Yu-Tsung Huang",
+          "affiliation": "Department of Laboratory Medicine, National Taiwan University Hospital, College of Medicine, National Taiwan University, Taipei, Taiwan\\Department of Internal Medicine, National Taiwan University Hospital, College of Medicine, National Taiwan University, Taipei, Taiwan",
+          "email": "yutsunghuang@gmail.com"
+        }
+      ],
+      "editors": [],
+      "corporate_authors": []
+    },
+    {
+      "journal_title": "Journal of Microbiology, Immunology and Infection",
+      "journal_url": "https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/issues",
+      "volume": "59",
+      "issue": "4",
+      "issue_url": "https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/vol/59/issue/4",
+      "issue_publication_month": "August",
+      "issue_publication_day": "",
+      "issue_publication_year": "2026",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S1684118226000186",
+      "article_publication_month": "August",
+      "article_publication_day": "",
+      "article_publication_year": "2026",
+      "start_page": "525",
+      "last_page": "526",
+      "article_id": "",
+      "english_title": "Opisthotonus arising from an ulcerated breast cancer wound",
+      "foreign_title": "",
+      "doi": "10.1016/j.jmii.2026.01.005",
+      "english_abstract": "",
+      "non_english_abstract": "",
+      "article_type": "Correspondence",
+      "author_keyword": "",
+      "reference_count": "5",
+      "copyright_year": "2026",
+      "license_type": "http://creativecommons.org/licenses/by-nc-nd/4.0/",
+      "funding_status": "",
+      "authors": [
+        {
+          "name": "Yin-Ting Lin",
+          "affiliation": "Division of Infectious Diseases, Department of Internal Medicine, Chiayi Chang Gung Memorial Hospital, Chiayi, Taiwan\\Microbiology Treatment and Research Center, Chiayi Chang Gung Memorial Hospital, Chiayi, Taiwan",
+          "email": "sailprop0718@gmail.com"
+        },
+        {
+          "name": "Shu-Fang Kuo",
+          "affiliation": "Microbiology Treatment and Research Center, Chiayi Chang Gung Memorial Hospital, Chiayi, Taiwan\\Departments of Laboratory Medicine, Chiayi Chang Gung Memorial Hospital, Chiayi, Taiwan\\Department of Medical Biotechnology and Laboratory Sciences, College of Medicine, Chang Gung University, Taoyuan, Taiwan",
+          "email": "ivykuo@cgmh.org.tw"
+        },
+        {
+          "name": "Yu-Lin Cheng",
+          "affiliation": "Division of Nephrology, Department of Internal Medicine, Chiayi Chang Gung Memorial Hospital, Chiayi, Taiwan",
+          "email": "molinphoto543@gmail.com"
+        },
+        {
+          "name": "Huang-Shen Lin",
+          "affiliation": "Division of Infectious Diseases, Department of Internal Medicine, Chiayi Chang Gung Memorial Hospital, Chiayi, Taiwan\\College of Medicine, Chang Gung University, Taoyuan, Taiwan",
+          "email": "linhuangshen@gmail.com"
+        },
+        {
+          "name": "Chen-Hsiang Lee",
+          "affiliation": "Division of Infectious Diseases, Department of Internal Medicine, Chiayi Chang Gung Memorial Hospital, Chiayi, Taiwan\\College of Medicine, Chang Gung University, Taoyuan, Taiwan\\Division of Infectious Diseases, Department of Internal Medicine, Kaohsiung Chang Gung Memorial Hospital, Kaohsiung, Taiwan",
+          "email": "lee900@cgmh.org.tw"
+        }
+      ],
+      "editors": [],
+      "corporate_authors": []
+    },
+    {
+      "journal_title": "Journal of Microbiology, Immunology and Infection",
+      "journal_url": "https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/issues",
+      "volume": "59",
+      "issue": "4",
+      "issue_url": "https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/vol/59/issue/4",
+      "issue_publication_month": "August",
+      "issue_publication_day": "",
+      "issue_publication_year": "2026",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S1684118226000228",
+      "article_publication_month": "August",
+      "article_publication_day": "",
+      "article_publication_year": "2026",
+      "start_page": "527",
+      "last_page": "528",
+      "article_id": "",
+      "english_title": "Etiological identification of Orientia tsutsugamushi by metagenomic next-generation sequencing in an adult with septic shock in Taiwan",
+      "foreign_title": "",
+      "doi": "10.1016/j.jmii.2026.02.002",
+      "english_abstract": "",
+      "non_english_abstract": "",
+      "article_type": "Correspondence",
+      "author_keyword": "Metagenomic next-generation sequencing|Orientia tsutsugamushi|Rickettsiosis|Rickettsial infections|Scrub typhus",
+      "reference_count": "5",
+      "copyright_year": "2026",
+      "license_type": "http://creativecommons.org/licenses/by-nc-nd/4.0/",
+      "funding_status": "This study was supported by the grants from National Science and Technology Council (NSTC 114-2321-B-006-012), Taiwan.",
+      "authors": [
+        {
+          "name": "Tian-Yu You",
+          "affiliation": "Department of Internal Medicine, National Cheng Kung University Hospital, College of Medicine, National Cheng Kung University, Tainan, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Nan-Yao Lee",
+          "affiliation": "Department of Internal Medicine, National Cheng Kung University Hospital, College of Medicine, National Cheng Kung University, Tainan, Taiwan\\Center for Infection Control, National Cheng Kung University Hospital, College of Medicine, National Cheng Kung University, Tainan, Taiwan\\Department of Medicine, College of Medicine, National Cheng Kung University, Tainan, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Wen-Chia Tsai",
+          "affiliation": "Department of Internal Medicine, National Cheng Kung University Hospital, College of Medicine, National Cheng Kung University, Tainan, Taiwan\\Center for Infection Control, National Cheng Kung University Hospital, College of Medicine, National Cheng Kung University, Tainan, Taiwan\\Department of Medicine, College of Medicine, National Cheng Kung University, Tainan, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Ching-Lung Lo",
+          "affiliation": "Department of Internal Medicine, National Cheng Kung University Hospital, College of Medicine, National Cheng Kung University, Tainan, Taiwan\\Center for Infection Control, National Cheng Kung University Hospital, College of Medicine, National Cheng Kung University, Tainan, Taiwan\\Department of Medicine, College of Medicine, National Cheng Kung University, Tainan, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Po-Ta Chen",
+          "affiliation": "Department of Internal Medicine, National Cheng Kung University Hospital, College of Medicine, National Cheng Kung University, Tainan, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Szu-Ying Chen",
+          "affiliation": "Center for Infection Control, National Cheng Kung University Hospital, College of Medicine, National Cheng Kung University, Tainan, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Hao-En Jan",
+          "affiliation": "Department of Internal Medicine, National Cheng Kung University Hospital, College of Medicine, National Cheng Kung University, Tainan, Taiwan\\Center for Infection Control, National Cheng Kung University Hospital, College of Medicine, National Cheng Kung University, Tainan, Taiwan\\Department of Medicine, College of Medicine, National Cheng Kung University, Tainan, Taiwan\\Department of Public Health, College of Medicine, National Cheng Kung University, Tainan, Taiwan",
+          "email": "david12030920@gmail.com"
+        },
+        {
+          "name": "Wen-Chien Ko",
+          "affiliation": "Department of Internal Medicine, National Cheng Kung University Hospital, College of Medicine, National Cheng Kung University, Tainan, Taiwan\\Center for Infection Control, National Cheng Kung University Hospital, College of Medicine, National Cheng Kung University, Tainan, Taiwan\\Department of Medicine, College of Medicine, National Cheng Kung University, Tainan, Taiwan",
+          "email": "winston3415@gmail.com"
+        }
+      ],
+      "editors": [],
+      "corporate_authors": []
+    },
+    {
+      "journal_title": "Journal of Microbiology, Immunology and Infection",
+      "journal_url": "https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/issues",
+      "volume": "59",
+      "issue": "4",
+      "issue_url": "https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/vol/59/issue/4",
+      "issue_publication_month": "August",
+      "issue_publication_day": "",
+      "issue_publication_year": "2026",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S1684118226000678",
+      "article_publication_month": "August",
+      "article_publication_day": "",
+      "article_publication_year": "2026",
+      "start_page": "529",
+      "last_page": "",
+      "article_id": "",
+      "english_title": "Corrigendum to “Younger adults with mild-to-moderate COVID-19 exhibited more prevalent olfactory dysfunction in Taiwan” [J Microbiol Immunol Infect 54 (2021) 794–800]",
+      "foreign_title": "",
+      "doi": "10.1016/j.jmii.2026.06.002",
+      "english_abstract": "",
+      "non_english_abstract": "",
+      "article_type": "Erratum",
+      "author_keyword": "",
+      "reference_count": "",
+      "copyright_year": "2026",
+      "license_type": "",
+      "funding_status": "",
+      "authors": [
+        {
+          "name": "Meng-Yu Cheng",
+          "affiliation": "Division of Infectious Diseases, Department of Internal Medicine, China Medical University Hospital, Taichung, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Wen-Hsin Hsih",
+          "affiliation": "Division of Infectious Diseases, Department of Internal Medicine, China Medical University Hospital, Taichung, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Mao-Wang Ho",
+          "affiliation": "Division of Infectious Diseases, Department of Internal Medicine, China Medical University Hospital, Taichung, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Yi-Chyi Lai",
+          "affiliation": "Department of Microbiology and Immunology, Chung Shan Medical University, Taichung, Taiwan\\Department of Internal Medicine, Chung Shan Medical University Hospital, Taichung, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Wei-Chih Liao",
+          "affiliation": "Division of Pulmonary and Critical Medicine, Department of Internal Medicine, China Medical University Hospital, Taichung, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Chih-Yu Chen",
+          "affiliation": "Division of Pulmonary and Critical Medicine, Department of Internal Medicine, China Medical University Hospital, Taichung, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Tsung-Chia Chen",
+          "affiliation": "Division of Infectious Diseases, Department of Internal Medicine, Taichung Hospital, Ministry of Health and Welfare, Taichung, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Yu-Lin Lee",
+          "affiliation": "Division of Infectious Diseases, Department of Internal Medicine, Changhua Christian Hospital, Changhua, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Po-Yu Liu",
+          "affiliation": "Division of Infectious Diseases, Department of Internal Medicine, Taichung Veterans General Hospital, Taichung, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Chih-Chuan Kao",
+          "affiliation": "Division of Infectious Diseases, Department of Internal Medicine, Tungs’ Taichung Metroharbor Hospital, Taichung, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Chia-Huei Chou",
+          "affiliation": "Division of Infectious Diseases, Department of Internal Medicine, China Medical University Hospital, Taichung, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Po-Chang Lin",
+          "affiliation": "Division of Infectious Diseases, Department of Internal Medicine, China Medical University Hospital, Taichung, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Chih-Yu Chi",
+          "affiliation": "Division of Infectious Diseases, Department of Internal Medicine, China Medical University Hospital, Taichung, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Lih-Ying Leong",
+          "affiliation": "Division of Infectious Diseases, Department of Internal Medicine, China Medical University Hospital, Taichung, Taiwan",
+          "email": ""
+        },
+        {
+          "name": "Chih-Jaan Tai",
+          "affiliation": "Department of Otorhinolaryngology, China Medical University Hospital, Taichung, Taiwan\\Department of Health Services Administration, China Medical University, Taichung, Taiwan",
+          "email": "cjtai@mail.cmu.edu.tw"
+        },
+        {
+          "name": "Min-Chi Lu",
+          "affiliation": "Division of Infectious Diseases, Department of Internal Medicine, China Medical University Hospital, Taichung, Taiwan\\Department of Microbiology and Immunology, School of Medicine, China Medical University, Taichung, Taiwan",
+          "email": "luminchi@outlook.com"
+        }
+      ],
+      "editors": [],
+      "corporate_authors": []
+    }
+  ]
+}

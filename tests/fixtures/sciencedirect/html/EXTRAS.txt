@@ -1,0 +1,14 @@
+# One article URL per line. Optionally follow it with the issue or journal URL
+# used to warm the browser. Add a fixture name in a trailing # comment.
+# Format: ARTICLE_URL [ISSUE_OR_JOURNAL_URL] [# fixture_name]
+# If the article URL contains /journal/<slug>/ or /bookseries/<slug>/, the warm
+# URL can be omitted and will be derived as the journal issues/bookseries volumes page.
+# Canonical /science/article/pii/... URLs do not contain that slug, so they need
+# the second URL.
+#
+# Still needed:
+#   foreign_title / foreign_abstract:
+#     https://www.sciencedirect.com/journal/revue-veterinaire-clinique/issues
+#     https://www.sciencedirect.com/journal/cahiers-de-nutrition-et-de-dietetique/issues
+#   bookseries path shape:
+#     https://www.sciencedirect.com/bookseries/advances-in-parasitology/volumes

@@ -47,6 +47,13 @@ class DetailsSettings(BaseModel):
 
     model_config = ConfigDict(extra="forbid", frozen=True)
 
+    @field_validator("output_path", mode="before")
+    @classmethod
+    def strip_trailing_separators(cls, value: object) -> object:
+        """Normalise INI paths before platform-specific ``Path`` parsing."""
+
+        return value.rstrip("\\/") if isinstance(value, str) else value
+
 
 class PathSettings(BaseModel):
     url_details: Path

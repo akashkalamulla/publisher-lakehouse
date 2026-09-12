@@ -1,0 +1,809 @@
+{
+  "articles": [
+    {
+      "journal_title": "International Journal of Sediment Research",
+      "journal_url": "https://www.sciencedirect.com/journal/international-journal-of-sediment-research/issues",
+      "volume": "41",
+      "issue": "5",
+      "issue_url": "https://www.sciencedirect.com/journal/international-journal-of-sediment-research/vol/41/issue/5",
+      "issue_publication_month": "October",
+      "issue_publication_day": "",
+      "issue_publication_year": "2026",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S1001627926000612",
+      "article_publication_month": "October",
+      "article_publication_day": "",
+      "article_publication_year": "2026",
+      "start_page": "ii",
+      "last_page": "iii",
+      "article_id": "",
+      "english_title": "TOC",
+      "foreign_title": "",
+      "doi": "10.1016/S1001-6279(26)00061-2",
+      "english_abstract": "",
+      "non_english_abstract": "",
+      "article_type": "Editorial board",
+      "author_keyword": "",
+      "reference_count": "",
+      "copyright_year": "",
+      "license_type": "http://creativecommons.org/licenses/by-nc-nd/4.0/",
+      "funding_status": "",
+      "authors": [],
+      "editors": [],
+      "corporate_authors": []
+    },
+    {
+      "journal_title": "International Journal of Sediment Research",
+      "journal_url": "https://www.sciencedirect.com/journal/international-journal-of-sediment-research/issues",
+      "volume": "41",
+      "issue": "5",
+      "issue_url": "https://www.sciencedirect.com/journal/international-journal-of-sediment-research/vol/41/issue/5",
+      "issue_publication_month": "October",
+      "issue_publication_day": "",
+      "issue_publication_year": "2026",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S1001627926000569",
+      "article_publication_month": "October",
+      "article_publication_day": "",
+      "article_publication_year": "2026",
+      "start_page": "727",
+      "last_page": "747",
+      "article_id": "",
+      "english_title": "3D velocity structure and Reynolds shear stress around an oblong pier under clear-water and live-bed conditions",
+      "foreign_title": "",
+      "doi": "10.1016/j.ijsrc.2026.07.008",
+      "english_abstract": "Local scour around bridge piers involves complex three-dimensional (3D) flow–sediment interactions poorly documented for non-circular geometries. This study investigates the 3D velocity field and Reynolds shear stress (RSS) around an oblong bridge pier under clear-water (CW) and live-bed (LB) conditions using full-circumference Acoustic Doppler Velocimetry (ADV) at eight azimuthal positions over fixed reconstructed equilibrium scour beds.\n\nThe oblong pier generates a vertically compact vortex system, shallow near-bed downflow upstream, lateral sweeping along the shoulders, and wake-induced upflow downstream confined to the lower flow depth (y/H ≲ 0.2). The pier-influence zone is strongly asymmetric: upstream disturbance is confined to r/D ≤ 2.4, while the downstream wake sustains elevated velocity deficits (δU > 5%) to r/D ≈ 4.4, with far-field recovery (δU ≤ 5%) first confirmed at r/D = 4.6 under both regimes.\n\nUnder CW conditions, peak normalized bed shear stress reaches 1.1–1.7 at the upstream shoulders (θ ≈ 45°–75°), producing deep, focused scour. Under LB conditions, the shear field is more diffuse, yielding wider but shallower scour (∼11% shallower). In the far-field, log-law and RSS-based shear estimates agree within ±20%; near the pier, the log-law fails under strongly 3D flow. These findings support a mechanism-based framework for scour assessment at oblong bridge piers under the tested conditions. Although maximum local scour occurs immediately adjacent to the pier, the hydrodynamic influence zone extends to r/D ≤ 2.4 upstream and r/D ≤ 4.6 downstream, and countermeasures should target this broader zone. RSS-based estimation provides the more robust near-pier shear method.",
+      "non_english_abstract": "",
+      "article_type": "Research article",
+      "author_keyword": "Oblong bridge pier|Reynolds shear stress|Acoustic Doppler Velocimetry|Local scour|Clear-water and live-bed conditions",
+      "reference_count": "41",
+      "copyright_year": "2026",
+      "license_type": "http://creativecommons.org/licenses/by-nc-nd/4.0/",
+      "funding_status": "",
+      "authors": [
+        {
+          "name": "Bambang Agus Kironoto",
+          "affiliation": "Department of Civil and Environmental Engineering, Faculty of Engineering, Universitas Gadjah Mada, Yogyakarta, Indonesia",
+          "email": "kironoto@ugm.ac.id"
+        },
+        {
+          "name": "Achmad Rafi’ud Darajat",
+          "affiliation": "Department of Civil and Environmental Engineering, Faculty of Engineering, Universitas Gadjah Mada, Yogyakarta, Indonesia\\Department of Civil Engineering, Faculty of Engineering, Universitas Tidar, Magelang, Indonesia",
+          "email": ""
+        },
+        {
+          "name": "Istiarto",
+          "affiliation": "Department of Civil and Environmental Engineering, Faculty of Engineering, Universitas Gadjah Mada, Yogyakarta, Indonesia",
+          "email": ""
+        },
+        {
+          "name": "Adam Pamudji Rahardjo",
+          "affiliation": "Department of Civil and Environmental Engineering, Faculty of Engineering, Universitas Gadjah Mada, Yogyakarta, Indonesia",
+          "email": ""
+        }
+      ],
+      "editors": [],
+      "corporate_authors": []
+    },
+    {
+      "journal_title": "International Journal of Sediment Research",
+      "journal_url": "https://www.sciencedirect.com/journal/international-journal-of-sediment-research/issues",
+      "volume": "41",
+      "issue": "5",
+      "issue_url": "https://www.sciencedirect.com/journal/international-journal-of-sediment-research/vol/41/issue/5",
+      "issue_publication_month": "October",
+      "issue_publication_day": "",
+      "issue_publication_year": "2026",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S1001627926000326",
+      "article_publication_month": "October",
+      "article_publication_day": "",
+      "article_publication_year": "2026",
+      "start_page": "748",
+      "last_page": "759",
+      "article_id": "",
+      "english_title": "Distinct mechanisms influence the variations in soil shear strength between collapsing walls and non-collapse profiles in the hilly granitic region of south China",
+      "foreign_title": "",
+      "doi": "10.1016/j.ijsrc.2026.05.002",
+      "english_abstract": "Soil shear strength is a critical mechanical property governing the stability of collapsing walls in Benggang erosion, a severe form of land degradation in the granitic hilly regions of southern China. While its importance is recognized, a systematic comparison of the driving mechanisms behind shear strength indicators between collapsing walls and intact, non-collapse soil profiles has been lacking. This study addresses this gap by integrating direct shear testing, complex network analysis, and partial least squares-structural equation modeling (PLS-SEM). Quantitative analysis confirmed significantly lower shear strength in collapsing walls relative to non-collapse profiles, exhibiting reductions of 32.90% in cohesion force and 8.13% in the internal friction angle. Complex network analysis further revealed a less complex and more fragmented interaction network among soil properties within the collapsing walls, characterized by fewer connections and slower information transmission. Mechanistic insights from PLS-SEM identified basic chemical properties as the dominant direct factor influencing shear strength indicators changes, whereas physical properties exerted their effects indirectly by modulating basic chemical properties and iron–aluminum–manganese oxides. This study conclusively demonstrates that the degradation of soil shear strength in collapsing walls stems primarily from the fundamental alterations in soil properties and the disruption of their synergistic interactions, providing a novel mechanistic framework for understanding and predicting Benggang evolution.",
+      "non_english_abstract": "",
+      "article_type": "Research article",
+      "author_keyword": "Non-collapse soil profiles|Collapsing walls|Shear strength indicators|Benggang erosion|Cohesion force|Internal friction angle",
+      "reference_count": "57",
+      "copyright_year": "2026",
+      "license_type": "http://creativecommons.org/licenses/by-nc-nd/4.0/",
+      "funding_status": "",
+      "authors": [
+        {
+          "name": "Xiang Zhang",
+          "affiliation": "Fujian Agriculture and Forestry University, Fuzhou, 350002, China\\National Positioning Observation and Research Station of Red Soil Hill Ecosystem in Changting, Fuzhou, 350002, China",
+          "email": ""
+        },
+        {
+          "name": "Jialin Chen",
+          "affiliation": "Fujian Agriculture and Forestry University, Fuzhou, 350002, China",
+          "email": ""
+        },
+        {
+          "name": "Liangwen Lin",
+          "affiliation": "Fujian Agriculture and Forestry University, Fuzhou, 350002, China",
+          "email": ""
+        },
+        {
+          "name": "Haitao Wang",
+          "affiliation": "Fujian Agriculture and Forestry University, Fuzhou, 350002, China",
+          "email": ""
+        },
+        {
+          "name": "Jiayu Liu",
+          "affiliation": "Fujian Agriculture and Forestry University, Fuzhou, 350002, China",
+          "email": ""
+        },
+        {
+          "name": "Huaxin Cao",
+          "affiliation": "Fujian Agriculture and Forestry University, Fuzhou, 350002, China",
+          "email": ""
+        },
+        {
+          "name": "Fangshi Jiang",
+          "affiliation": "Fujian Agriculture and Forestry University, Fuzhou, 350002, China",
+          "email": ""
+        },
+        {
+          "name": "Yanhe Huang",
+          "affiliation": "Fujian Agriculture and Forestry University, Fuzhou, 350002, China",
+          "email": ""
+        },
+        {
+          "name": "Jinshi Lin",
+          "affiliation": "Fujian Agriculture and Forestry University, Fuzhou, 350002, China",
+          "email": "Linjs18@163.com"
+        }
+      ],
+      "editors": [],
+      "corporate_authors": []
+    },
+    {
+      "journal_title": "International Journal of Sediment Research",
+      "journal_url": "https://www.sciencedirect.com/journal/international-journal-of-sediment-research/issues",
+      "volume": "41",
+      "issue": "5",
+      "issue_url": "https://www.sciencedirect.com/journal/international-journal-of-sediment-research/vol/41/issue/5",
+      "issue_publication_month": "October",
+      "issue_publication_day": "",
+      "issue_publication_year": "2026",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S1001627926000351",
+      "article_publication_month": "October",
+      "article_publication_day": "",
+      "article_publication_year": "2026",
+      "start_page": "760",
+      "last_page": "771",
+      "article_id": "",
+      "english_title": "New insights on optimizing aeolian–fluvial sediment source fingerprinting using geomorphic controls and correction factors—Case study: Lake Urmia sand dunes, NW Iran",
+      "foreign_title": "",
+      "doi": "10.1016/j.ijsrc.2026.05.005",
+      "english_abstract": "Accurate identification of sediment sources remains a major challenge in sediment fingerprinting due to uncertainties associated with tracer selection, model structure, and the lack of geomorphically informed framework constraints. Over the past decade, persistent desiccation of Lake Urmia, coupled with strong winds, has triggered the formation of extensive aeolian sand dunes along its western margins. This study aims to improve sediment source fingerprinting by integrating geomorphic parameters and correction factors within both local (modified Collins’ model) and global (genetic algorithm, GA) optimization frameworks in the Kahriz Subbasin. Correction factors, including particle size, organic matter, and key geomorphic parameters (e.g., slope, drainage density, and source-to-sink distance), were incorporated into model simulations. The results indicate that, without these factors, both optimization methods show limited performance (internal validation < 65%). In contrast, the GA-based model, when combined with correction factors, significantly improves model performance (internal validation > 80%) and identifies gravel fans (Qf), cherty dolomite and metamorphic sandstone (Eb), and channel deposits (Qal) as the dominant sediment sources. The modified Collins’ model, however, yields less stable and geomorphically less consistent results, emphasizing its sensitivity to model assumptions. These findings demonstrate that incorporating geomorphic controls and correction factors is essential for reducing uncertainty and achieving physically meaningful sediment source apportionment.",
+      "non_english_abstract": "",
+      "article_type": "Research article",
+      "author_keyword": "Sediment fingerprinting|Optimization|Genetic algorithm (GA)|Geomorphic parameters|Aeolian sand dune|Lake Urmia",
+      "reference_count": "65",
+      "copyright_year": "2026",
+      "license_type": "http://creativecommons.org/licenses/by-nc-nd/4.0/",
+      "funding_status": "",
+      "authors": [
+        {
+          "name": "Mehdi Samadpour-Benab",
+          "affiliation": "Faculty of Natural Resources, Urmia University, Urmia, Iran",
+          "email": ""
+        },
+        {
+          "name": "Hesam Ahmady-Birgani",
+          "affiliation": "Faculty of Natural Resources, Urmia University, Urmia, Iran",
+          "email": "h.ahmadybirgani@urmia.ac.ir"
+        },
+        {
+          "name": "Hirad Abghari",
+          "affiliation": "Faculty of Natural Resources, Urmia University, Urmia, Iran",
+          "email": ""
+        }
+      ],
+      "editors": [],
+      "corporate_authors": []
+    },
+    {
+      "journal_title": "International Journal of Sediment Research",
+      "journal_url": "https://www.sciencedirect.com/journal/international-journal-of-sediment-research/issues",
+      "volume": "41",
+      "issue": "5",
+      "issue_url": "https://www.sciencedirect.com/journal/international-journal-of-sediment-research/vol/41/issue/5",
+      "issue_publication_month": "October",
+      "issue_publication_day": "",
+      "issue_publication_year": "2026",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S1001627926000521",
+      "article_publication_month": "October",
+      "article_publication_day": "",
+      "article_publication_year": "2026",
+      "start_page": "772",
+      "last_page": "785",
+      "article_id": "",
+      "english_title": "Influence of sand fence opening shapes on aeolian sand transport and deposition under fixed porosity",
+      "foreign_title": "",
+      "doi": "10.1016/j.ijsrc.2026.07.004",
+      "english_abstract": "Perforated sand fences are widely used to mitigate aeolian sand hazards along desert railways; however, generalized links between sand fence opening shapes and downwind deposition remain limited under fixed porosity. In this study, wind tunnel measurements combined with validated numerical simulations quantify how opening shapes, including opening scale, perimeter complexity, slit aspect ratio, and slit orientation, regulate wake recovery, near-surface shear, and sand flux redistribution at a fixed total porosity. Across all geometries, a near-fence acceleration zone is followed by momentum loss and downstream recovery, while the recovery length varies systematically with aperture design and governs the extent and persistence of the low-shear shadow that controls sand trapping. Straight slits generate spatially coherent low-velocity wakes, expand low-shear areas, and suppress re-entrainment, promoting a continuous deposition belt immediately leeward of the fence. In contrast, inclined slits redirect momentum upward or laterally, shortening recovery while forming directional shear corridors that shift and elongate deposition zones and may enhance lateral export. The centerline particle volume fraction peaks at the fence and decays within one to two fence heights, with the longest downstream tails associated with geometries that promote lifted jet transport. These results provide geometry based predictors and design guidance for selecting opening shapes to stabilize near-leeward trapping belts or steer deposition away from sensitive infrastructure in arid transport corridors, under the present fixed-porosity conditions.",
+      "non_english_abstract": "",
+      "article_type": "Research article",
+      "author_keyword": "Aeolian sand transport|sand fence porosity geometry|sand deposition pattern|Near-bed shear stress|Arid transport corridor",
+      "reference_count": "26",
+      "copyright_year": "2026",
+      "license_type": "http://creativecommons.org/licenses/by-nc-nd/4.0/",
+      "funding_status": "",
+      "authors": [
+        {
+          "name": "Guowei Xin",
+          "affiliation": "School of Civil Engineering, Lanzhou Jiaotong University, Lanzhou 730070, China",
+          "email": "xingw@lzjtu.edu.cn"
+        },
+        {
+          "name": "Youchun Ding",
+          "affiliation": "School of Civil Engineering, Lanzhou Jiaotong University, Lanzhou 730070, China",
+          "email": ""
+        },
+        {
+          "name": "Yanlu Qi",
+          "affiliation": "Xinjiang Railway Survey and Design Institute Company Limited, Urumqi 830011, China",
+          "email": ""
+        },
+        {
+          "name": "Jiaxin Xu",
+          "affiliation": "School of Civil Engineering, Lanzhou Jiaotong University, Lanzhou 730070, China",
+          "email": ""
+        },
+        {
+          "name": "Zhen Yang",
+          "affiliation": "School of Civil Engineering, Lanzhou Jiaotong University, Lanzhou 730070, China",
+          "email": ""
+        },
+        {
+          "name": "Guanghui Tang",
+          "affiliation": "China Railway Construction Management Co., Ltd, Beijing 100036, China",
+          "email": ""
+        }
+      ],
+      "editors": [],
+      "corporate_authors": []
+    },
+    {
+      "journal_title": "International Journal of Sediment Research",
+      "journal_url": "https://www.sciencedirect.com/journal/international-journal-of-sediment-research/issues",
+      "volume": "41",
+      "issue": "5",
+      "issue_url": "https://www.sciencedirect.com/journal/international-journal-of-sediment-research/vol/41/issue/5",
+      "issue_publication_month": "October",
+      "issue_publication_day": "",
+      "issue_publication_year": "2026",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S1001627926000375",
+      "article_publication_month": "October",
+      "article_publication_day": "",
+      "article_publication_year": "2026",
+      "start_page": "786",
+      "last_page": "809",
+      "article_id": "",
+      "english_title": "Reconstructing paleoenvironments of the late Cretaceous sequence in the Anambra Basin, Nigeria: New insights from grain texture and morphology",
+      "foreign_title": "",
+      "doi": "10.1016/j.ijsrc.2026.06.001",
+      "english_abstract": "This study investigates Campano-Maastrichtian sediments from the northern Anambra Basin, Nigeria, to refine existing paleoenvironmental models through a multi-proxy integration of particle size analysis, scanning electron microscopy with energy dispersive X-ray spectroscopy (SEM-EDX), and principal component analysis (PCA). While previous studies relied on first-order textural data, the current integrated approach provides new insight into the interplay of provenance, episodic energy fluctuations, and diagenetic overprinting. Seventeen samples of sandstone, siltstone, and ironstone were collected from the Ajali and Mamu formations at Odagbo, Egume, and Iyale. Granulometric analysis reveals predominantly fine to medium-grained, unimodal, and poorly to moderately sorted sediments. Linear discriminant functions suggest deposition in a mixed fluvial and shallow marine setting, with potential episodic influence of high-energy density flows or storm-induced turbulence. SEM imaging shows grain morphologies ranging from angular to rounded, with microtextures such as: conchoidal fractures, dissolution pits, and quartz overgrowth, reflecting variable transport distances and diagenetic modifications. EDX spectra confirm quartz-dominated mineralogy with variable aluminosilicate, iron oxide, and traces of heavy mineral contributions, while the PCA identified three compositional groups: (1) quartz-rich, texturally mature assemblages; (2) feldspathic and clay-rich sediments of proximal origin; and (3) organic and iron (Fe)-bearing sediment reflecting redox variations. These results demonstrate that sediment supply was derived from cratonic interior sources, modified by fluvial input and reworked under shallow marine conditions with subsequent diagenetic overprinting. By integrating textural and geochemical data, this study highlights the interplay of provenance, episodic hydrodynamic fluctuations, and diagenesis, providing new insight into the paleoenvironmental evolution of the Anambra Basin.",
+      "non_english_abstract": "",
+      "article_type": "Research article",
+      "author_keyword": "Particle size analysis|SEM-EDX|Diagenesis|PCA|Depositional environment|Northern Anambra Basin",
+      "reference_count": "77",
+      "copyright_year": "2026",
+      "license_type": "http://creativecommons.org/licenses/by-nc-nd/4.0/",
+      "funding_status": "",
+      "authors": [
+        {
+          "name": "Taiwo A. Bolaji",
+          "affiliation": "Department of Geology, Faculty of Physical Sciences, Federal University Oye-Ekiti, Ekiti State, 371010, Nigeria",
+          "email": "taiwo.bolaji@fuoye.edu.ng"
+        },
+        {
+          "name": "Gbemisola E. Abiola",
+          "affiliation": "Department of Geology, Faculty of Physical Sciences, Federal University Oye-Ekiti, Ekiti State, 371010, Nigeria",
+          "email": ""
+        },
+        {
+          "name": "Olumide S. Ogunmodimu",
+          "affiliation": "Department of Energy and Mineral Engineering, College of Earth and Mineral Sciences, The Pennsylvania State University, PA, 16802, USA",
+          "email": "olumide.o@psu.edu"
+        },
+        {
+          "name": "Olushola S. Ayanda",
+          "affiliation": "Department of Industrial Chemistry, Faculty of Physical Sciences, Federal University Oye-Ekiti, Ekiti State, 371010, Nigeria",
+          "email": ""
+        },
+        {
+          "name": "Ayuk C. Ayuk",
+          "affiliation": "Department of Energy and Mineral Engineering, College of Earth and Mineral Sciences, The Pennsylvania State University, PA, 16802, USA",
+          "email": ""
+        }
+      ],
+      "editors": [],
+      "corporate_authors": []
+    },
+    {
+      "journal_title": "International Journal of Sediment Research",
+      "journal_url": "https://www.sciencedirect.com/journal/international-journal-of-sediment-research/issues",
+      "volume": "41",
+      "issue": "5",
+      "issue_url": "https://www.sciencedirect.com/journal/international-journal-of-sediment-research/vol/41/issue/5",
+      "issue_publication_month": "October",
+      "issue_publication_day": "",
+      "issue_publication_year": "2026",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S1001627926000363",
+      "article_publication_month": "October",
+      "article_publication_day": "",
+      "article_publication_year": "2026",
+      "start_page": "810",
+      "last_page": "822",
+      "article_id": "",
+      "english_title": "Modeling of sand production and transport on wind-water composite erosion slopes based on energy processes",
+      "foreign_title": "",
+      "doi": "10.1016/j.ijsrc.2026.05.006",
+      "english_abstract": "Soil erosion is most intricate and damaging in the geomorphological context where wind and water erosion converge. This research introduces an energy-based model for simulating wind-water composite erosion, sand generation, and sediment transport on sandy and coarse sandy slopes within the Yellow River basin. The model integrates erosion energy as a fundamental element, utilizing data obtained from wind tunnel testing and rainfall studies. The findings indicate that the wind erosion energy-based model for predicting sand production and transport is highly effective in sand-capped bedrock, sand-capped loess, and loess regions, achieving coefficients of determination (R2) of 0.978, 0.944, and 0.979, respectively. The goodness of fit between sediment yield on loess slopes and runoff erosion energy yielded an R2 of 0.804, whereas the R2 for sand-capped slopes was only 0.565, indicating a significant decrease in fitting performance compared with loess slopes. The wind-water compound slope erosion sediment yield and transport model established in this study achieves coefficients of determination R2 of 0.891 for sand-capped loess and 0.957 for sand-capped bedrock, and possesses better prediction performance than models that only take runoff energy into account. This research not only provides theoretical support for the in-depth prevention and control of combined wind and water erosion, but also offers quantitative evidence for formulating regional ecological restoration and management strategies.",
+      "non_english_abstract": "",
+      "article_type": "Research article",
+      "author_keyword": "Wind erosion energy|Runoff energy|Sediment yield and transport model|Sandy and coarse sandy area|Wind tunnel experiment|Rainfall experiment",
+      "reference_count": "75",
+      "copyright_year": "2026",
+      "license_type": "http://creativecommons.org/licenses/by-nc-nd/4.0/",
+      "funding_status": "",
+      "authors": [
+        {
+          "name": "Xingyue Guo",
+          "affiliation": "State Key Laboratory of Water Engineering Ecology and Environment in Arid Area, Xi’an University of Technology, Xi’an 710048, China",
+          "email": ""
+        },
+        {
+          "name": "Tian Wang",
+          "affiliation": "State Key Laboratory of Water Engineering Ecology and Environment in Arid Area, Xi’an University of Technology, Xi’an 710048, China\\Key Laboratory of National Forestry Administration on Ecological Hydrology and Disaster Prevention in Arid Regions, Xi’an University of Technology, Xi’an 710048, China",
+          "email": "t.wang@xaut.edu.cn"
+        },
+        {
+          "name": "Zhanbin Li",
+          "affiliation": "State Key Laboratory of Water Engineering Ecology and Environment in Arid Area, Xi’an University of Technology, Xi’an 710048, China\\Key Laboratory of National Forestry Administration on Ecological Hydrology and Disaster Prevention in Arid Regions, Xi’an University of Technology, Xi’an 710048, China",
+          "email": ""
+        },
+        {
+          "name": "Peng Li",
+          "affiliation": "State Key Laboratory of Water Engineering Ecology and Environment in Arid Area, Xi’an University of Technology, Xi’an 710048, China\\Key Laboratory of National Forestry Administration on Ecological Hydrology and Disaster Prevention in Arid Regions, Xi’an University of Technology, Xi’an 710048, China",
+          "email": ""
+        },
+        {
+          "name": "Yaqiong Jiang",
+          "affiliation": "State Key Laboratory of Water Engineering Ecology and Environment in Arid Area, Xi’an University of Technology, Xi’an 710048, China",
+          "email": ""
+        },
+        {
+          "name": "Xiaoming Zhang",
+          "affiliation": "State Key Laboratory of Water Cycle and Water Security, China Institute of Water Resources and Hydropower Research, Beijing 100048, China",
+          "email": ""
+        },
+        {
+          "name": "Tiegang Zhang",
+          "affiliation": "Institute of Water Resources for Pastoral Area, Ministry of Water Resources, Huhhot 010020, China",
+          "email": ""
+        },
+        {
+          "name": "Jianye Lv",
+          "affiliation": "State Key Laboratory of Water Engineering Ecology and Environment in Arid Area, Xi’an University of Technology, Xi’an 710048, China",
+          "email": ""
+        },
+        {
+          "name": "Yunzhe Zhen",
+          "affiliation": "State Key Laboratory of Water Engineering Ecology and Environment in Arid Area, Xi’an University of Technology, Xi’an 710048, China",
+          "email": ""
+        },
+        {
+          "name": "Fan Yue",
+          "affiliation": "PowerChina Northwest Engineering Corporation Limited, Xi’an 710065, China",
+          "email": ""
+        }
+      ],
+      "editors": [],
+      "corporate_authors": []
+    },
+    {
+      "journal_title": "International Journal of Sediment Research",
+      "journal_url": "https://www.sciencedirect.com/journal/international-journal-of-sediment-research/issues",
+      "volume": "41",
+      "issue": "5",
+      "issue_url": "https://www.sciencedirect.com/journal/international-journal-of-sediment-research/vol/41/issue/5",
+      "issue_publication_month": "October",
+      "issue_publication_day": "",
+      "issue_publication_year": "2026",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S1001627926000399",
+      "article_publication_month": "October",
+      "article_publication_day": "",
+      "article_publication_year": "2026",
+      "start_page": "823",
+      "last_page": "833",
+      "article_id": "",
+      "english_title": "Review of the migration and transformation of reservoir mineral-associated organic carbon (MAOC)",
+      "foreign_title": "",
+      "doi": "10.1016/j.ijsrc.2026.06.003",
+      "english_abstract": "Mineral-associated organic carbon (MAOC) plays an important role in reservoir carbon cycling and carbon sink function. This review synthesizes recent advances in the migration and transformation of MAOC in reservoirs from two complementary perspectives: migration, involving adsorption–desorption, hydrodynamic transport, flocculation, sedimentation, and water–sediment regulation; and transformation, involving microbial processing, redox regulation, and long-term burial. It clarifies the pathways of MAOC input, transport, release, decomposition, and preservation and summarizes the coupled influences of hydrological conditions, sediment properties, physicochemical environments, biological activity, and reservoir operation on MAOC dynamics. Available evidence indicates that reservoir MAOC dynamics are jointly regulated by particle-size sorting, organo–mineral interactions, oxygen and redox conditions, microbial activity, and anthropogenic regulation, which together determine whether MAOC is stabilized and buried or remobilized and transformed. Differences in MAOC migration and transformation between reservoirs and rivers are also discussed. Current research remains limited by insufficient mechanistic coupling, inadequate dynamic quantification, and limited cross-scale integration. Future studies should strengthen long-term observations, controlled experiments, and coupled water-sediment-carbon modeling to improve the assessment and prediction of reservoir carbon sink functions under changing environmental conditions.",
+      "non_english_abstract": "",
+      "article_type": "Review article",
+      "author_keyword": "Reservoir|Sediment|Mineral-associated organic carbon (MAOC)|Carbon burial|Adsorption|Desorption",
+      "reference_count": "101",
+      "copyright_year": "2026",
+      "license_type": "http://creativecommons.org/licenses/by-nc-nd/4.0/",
+      "funding_status": "",
+      "authors": [
+        {
+          "name": "Kezhi Wang",
+          "affiliation": "State Key Laboratory of Water Cycle and Water Security, China Institute of Water Resources and Hydropower Research, Beijing, 100048, China\\Key Laboratory of Sediment Science and Northern River Training, Ministry of Water Resources, China Institute of Water Resources and Hydropower Research, Beijing, 100048, China",
+          "email": ""
+        },
+        {
+          "name": "Anjun Deng",
+          "affiliation": "State Key Laboratory of Water Cycle and Water Security, China Institute of Water Resources and Hydropower Research, Beijing, 100048, China\\Key Laboratory of Sediment Science and Northern River Training, Ministry of Water Resources, China Institute of Water Resources and Hydropower Research, Beijing, 100048, China",
+          "email": ""
+        },
+        {
+          "name": "Huiming Zhao",
+          "affiliation": "State Key Laboratory of Water Cycle and Water Security, China Institute of Water Resources and Hydropower Research, Beijing, 100048, China\\Key Laboratory of Sediment Science and Northern River Training, Ministry of Water Resources, China Institute of Water Resources and Hydropower Research, Beijing, 100048, China",
+          "email": "zhaohuiming045@163.com"
+        },
+        {
+          "name": "Xianyong Dong",
+          "affiliation": "China Three Gorges Construction Engineering Corporation, Chengdu, 610041, China",
+          "email": ""
+        },
+        {
+          "name": "Jianguo Chen",
+          "affiliation": "State Key Laboratory of Water Cycle and Water Security, China Institute of Water Resources and Hydropower Research, Beijing, 100048, China\\Key Laboratory of Sediment Science and Northern River Training, Ministry of Water Resources, China Institute of Water Resources and Hydropower Research, Beijing, 100048, China",
+          "email": ""
+        },
+        {
+          "name": "Zedong Du",
+          "affiliation": "China Three Gorges Construction Engineering Corporation, Chengdu, 610041, China",
+          "email": ""
+        },
+        {
+          "name": "Zhongfu Xiong",
+          "affiliation": "Upper Yangtze River Bureau of Hydrology and Water Resources Survey, Hydrology Bureau of Yangtze River Water Resources Commission, Chongqing, 400021, China",
+          "email": ""
+        },
+        {
+          "name": "Xingyu Zhou",
+          "affiliation": "China Three Gorges Construction Engineering Corporation, Chengdu, 610041, China",
+          "email": ""
+        },
+        {
+          "name": "Shuai Xiao",
+          "affiliation": "State Key Laboratory of Water Cycle and Water Security, China Institute of Water Resources and Hydropower Research, Beijing, 100048, China\\Key Laboratory of Sediment Science and Northern River Training, Ministry of Water Resources, China Institute of Water Resources and Hydropower Research, Beijing, 100048, China",
+          "email": ""
+        }
+      ],
+      "editors": [],
+      "corporate_authors": []
+    },
+    {
+      "journal_title": "International Journal of Sediment Research",
+      "journal_url": "https://www.sciencedirect.com/journal/international-journal-of-sediment-research/issues",
+      "volume": "41",
+      "issue": "5",
+      "issue_url": "https://www.sciencedirect.com/journal/international-journal-of-sediment-research/vol/41/issue/5",
+      "issue_publication_month": "October",
+      "issue_publication_day": "",
+      "issue_publication_year": "2026",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S1001627926000491",
+      "article_publication_month": "October",
+      "article_publication_day": "",
+      "article_publication_year": "2026",
+      "start_page": "834",
+      "last_page": "846",
+      "article_id": "",
+      "english_title": "Machine learning-driven SSC retrieval in the high-turbidity lower Yellow River leveraging a novel red-edge and narrow NIR band synergy",
+      "foreign_title": "",
+      "doi": "10.1016/j.ijsrc.2026.07.001",
+      "english_abstract": "Spatiotemporal dynamics of suspended sediment concentration (SSC) in the lower Yellow River, China (LYR), are critical for understanding channel evolution and optimizing reservoir operations but remain poorly quantified at high resolution. This study combined Sentinel-2 imagery and daily SSC data from seven hydrological stations to develop a retrieval model integrating machine learning feature selection with empirical regression. The proposed normalized difference index (B8A – B7)/(B8A + B7) achieved high retrieval accuracy (R2 = 0.82) and was applied to reconstruct SSC variations during 2019–2024. Daily SSC during this period ranged from approximately 0 to 30 kg/m3, with daily discharge varying between approximately 100 and 5200 m3/s, representing typical conditions of a highly turbid, flow-regulated river. The results reveal a distinct spatiotemporal regime: high-concentration events predominantly occur in summer, synchronized with flood seasons and reservoir discharges, while a clear erosion–deposition transition exists approximately 20–30 km downstream of Luokou station, a representative hydrological station located in the downstream channel of the LYR. This spatial pattern indicates the limited efficacy of current regulation strategies in maintaining full-stream scour. The study provides a novel monitoring framework for sediment transport in highly regulated rivers and highlights the need for adaptive management strategies to mitigate discontinuous scour and deposition.",
+      "non_english_abstract": "",
+      "article_type": "Research article",
+      "author_keyword": "Suspended sediment concentration (SSC)|Yellow River|Remote sensing|Sentinel-2",
+      "reference_count": "72",
+      "copyright_year": "2026",
+      "license_type": "http://creativecommons.org/licenses/by-nc-nd/4.0/",
+      "funding_status": "",
+      "authors": [
+        {
+          "name": "Guorui Shen",
+          "affiliation": "College of Geodesy and Geomatics, Shandong University of Science and Technology, Qingdao, 266590, China",
+          "email": ""
+        },
+        {
+          "name": "Dongxian Kong",
+          "affiliation": "College of Geodesy and Geomatics, Shandong University of Science and Technology, Qingdao, 266590, China",
+          "email": "kdx@sdust.edu.cn"
+        },
+        {
+          "name": "Yongcai Jing",
+          "affiliation": "Henan Key Laboratory of Ecological Environment Protection and Restoration of Yellow River Basin, Yellow River Institute of Hydraulic Research, Zhengzhou, 450003, China",
+          "email": ""
+        },
+        {
+          "name": "Mo Liu",
+          "affiliation": "College of Geodesy and Geomatics, Shandong University of Science and Technology, Qingdao, 266590, China",
+          "email": ""
+        },
+        {
+          "name": "Chiyuan Miao",
+          "affiliation": "State Key Laboratory of Earth Surface Processes and Resource Ecology, Faculty of Geographical Science, Beijing Normal University, Beijing, 100875, China",
+          "email": "miaocy@bnu.edu.cn"
+        }
+      ],
+      "editors": [],
+      "corporate_authors": []
+    },
+    {
+      "journal_title": "International Journal of Sediment Research",
+      "journal_url": "https://www.sciencedirect.com/journal/international-journal-of-sediment-research/issues",
+      "volume": "41",
+      "issue": "5",
+      "issue_url": "https://www.sciencedirect.com/journal/international-journal-of-sediment-research/vol/41/issue/5",
+      "issue_publication_month": "October",
+      "issue_publication_day": "",
+      "issue_publication_year": "2026",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S1001627926000508",
+      "article_publication_month": "October",
+      "article_publication_day": "",
+      "article_publication_year": "2026",
+      "start_page": "847",
+      "last_page": "862",
+      "article_id": "",
+      "english_title": "Erosion-deposition patterns in large, deep reservoirs dominated by intervening-catchment sediment inputs: A case study of the cascade of reservoirs in the Lower Jinsha River, China",
+      "foreign_title": "",
+      "doi": "10.1016/j.ijsrc.2026.07.002",
+      "english_abstract": "Under regulation of a cascade of reservoirs, sediment supply from upstream to downstream reservoirs is greatly reduced, increasing the relative importance of sediment inputs from intervening catchments. The current study investigated erosion and deposition patterns in the four reservoirs of the Lower Jinsha River cascade, Wudongde (WDD), Baihetan (BHT), Xiluodu (XLD), and Xiangjiaba (XJB), using hydrological, sediment, and topographic data. From initial operation to October 2023, cumulative sediment deposition reached 55.8, 82.8, 487.3, and 37.0 million m3 in WDD, BHT, XLD, and XJB, respectively. With limited upstream sediment supply, sedimentation rates generally declined over time, and most reservoirs exhibited net scour in recent years, partly attributable to rapid compaction of deposited sediment under deep-water conditions. Sediment inputs from tributaries and other intervening catchments contributed substantially to the sediment accumulation, with deposition per unit storage capacity in tributary zones being 2.5–8.2 times that in the corresponding main-stem zones. Along the reservoir axis, sediment deposition was relatively uniform due to lateral sediment inputs, although local maxima occurred near major tributary confluences where recirculation and low-velocity zones promoted sediment accumulation. Vertically, deposition occurred mainly below the dead water level, with little accumulation between the dead water level and the flood-limited water level and slight net scour occurred between the flood-limited water level and the normal pool level. The thalweg longitudinal profiles were well described by an exponential decay function (R2 > 0.94). WDD and BHT exhibited limited spatial and temporal variability, XLD underwent pronounced early-stage adjustment before stabilizing, and XJB experienced marked incision near both the dam and the reservoir tail. These findings provide a scientific basis for sedimentation assessment and management in the cascade of reservoirs under reduced upstream sediment supply conditions.",
+      "non_english_abstract": "",
+      "article_type": "Research article",
+      "author_keyword": "Sediment-starved conditions|Reservoir sedimentation|Deposition patterns|Longitudinal profile|Lower Jinsha river",
+      "reference_count": "37",
+      "copyright_year": "2026",
+      "license_type": "http://creativecommons.org/licenses/by-nc-nd/4.0/",
+      "funding_status": "",
+      "authors": [
+        {
+          "name": "Ziyan Lu",
+          "affiliation": "State Key Laboratory of Water Cycle and Water Security in River Basin, China Institute of Water Resources and Hydropower Research, Beijing, 100048, China\\Key Laboratory of Sediment Science and Northern River Training, Ministry of Water Resources, China Institute of Water Resources and Hydropower Research, Beijing, 100048, China",
+          "email": ""
+        },
+        {
+          "name": "Anjun Deng",
+          "affiliation": "State Key Laboratory of Water Cycle and Water Security in River Basin, China Institute of Water Resources and Hydropower Research, Beijing, 100048, China\\Key Laboratory of Sediment Science and Northern River Training, Ministry of Water Resources, China Institute of Water Resources and Hydropower Research, Beijing, 100048, China",
+          "email": "denganj@iwhr.com"
+        },
+        {
+          "name": "Shuai Xiao",
+          "affiliation": "State Key Laboratory of Water Cycle and Water Security in River Basin, China Institute of Water Resources and Hydropower Research, Beijing, 100048, China\\Key Laboratory of Sediment Science and Northern River Training, Ministry of Water Resources, China Institute of Water Resources and Hydropower Research, Beijing, 100048, China",
+          "email": ""
+        },
+        {
+          "name": "Kezhi Wang",
+          "affiliation": "State Key Laboratory of Water Cycle and Water Security in River Basin, China Institute of Water Resources and Hydropower Research, Beijing, 100048, China\\Key Laboratory of Sediment Science and Northern River Training, Ministry of Water Resources, China Institute of Water Resources and Hydropower Research, Beijing, 100048, China",
+          "email": ""
+        },
+        {
+          "name": "Shenghang Feng",
+          "affiliation": "River Basin Complex Administration Center, China Three Gorges Corporation, Yichang, 443133, China",
+          "email": ""
+        },
+        {
+          "name": "Zijing Zhou",
+          "affiliation": "State Key Laboratory of Water Cycle and Water Security in River Basin, China Institute of Water Resources and Hydropower Research, Beijing, 100048, China\\Key Laboratory of Sediment Science and Northern River Training, Ministry of Water Resources, China Institute of Water Resources and Hydropower Research, Beijing, 100048, China",
+          "email": ""
+        },
+        {
+          "name": "Fei Ling",
+          "affiliation": "State Key Laboratory of Water Cycle and Water Security in River Basin, China Institute of Water Resources and Hydropower Research, Beijing, 100048, China\\Key Laboratory of Sediment Science and Northern River Training, Ministry of Water Resources, China Institute of Water Resources and Hydropower Research, Beijing, 100048, China",
+          "email": ""
+        },
+        {
+          "name": "Shiyu Jiang",
+          "affiliation": "State Key Laboratory of Water Cycle and Water Security in River Basin, China Institute of Water Resources and Hydropower Research, Beijing, 100048, China\\Key Laboratory of Sediment Science and Northern River Training, Ministry of Water Resources, China Institute of Water Resources and Hydropower Research, Beijing, 100048, China",
+          "email": ""
+        }
+      ],
+      "editors": [],
+      "corporate_authors": []
+    },
+    {
+      "journal_title": "International Journal of Sediment Research",
+      "journal_url": "https://www.sciencedirect.com/journal/international-journal-of-sediment-research/issues",
+      "volume": "41",
+      "issue": "5",
+      "issue_url": "https://www.sciencedirect.com/journal/international-journal-of-sediment-research/vol/41/issue/5",
+      "issue_publication_month": "October",
+      "issue_publication_day": "",
+      "issue_publication_year": "2026",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S100162792600051X",
+      "article_publication_month": "October",
+      "article_publication_day": "",
+      "article_publication_year": "2026",
+      "start_page": "863",
+      "last_page": "878",
+      "article_id": "",
+      "english_title": "Multitype sediment deposits and sediment supply potential across alluvial–bedrock reaches of the Parlung Tsangpo river",
+      "foreign_title": "",
+      "doi": "10.1016/j.ijsrc.2026.07.003",
+      "english_abstract": "The Parlung Tsangpo Grand Canyon, located on the southeastern margin of the Tibetan Plateau, is one of the most tectonically active and sediment-dynamic regions in the alpine gorge zone. Frequent landslides, bank collapses, and flood events generate diverse multitype sediment deposits that strongly influence sediment supply and channel evolution. However, comprehensive investigations into the geometric characteristics of coexisting multitype sediment deposits, reach types, and associated sediment supply dynamics in river reaches subject to minimal human disturbance remain limited. In this study, the Parlung Tsangpo River (PTR) was selected as the study area. Focusing on the existing sediment deposits within the current river corridor, we identified and characterized four main types of sediment deposits—high-energy flood deposits (HFDs), confluence-zone alluvial deposits (CADs), bank-collapse deposits (BCDs), and landslide deposits (LSDs) —and the river was further divided into alluvial, mixed bedrock–alluvial, and bedrock reaches. The results indicate that variations in grain-size composition and geometric attributes among deposit types reflect distinct formative mechanisms and energy regimes, whereas reach type exerts a fundamental control on river morphology as well as the spatial scale and distribution of sediment deposits. Sediment supply is controlled by deposit geometry, spatial location, and discharge magnitude: HFD contributes most under low-flow conditions, whereas LSD and CAD dominate during high-flow and extreme flood events. This study elucidates the formation mechanisms, spatial differentiation, and sediment-supply processes of multitype sediment deposits in a high-mountain gorge environment, providing quantitative insights into potential sediment-supply dynamics and local channel adjustment in data-scarce alpine canyon rivers.",
+      "non_english_abstract": "",
+      "article_type": "Research article",
+      "author_keyword": "Tibetan plateau|Parlung Tsangpo river|Multitype sediment deposits|Sediment supply",
+      "reference_count": "83",
+      "copyright_year": "2026",
+      "license_type": "http://creativecommons.org/licenses/by-nc-nd/4.0/",
+      "funding_status": "",
+      "authors": [
+        {
+          "name": "Runxiang Li",
+          "affiliation": "State Key Laboratory of Hydraulics and Mountain River Engineering, Sichuan University, Chengdu, 610065, China",
+          "email": ""
+        },
+        {
+          "name": "Xudong Ma",
+          "affiliation": "State Key Laboratory of Hydraulics and Mountain River Engineering, Sichuan University, Chengdu, 610065, China",
+          "email": ""
+        },
+        {
+          "name": "Ming Luo",
+          "affiliation": "State Key Laboratory of Hydraulics and Mountain River Engineering, Sichuan University, Chengdu, 610065, China",
+          "email": ""
+        },
+        {
+          "name": "Ruihua Nie",
+          "affiliation": "State Key Laboratory of Hydraulics and Mountain River Engineering, Sichuan University, Chengdu, 610065, China",
+          "email": "nierh@scu.edu.cn"
+        }
+      ],
+      "editors": [],
+      "corporate_authors": []
+    },
+    {
+      "journal_title": "International Journal of Sediment Research",
+      "journal_url": "https://www.sciencedirect.com/journal/international-journal-of-sediment-research/issues",
+      "volume": "41",
+      "issue": "5",
+      "issue_url": "https://www.sciencedirect.com/journal/international-journal-of-sediment-research/vol/41/issue/5",
+      "issue_publication_month": "October",
+      "issue_publication_day": "",
+      "issue_publication_year": "2026",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S1001627926000557",
+      "article_publication_month": "October",
+      "article_publication_day": "",
+      "article_publication_year": "2026",
+      "start_page": "879",
+      "last_page": "890",
+      "article_id": "",
+      "english_title": "Laboratory experiment on phosphorus adsorption characteristics of different-sized sediment particles in the Middle Yangtze River",
+      "foreign_title": "",
+      "doi": "10.1016/j.ijsrc.2026.07.007",
+      "english_abstract": "In alluvial rivers, sediment particles exhibit a strong affinity to phosphorus (P), with the adsorption capacity varying across different particle sizes, and the experimentally derived adsorption parameters can be used in water quality models that consider the effect of sediment adsorption processes. However, there exist limited systematic experimental studies on how particle size influences P adsorption by sediment. To investigate the P adsorption characteristics of different-sized sediments, surface bed sediment samples were collected from two sections in the Middle Yangtze River (MYR), with particle size (D) ranging between 2 and 500 μm. These sediment mixtures were then separated into 7 size fractions (down to D < 8 μm), with the corresponding mean particle size (D¯) ranging from 5.9 to 424.8 μm. The native adsorbed P (NAP) amounts for different-sized sediment fractions were measured, and P adsorption experiments were conducted for the 7 sediment fractions under 3 different sediment concentrations (S) with a similar environment of pH and temperature when sampled from the MYR. Experimental results show that: (i) NAP values for sediment particles with D < 500 μm ranged from 0.15 to 0.47 mg·g−1, exhibiting a negative exponential relation with D¯; (ii) P adsorption by sediment primarily occurred within the first 4 h, with the highest adsorption rate, and both the amount and rate of P adsorption were negatively correlated with S and D¯; (iii) key adsorption parameters in the Langmuir isotherm and kinetic equations were calibrated using the experimental data, achieving high fitting accuracy. The maximum P adsorption amount (Qmax) obtained in isothermal experiments was well described by the equation considering the combined effects of S and D¯: Qmax = 1.6189S−0.228 D¯−0.283, with particle size having a greater influence than sediment concentration; and (iv) in addition, the kinetic adsorption data for most sediment fractions (D < 250 μm) were closely distributed and displayed a consistent linear trend, leading to the determination of unified adsorption kinetic parameters for nonuniform sediment under different S values: k1 = 0.257 L·mg−1·h−1 and k2 = 0.057 h−1.",
+      "non_english_abstract": "",
+      "article_type": "Research article",
+      "author_keyword": "Phosphorus adsorption|Nonuniform sediment|Adsorption parameters|Laboratory experiment|Middle Yangtze river",
+      "reference_count": "57",
+      "copyright_year": "2026",
+      "license_type": "http://creativecommons.org/licenses/by-nc-nd/4.0/",
+      "funding_status": "",
+      "authors": [
+        {
+          "name": "Junqiang Xia",
+          "affiliation": "State Key Laboratory of Water Resources Engineering and Management, Wuhan University, Wuhan 430072, China",
+          "email": "xiajq@whu.edu.cn"
+        },
+        {
+          "name": "Yu Mao",
+          "affiliation": "State Key Laboratory of Water Resources Engineering and Management, Wuhan University, Wuhan 430072, China",
+          "email": ""
+        },
+        {
+          "name": "Meirong Zhou",
+          "affiliation": "State Key Laboratory of Water Resources Engineering and Management, Wuhan University, Wuhan 430072, China",
+          "email": "zmr@whu.edu.cn"
+        },
+        {
+          "name": "Shanshan Deng",
+          "affiliation": "State Key Laboratory of Water Resources Engineering and Management, Wuhan University, Wuhan 430072, China",
+          "email": ""
+        },
+        {
+          "name": "Xi Shi",
+          "affiliation": "State Key Laboratory of Water Resources Engineering and Management, Wuhan University, Wuhan 430072, China",
+          "email": ""
+        }
+      ],
+      "editors": [],
+      "corporate_authors": []
+    },
+    {
+      "journal_title": "International Journal of Sediment Research",
+      "journal_url": "https://www.sciencedirect.com/journal/international-journal-of-sediment-research/issues",
+      "volume": "41",
+      "issue": "5",
+      "issue_url": "https://www.sciencedirect.com/journal/international-journal-of-sediment-research/vol/41/issue/5",
+      "issue_publication_month": "October",
+      "issue_publication_day": "",
+      "issue_publication_year": "2026",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S1001627926000533",
+      "article_publication_month": "October",
+      "article_publication_day": "",
+      "article_publication_year": "2026",
+      "start_page": "891",
+      "last_page": "908",
+      "article_id": "",
+      "english_title": "Changes in sedimentation in the Caribbean Sea before, during and after the shoaling of the Central American Seaway",
+      "foreign_title": "",
+      "doi": "10.1016/j.ijsrc.2026.07.005",
+      "english_abstract": "The Pliocene, a pivotal period in Earth’s climatic evolution, holds immense significance. It marks the transition from a notably warmer period, with no permanent ice in the northern hemisphere, to the colder phases associated with the Pleistocene glacial periods. Several geological events were significant during the Neogene, but one of the most crucial was the closure of the Isthmus of Panama. This land bridge, connecting the North and South American continents, formed primarily through the convergence of the Cocos plate, the Caribbean plate, and the Panama microplate, resulting in widespread orogeny and intense volcanism. This study is based on textural, mineralogical, and geochemical proxies derived from samples collected in the Caribbean Sea basin at site 999A of the ocean drilling program (ODP). It aims to understand the influence of the closure of the Isthmus of Panama and climate change on sedimentation in the study area (Colombian Basin). The geochemical and mineralogical data suggest that orbital (Milankovitch) cycles influenced sedimentation patterns in the Caribbean Sea during the Pliocene due to substantial changes in regional precipitation. However, after the shoaling of the Central American seaway, approximately 4 million years ago, the expression of these cycles in sedimentation in the study area decreased. The impact of these orbital cycles on precipitation began to diminish as the North Atlantic and the Caribbean Sea warmed. This shift had profound implications for climate dynamics, causing the Intertropical Convergence zone to migrate northward. With the onset of the Pleistocene, approximately 2.58 million years ago, the relevance of orbital forcing reemerged, fundamentally influencing sedimentation in the Caribbean Sea and specifically affecting precipitation patterns in the equatorial region and the South American monsoon system. Understanding this complex interaction is crucial, as it highlights how geological and climatic factors have shaped our modern environment.",
+      "non_english_abstract": "",
+      "article_type": "Research article",
+      "author_keyword": "Geochemistry|Orbital cycles|Paleoproductivity|Atlantic meridional overturning circulation",
+      "reference_count": "124",
+      "copyright_year": "2026",
+      "license_type": "http://creativecommons.org/licenses/by-nc-nd/4.0/",
+      "funding_status": "",
+      "authors": [
+        {
+          "name": "Murilo Barros Saibro",
+          "affiliation": "Universidade do Estado do Rio de Janeiro, UERJ, Programa de Pós-graduação em Geociências, Faculdade de Geologia, Av. São Francisco Xavier, 524, Sala 4037F, Maracanã, 20550-013, Rio de Janeiro, RJ, Brazil",
+          "email": "saibrobarros@gmail.com"
+        },
+        {
+          "name": "Maria Virginia Alves Martins",
+          "affiliation": "Universidade do Estado do Rio de Janeiro, UERJ, Programa de Pós-graduação em Geociências, Faculdade de Geologia, Av. São Francisco Xavier, 524, Sala 4037F, Maracanã, 20550-013, Rio de Janeiro, RJ, Brazil\\Universidade de Aveiro, GeoBioTec, Departamento de Geociências, Campus de Santiago, 3810-193, Aveiro, Portugal",
+          "email": "virginia.martins@ua.pt"
+        },
+        {
+          "name": "Orangel Antonio Aguilera Socorro",
+          "affiliation": "Universidade Federal Fluminense, UFF, Programa de Pós-graduação em Geoquímica e Biologia Marinha, Campus Gragoatá, Bloco M, Sala 425 426, Niterói, RJ, Brazil",
+          "email": "orangel.aguilera@gmail.com"
+        },
+        {
+          "name": "Denise Terroso",
+          "affiliation": "Universidade de Aveiro, GeoBioTec, Departamento de Geociências, Campus de Santiago, 3810-193, Aveiro, Portugal",
+          "email": "laraterroso@ua.pt"
+        },
+        {
+          "name": "Felipe de Castro Figueiredo Simões",
+          "affiliation": "Universidade do Estado do Rio de Janeiro, UERJ, Programa de Pós-graduação em Geociências, Faculdade de Geologia, Av. São Francisco Xavier, 524, Sala 4037F, Maracanã, 20550-013, Rio de Janeiro, RJ, Brazil\\Universidade do Estado do Rio de Janeiro, UERJ, Faculdade de Oceanografia, Rua São Francisco Xavier, 524, 4° andar, Bloco E, Sala 4018, CEP 20550-900, Rio de Janeiro, RJ, Brazil",
+          "email": "felipe.simoes@uerj.br"
+        },
+        {
+          "name": "Emilly Bastos da Silva",
+          "affiliation": "Universidade do Estado do Rio de Janeiro, UERJ, Faculdade de Oceanografia, Rua São Francisco Xavier, 524, 4° andar, Bloco E, Sala 4018, CEP 20550-900, Rio de Janeiro, RJ, Brazil",
+          "email": "emillybastos222@gmail.com"
+        },
+        {
+          "name": "Josefa Varela Guerra",
+          "affiliation": "Universidade do Estado do Rio de Janeiro, UERJ, Faculdade de Oceanografia, Rua São Francisco Xavier, 524, 4° andar, Bloco E, Sala 4018, CEP 20550-900, Rio de Janeiro, RJ, Brazil",
+          "email": "josefa@uerj.br"
+        },
+        {
+          "name": "Rubens Cesar Lopes Figueira",
+          "affiliation": "Instituto Oceanográfico, Universidade de São Paulo, IOUSP. Pça. do Oceanográfico, 191, Butantã, São Paulo, 05508 120, Brazil",
+          "email": "rfigueira@usp.br"
+        },
+        {
+          "name": "João Wagner Alencar Castro",
+          "affiliation": "Universidade Federal do Rio de Janeiro, Museu Nacional, Quinta da Boa Vista S n, São Cristovão, Rio de Janeiro, RJ, 20940-040, Brazil",
+          "email": "castro@mn.ufrj.br"
+        },
+        {
+          "name": "Fernando Rocha",
+          "affiliation": "Universidade de Aveiro, GeoBioTec, Departamento de Geociências, Campus de Santiago, 3810-193, Aveiro, Portugal",
+          "email": "tavares.rocha@ua.pt"
+        }
+      ],
+      "editors": [],
+      "corporate_authors": []
+    }
+  ]
+}

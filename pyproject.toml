@@ -21,6 +21,9 @@ dependencies = [
     "zendriver==0.16.0",
 ]
 
+[project.scripts]
+publisher-lakehouse = "publisher_lakehouse.cli:app"
+
 [project.optional-dependencies]
 test = [
     "pytest>=8.3",
@@ -32,4 +35,3 @@ include = ["publisher_lakehouse*"]
 [tool.pytest.ini_options]
 addopts = "-ra"
 testpaths = ["tests"]
-

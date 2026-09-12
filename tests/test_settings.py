@@ -9,6 +9,7 @@ from pathlib import Path
 import pytest
 
 from publisher_lakehouse.settings import (
+    DetailsSettings,
     load_environment_settings,
     load_operator_settings,
     load_settings,
@@ -83,6 +84,13 @@ def test_operator_settings_are_read_from_the_given_ini(tmp_path: Path) -> None:
     assert operator.ingestion.manifest_flush_every == 3
     assert operator.refresh.journal_days == 0
     assert operator.refresh.article_days == 90
+
+
+def test_details_output_path_ignores_a_trailing_separator() -> None:
+    with_separator = DetailsSettings(output_path="C:\\CABIACQ_NEW1\\")
+    without_separator = DetailsSettings(output_path="C:\\CABIACQ_NEW1")
+
+    assert with_separator.output_path == without_separator.output_path
 
 
 def test_environment_and_operator_settings_are_loaded_separately(
