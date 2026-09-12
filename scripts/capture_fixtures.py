@@ -23,6 +23,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 LEGACY_PATH = REPO_ROOT / "CABIACQ.py"
 GOLDEN_DIR = REPO_ROOT / "tests" / "fixtures" / "golden" / "sciencedirect"
 HTML_DIR = REPO_ROOT / "tests" / "fixtures" / "sciencedirect" / "html"
+ISSUE_HTML_DIR = REPO_ROOT / "tests" / "fixtures" / "sciencedirect" / "issue_html"
 SELECTION_PATH = HTML_DIR / "SELECTION.json"
 EXTRAS_PATH = HTML_DIR / "EXTRAS.txt"
 SOURCE_PATH = HTML_DIR / "SOURCE.md"
@@ -45,6 +46,14 @@ class Fixture:
 class CaptureResult:
     outcome: str
     byte_count: int = 0
+
+
+@dataclass(frozen=True)
+class IssueCapture:
+    slug: str
+    issue_url: str
+    page_title: str
+    byte_count: int
 
 
 @dataclass(frozen=True)
@@ -126,6 +135,10 @@ def derive_warm_url(url: str) -> str:
 
 def safe_name(value: str) -> str:
     return re.sub(r"[^a-z0-9]+", "_", value.lower()).strip("_") or "manual_extra"
+
+
+def issue_slug(issue_url: str) -> str:
+    return safe_name(unquote(urlparse(issue_url).path))
 
 
 def load_selection() -> list[Fixture]:
@@ -343,14 +356,61 @@ async def verify_session_cleared(
     return title
 
 
-async def warm_verified_session(
+async def save_issue_page(
     legacy: ModuleType, browser: object, issue_url: str
+) -> IssueCapture:
+    page = getattr(browser, "main_tab", None)
+    if page is None:
+        raise WarmupVerificationError(
+            f"Could not save warmed issue URL {issue_url}: no active tab"
+        )
+    try:
+        html = await page.get_content()
+    except Exception as exc:
+        raise WarmupVerificationError(
+            f"Could not read warmed issue URL {issue_url}: "
+            f"{type(exc).__name__}: {exc}"
+        ) from exc
+    if html is None:
+        raise WarmupVerificationError(
+            f"Could not read warmed issue URL {issue_url}: page returned no HTML"
+        )
+    html_text = normalise_html(html)
+    if not html_text.strip():
+        raise WarmupVerificationError(
+            f"Could not read warmed issue URL {issue_url}: page returned empty HTML"
+        )
+
+    captured_title = page_title(BeautifulSoup(html_text, "lxml"))
+    if legacy.is_blocked(captured_title):
+        raise WarmupVerificationError(
+            f"Warmed issue URL {issue_url} returned a blocked page; "
+            f"title={captured_title!r}"
+        )
+
+    slug = issue_slug(issue_url)
+    byte_count = len(html_text.encode("utf-8"))
+    ISSUE_HTML_DIR.mkdir(parents=True, exist_ok=True)
+    (ISSUE_HTML_DIR / f"{slug}.html").write_text(
+        html_text, encoding="utf-8", newline="\n"
+    )
+    return IssueCapture(slug, issue_url, captured_title, byte_count)
+
+
+async def warm_verified_session(
+    legacy: ModuleType,
+    browser: object,
+    issue_url: str,
+    issue_captures: dict[str, IssueCapture],
 ) -> None:
     last_error: WarmupVerificationError | None = None
     for attempt in range(1, 3):
         await legacy.setup_browser_session(browser, issue_url)
         try:
             title = await verify_session_cleared(legacy, browser, issue_url)
+            issue_capture = None
+            if issue_url not in issue_captures:
+                issue_capture = await save_issue_page(legacy, browser, issue_url)
         except WarmupVerificationError as exc:
             last_error = exc
             if attempt == 1:
@@ -362,18 +422,29 @@ async def warm_verified_session(
                 continue
             break
         print(f"  [setup] Verified issue session. Title: {title[:80]!r}")
+        if issue_capture is not None:
+            issue_captures[issue_url] = issue_capture
+            print(
+                f"  [issue] {issue_capture.slug}  saved  "
+                f"{issue_capture.byte_count} bytes"
+            )
         return
     raise WarmupVerificationError(
         f"Warm-up failed twice for issue URL {issue_url}: {last_error}"
     ) from last_error
 
 
-async def restart_browser(legacy: ModuleType, browser: object, issue_url: str) -> object:
+async def restart_browser(
+    legacy: ModuleType,
+    browser: object,
+    issue_url: str,
+    issue_captures: dict[str, IssueCapture],
+) -> object:
     await stop_browser(browser)
     await asyncio.sleep(BLOCK_RESTART_DELAY_SECONDS)
     replacement = await legacy.start_browser()
     try:
-        await warm_verified_session(legacy, replacement, issue_url)
+        await warm_verified_session(legacy, replacement, issue_url, issue_captures)
     except Exception:
         await stop_browser(replacement)
         raise
@@ -381,7 +452,10 @@ async def restart_browser(legacy: ModuleType, browser: object, issue_url: str) -
 
 
 async def capture_one(
-    legacy: ModuleType, browser: object, fixture: Fixture
+    legacy: ModuleType,
+    browser: object,
+    fixture: Fixture,
+    issue_captures: dict[str, IssueCapture],
 ) -> tuple[object, CaptureResult]:
     target = HTML_DIR / f"{fixture.fixture_name}.html"
 
@@ -404,7 +478,9 @@ async def capture_one(
                     f"({block_attempt}/4); waiting, restarting, and re-warming "
                     f"on {fixture.issue_url}"
                 )
-                browser = await restart_browser(legacy, browser, fixture.issue_url)
+                browser = await restart_browser(
+                    legacy, browser, fixture.issue_url, issue_captures
+                )
                 continue
             return browser, CaptureResult("failed (blocked after 4 attempts)")
 
@@ -520,6 +596,7 @@ def write_source(
     fixtures: Sequence[Fixture],
     results: Mapping[str, CaptureResult],
     findings: Mapping[str, RichTextFinding],
+    issue_captures: Mapping[str, IssueCapture],
 ) -> None:
     lines = [
         "# ScienceDirect HTML fixtures",
@@ -549,6 +626,29 @@ def write_source(
                     fixture.journal_title,
                     ", ".join(fixture.covers),
                     rich_text,
+                )
+            )
+            + " |"
+        )
+    lines.extend(
+        [
+            "",
+            "## Issue pages",
+            "",
+            "| Slug | Issue URL | Page title | Byte size |",
+            "|---|---|---|---:|",
+        ]
+    )
+    for issue_capture in issue_captures.values():
+        lines.append(
+            "| "
+            + " | ".join(
+                markdown_cell(value)
+                for value in (
+                    issue_capture.slug,
+                    issue_capture.issue_url,
+                    issue_capture.page_title,
+                    issue_capture.byte_count,
                 )
             )
             + " |"
@@ -587,15 +687,20 @@ def group_by_issue(fixtures: Sequence[Fixture]) -> list[tuple[str, list[Fixture]
 
 async def capture_all(fixtures: Sequence[Fixture], legacy: ModuleType) -> int:
     results: dict[str, CaptureResult] = {}
+    issue_captures: dict[str, IssueCapture] = {}
     abort_error: WarmupVerificationError | None = None
     completed = 0
     for issue_url, issue_fixtures in group_by_issue(fixtures):
         browser: object | None = None
         try:
             browser = await legacy.start_browser()
-            await warm_verified_session(legacy, browser, issue_url)
+            await warm_verified_session(
+                legacy, browser, issue_url, issue_captures
+            )
             for issue_index, fixture in enumerate(issue_fixtures):
-                browser, result = await capture_one(legacy, browser, fixture)
+                browser, result = await capture_one(
+                    legacy, browser, fixture, issue_captures
+                )
                 results[fixture.fixture_name] = result
                 completed += 1
                 print(
@@ -626,7 +731,7 @@ async def capture_all(fixtures: Sequence[Fixture], legacy: ModuleType) -> int:
         if results[fixture.fixture_name].outcome == "saved"
     }
     print_rich_text_table(fixtures, findings)
-    write_source(fixtures, results, findings)
+    write_source(fixtures, results, findings, issue_captures)
     print(f"\nSource manifest written to {SOURCE_PATH.relative_to(REPO_ROOT)}")
     successes = sum(result.outcome == "saved" for result in results.values())
     print(f"Captured successfully: {successes}/{len(fixtures)} fixture(s).")
@@ -648,7 +753,7 @@ def main() -> int:
     print(f"Combined fixture count: {len(fixtures)}")
     if not fixtures:
         print("Nothing to capture.")
-        write_source([], {}, {})
+        write_source([], {}, {}, {})
         return 0
     legacy = import_legacy_scraper()
     return asyncio.run(capture_all(fixtures, legacy))
