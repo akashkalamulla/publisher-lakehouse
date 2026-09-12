@@ -2,9 +2,11 @@
 
 ``alembic.ini`` carries no URL.  It is resolved here, in this order:
 
-1. a URL set programmatically on the config (used by the integration test),
-2. ``-x db_url=...`` on the command line,
-3. ``EnvironmentSettings.database_url``, i.e. ``.env``.
+1. a connection supplied on ``config.attributes["connection"]`` -- no URL is
+   resolved at all,
+2. a URL set programmatically on the config (used by the integration test),
+3. ``-x db_url=...`` on the command line,
+4. ``EnvironmentSettings.database_url``, i.e. ``.env``.
 
 That keeps the password out of every committed file.
 """
@@ -57,9 +59,6 @@ def run_migrations_offline() -> None:
 
 
 def run_migrations_online() -> None:
-    section = config.get_section(config.config_ini_section, {})
-    section["sqlalchemy.url"] = resolve_url()
-
     connectable = config.attributes.get("connection", None)
     if connectable is not None:
         context.configure(connection=connectable, target_metadata=target_metadata)
@@ -67,6 +66,8 @@ def run_migrations_online() -> None:
             context.run_migrations()
         return
 
+    section = config.get_section(config.config_ini_section, {})
+    section["sqlalchemy.url"] = resolve_url()
     engine = engine_from_config(section, prefix="sqlalchemy.", poolclass=pool.NullPool)
     with engine.connect() as connection:
         context.configure(connection=connection, target_metadata=target_metadata)

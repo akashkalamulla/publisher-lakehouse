@@ -1,0 +1,117 @@
+{
+  "generated_at": "2026-09-12T03:48:08.972064Z",
+  "source_files": [
+    "Indian_Journal_of_Tuberculosis_20260911102611.json",
+    "International_Journal_of_Sediment_Research_20260911102611.json",
+    "Journal_of_Microbiology,_Immunology_and_Infection_20260911102611.json"
+  ],
+  "selected": [
+    {
+      "fixture_name": "empty_abstract",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S1684118226000228",
+      "pii": "S1684118226000228",
+      "journal_title": "Journal of Microbiology, Immunology and Infection",
+      "issue_url": "https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/vol/59/issue/4",
+      "covers": [
+        "empty_abstract",
+        "many_authors",
+        "missing_email"
+      ],
+      "source_file": "Journal_of_Microbiology,_Immunology_and_Infection_20260911102611.json"
+    },
+    {
+      "fixture_name": "missing_email",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S0019570725001799",
+      "pii": "S0019570725001799",
+      "journal_title": "Indian Journal of Tuberculosis",
+      "issue_url": "https://www.sciencedirect.com/journal/indian-journal-of-tuberculosis/vol/73/issue/3",
+      "covers": [
+        "missing_email",
+        "ordinary"
+      ],
+      "source_file": "Indian_Journal_of_Tuberculosis_20260911102611.json"
+    },
+    {
+      "fixture_name": "empty_abstract_02",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S1001627926000612",
+      "pii": "S1001627926000612",
+      "journal_title": "International Journal of Sediment Research",
+      "issue_url": "https://www.sciencedirect.com/journal/international-journal-of-sediment-research/vol/41/issue/5",
+      "covers": [
+        "empty_abstract"
+      ],
+      "source_file": "International_Journal_of_Sediment_Research_20260911102611.json"
+    },
+    {
+      "fixture_name": "empty_abstract_03",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S0019570726001617",
+      "pii": "S0019570726001617",
+      "journal_title": "Indian Journal of Tuberculosis",
+      "issue_url": "https://www.sciencedirect.com/journal/indian-journal-of-tuberculosis/vol/73/issue/3",
+      "covers": [
+        "empty_abstract"
+      ],
+      "source_file": "Indian_Journal_of_Tuberculosis_20260911102611.json"
+    },
+    {
+      "fixture_name": "empty_abstract_04",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S0019570726001629",
+      "pii": "S0019570726001629",
+      "journal_title": "Indian Journal of Tuberculosis",
+      "issue_url": "https://www.sciencedirect.com/journal/indian-journal-of-tuberculosis/vol/73/issue/3",
+      "covers": [
+        "empty_abstract",
+        "missing_email"
+      ],
+      "source_file": "Indian_Journal_of_Tuberculosis_20260911102611.json"
+    },
+    {
+      "fixture_name": "many_authors",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S0019570725001842",
+      "pii": "S0019570725001842",
+      "journal_title": "Indian Journal of Tuberculosis",
+      "issue_url": "https://www.sciencedirect.com/journal/indian-journal-of-tuberculosis/vol/73/issue/3",
+      "covers": [
+        "many_authors",
+        "missing_email"
+      ],
+      "source_file": "Indian_Journal_of_Tuberculosis_20260911102611.json"
+    },
+    {
+      "fixture_name": "missing_email_02",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S0019570726000879",
+      "pii": "S0019570726000879",
+      "journal_title": "Indian Journal of Tuberculosis",
+      "issue_url": "https://www.sciencedirect.com/journal/indian-journal-of-tuberculosis/vol/73/issue/3",
+      "covers": [
+        "missing_email",
+        "ordinary"
+      ],
+      "source_file": "Indian_Journal_of_Tuberculosis_20260911102611.json"
+    },
+    {
+      "fixture_name": "empty_abstract_05",
+      "article_url": "https://www.sciencedirect.com/science/article/pii/S1684118226000678",
+      "pii": "S1684118226000678",
+      "journal_title": "Journal of Microbiology, Immunology and Infection",
+      "issue_url": "https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/vol/59/issue/4",
+      "covers": [
+        "empty_abstract",
+        "many_authors",
+        "missing_email"
+      ],
+      "source_file": "Journal_of_Microbiology,_Immunology_and_Infection_20260911102611.json"
+    }
+  ],
+  "uncovered_keys": [
+    "article_number_no_pages",
+    "collaboration_author",
+    "foreign_title",
+    "foreign_abstract",
+    "no_doi",
+    "missing_affiliation",
+    "editor_present",
+    "bookseries_path_shape"
+  ],
+  "manual_extras_needed": true
+}

@@ -13,7 +13,7 @@ from pathlib import Path
 import pytest
 from alembic.autogenerate import compare_metadata
 from alembic.migration import MigrationContext
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, inspect
 
 from publisher_lakehouse.manifest.models import (
     ManifestRow,
@@ -45,6 +45,23 @@ def engine(tmp_path: Path):
 @pytest.fixture()
 def repository(engine) -> ManifestRepository:
     return ManifestRepository(engine)
+
+
+def test_upgrade_with_supplied_connection_does_not_read_environment(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    import publisher_lakehouse.settings as settings
+
+    def fail_if_environment_is_read():
+        raise AssertionError("env should not be read")
+
+    monkeypatch.setattr(settings, "load_environment_settings", fail_if_environment_is_read)
+    migration_engine = create_engine(f"sqlite:///{tmp_path / 'migration.db'}")
+    try:
+        upgrade_to_head(migration_engine)
+        assert inspect(migration_engine).has_table("ingestion_manifest")
+    finally:
+        migration_engine.dispose()
 
 
 def article_row(**overrides):

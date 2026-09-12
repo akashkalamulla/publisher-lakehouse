@@ -6,4 +6,3 @@ __pycache__/
 pytest-cache-files-*/
 *.egg-info/
 data/
-tests/fixtures/sciencedirect/html/SELECTION.json
