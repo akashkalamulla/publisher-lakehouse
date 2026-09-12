@@ -14,3 +14,4 @@ https://www.sciencedirect.com/science/article/pii/S2214567225000997 https://www.
 https://www.sciencedirect.com/science/chapter/bookseries/pii/S0065308X26000023 https://www.sciencedirect.com/bookseries/advances-in-parasitology/vol/131/suppl/C # bookseries_chapter_editor
 https://www.sciencedirect.com/science/article/pii/S2214109X26001361 https://www.sciencedirect.com/journal/the-lancet-global-health/vol/14/issue/6 # article_id_no_pages
 https://www.sciencedirect.com/science/article/pii/S1002016025000335 https://www.sciencedirect.com/journal/pedosphere/vol/36/issue/3 # richtext_sub_and_superscript
+https://www.sciencedirect.com/science/article/pii/S1684118225002166 https://www.sciencedirect.com/journal/journal-of-microbiology-immunology-and-infection/vol/59/issue/3 # richtext_subscript_title
