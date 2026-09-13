@@ -16,16 +16,18 @@ The project follows the review gates in
 
 | Gate | Scope | Status |
 |---|---|---|
-| 1 | Packaging, `settings.py`, `common/` | Complete, fixes applied |
+| 1 | Packaging, `settings.py`, `common/` | Complete |
 | 2 | `inputs/loader.py`, `scripts/migrate_url_file.py` | Complete |
-| 3 | `manifest/` — models, Alembic, repository, policy | Code complete; **not yet run against PostgreSQL** |
-| 4 | `ingestion/browser/`, `sciencedirect/extract.py` | Not started |
-| 5 | `base.py`, `scraper.py`, `pipeline.py`, writers, `cli.py` | Not started |
+| 3 | `manifest/` — models, Alembic, repository, policy | Complete, verified against PostgreSQL 16 |
+| 4 | `ingestion/browser/`, `sciencedirect/extract.py` | Complete, tagged `gate4` |
+| 5a | `schemas/article.py`, `sciencedirect/record.py`, `writers/` | Complete, tagged `gate5a` — 8/8 golden comparisons exact |
+| 5b | `base.py`, `scraper.py`, `pipeline.py`, `cli.py` | Complete, tagged `gate5b` |
 | 6 | `export/journal_json.py` + regression test | Not started |
 
-The ingestion, browser, export, and CLI commands are intentionally unavailable
-until their review gates are approved. `CABIACQ.py` remains the working
-scraper and is untouched.
+The ingestion and CLI commands are intentionally unavailable until their review
+gates are approved. `CABIACQ.py` remains the working scraper and is untouched.
+
+Suite: 208 tests (199 offline, 9 requiring `PL_TEST_DATABASE_URL`).
 
 ### Gate 3 is blocked
 
@@ -71,9 +73,9 @@ that parses this run's logs reads stderr:
 & .\.venv\Scripts\python.exe -m publisher_lakehouse.cli ingest run 2> run.jsonl
 ```
 
-Errors are additionally collected in memory during the run and rendered to a
-legacy-compatible `errors.txt` at the end, one physical line per event with
-embedded newlines escaped.
+Errors appended by the frozen modules are collected in memory and emitted as
+structured `legacy_error` events at the end of ingestion. The
+legacy-compatible `errors.txt` renderer remains deferred to Gate 6.
 
 ## The URL model
 
@@ -145,7 +147,8 @@ permanently.
 
 ## The three-run acceptance test
 
-Not yet runnable (gates 4–6 outstanding). It will be:
+Not fully runnable until Gate 6 supplies the export comparison. The complete
+acceptance sequence will be:
 
 1. `ingest run --publisher sciencedirect --limit 3` completes against the real
    site and produces bronze JSONL; `export json` over that run produces files

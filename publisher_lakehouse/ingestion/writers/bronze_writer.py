@@ -42,7 +42,7 @@ class BronzeWriter:
 
     def __exit__(self, exc_type: object, exc: object, traceback: object) -> None:
         try:
-            self._flush()
+            self.flush()
         finally:
             if self._file is not None:
                 self._file.close()
@@ -59,9 +59,16 @@ class BronzeWriter:
         )
         self.written_count += 1
         if len(self._buffer) >= self.flush_every:
-            self._flush()
+            self.flush()
 
-    def _flush(self) -> None:
+    def flush(self) -> None:
+        """Make every buffered record durable without closing the file.
+
+        A caller that must not claim a record before its bytes are stored —
+        the ingestion pipeline, ahead of each manifest transaction — needs
+        this independently of the configured batch boundary.
+        """
+
         if not self._buffer:
             return
         if self._file is None:
@@ -70,3 +77,8 @@ class BronzeWriter:
         self._file.writelines(self._buffer)
         self._file.flush()
         self._buffer.clear()
+
+    def _flush(self) -> None:
+        """Alias kept for callers written against the pre-``flush()`` API."""
+
+        self.flush()

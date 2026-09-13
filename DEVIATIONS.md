@@ -199,3 +199,62 @@ assumes every non-string contact row contains exactly three values. The
 verbatim `JSON_FIELDS` also exposes `copyright` as `license_type` and
 `funding_details` as `funding_status`. These behaviours were not corrected
 because the golden records encode them.
+
+## Gate 5b — scraper, pipeline, and CLI
+
+### Pipeline boundary decisions
+
+- `--limit` truncates the deduplicated journal-task list, not the articles in
+  each discovered issue. This matches the acceptance command's use of
+  `--limit 3` as a deliberately partial coverage run.
+- The injected or captured run timestamp is required to be timezone-aware and
+  is converted to UTC before deriving `ingest_date` and article provenance.
+- The frozen browser API does not expose an HTTP status, so Gate 5b manifest
+  rows leave `last_http_status` null rather than inventing `200`.
+- The prompt specifies terminal manifest rows for article outcomes, but does
+  not specify journal or issue rows. Gate 5b therefore stages article rows
+  only. The journal `should_fetch` check honors a pre-existing journal row;
+  pipeline-produced state does not create one. This is currently neutral
+  because `journal_days` is zero. The issue refresh setting is likewise not a
+  gate in the prescribed sequence.
+
+### Frozen-interface workarounds
+
+`BaseScraper` remains limited to its three abstract methods. The concrete
+ScienceDirect adapter provides optional article-session start and stop hooks
+so the pipeline can preserve the legacy stop / sleep / restart / warm-up
+sequence without enlarging the publisher-neutral test-double contract.
+
+`ArticleFetch` has exactly the five requested fields and therefore cannot carry
+the browser page used for the ARP request. `ScienceDirectScraper` retains that
+page privately and passes it through the existing
+`extract_author_details(..., page=page)` parameter. The frozen author function
+needed no code or data-shape adaptation, and this avoids a second navigation.
+
+Gate 5a's `BronzeWriter` had no public flush operation, and its configured
+buffer can be larger than the manifest batch: the default 200-record bronze
+buffer and 100-row manifest batch could persist an `ok` claim before its
+corresponding JSONL bytes. Rather than call a private method from production
+code, Gate 5b makes one narrowly-scoped addition inside the Gate 5a freeze —
+a public `BronzeWriter.flush()` holding the former `_flush()` body, with
+`_flush()` kept as an alias for callers written against the older API. The
+pipeline calls `flush()` immediately before every manifest `batch_upsert`.
+Nothing else in `writers/` changed.
+
+### Block recovery fidelity
+
+The retry loop retains the legacy `while idx < total` control flow, retry
+counters and `>` budget checks, monotonic elapsed-time cutoff, non-advancing
+blocked index, browser stop / 10-second sleep / restart / session warm-up, and
+the randomized inter-article delay. The only structural indirection is that
+browser restart and `setup_browser_session` are encapsulated by the concrete
+scraper's session-start hook so offline `BaseScraper` fakes need no browser.
+
+### Acceptance-test limits
+
+The three-run live acceptance sequence checks the ordinary write, fresh-
+manifest skip, forced re-fetch, unchanged-payload suppression, and Gate 6
+byte comparison. It does not exercise Cloudflare retry exhaustion, elapsed
+block timeout, fetch timeout/exception recovery, malformed ARP contact rows,
+duplicate DOI handling, partial manifest-batch failure, formatting-only rich
+text changes, non-default discovery refresh windows, or UTC partition rollover.

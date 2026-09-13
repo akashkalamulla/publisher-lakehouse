@@ -81,6 +81,41 @@ def test_flush_boundary_smaller_than_record_count_keeps_every_record(
     assert len(all_lines) == 5
 
 
+def test_flush_persists_the_buffer_before_the_batch_boundary(
+    tmp_path: Path,
+) -> None:
+    records = [article(f"Article {index}") for index in range(2)]
+
+    with BronzeWriter(
+        tmp_path / "bronze",
+        "sciencedirect",
+        "20260913120000",
+        date(2026, 9, 13),
+        flush_every=50,
+    ) as writer:
+        for record in records:
+            writer.write(record)
+        assert not expected_path(tmp_path).read_text(encoding="utf-8")
+
+        writer.flush()
+
+        # Durable mid-run, with the file still open for the rest of the batch.
+        mid_run = expected_path(tmp_path).read_text(encoding="utf-8").splitlines()
+        assert [json.loads(line) for line in mid_run] == [
+            record.model_dump(mode="json") for record in records
+        ]
+
+        writer.flush()  # a second flush of an empty buffer writes nothing
+        assert len(
+            expected_path(tmp_path).read_text(encoding="utf-8").splitlines()
+        ) == len(records)
+
+        writer.write(article("Article after flush"))
+
+    all_lines = expected_path(tmp_path).read_text(encoding="utf-8").splitlines()
+    assert len(all_lines) == len(records) + 1
+
+
 def test_exception_inside_context_still_flushes_buffer(tmp_path: Path) -> None:
     with pytest.raises(RuntimeError, match="interrupted"):
         with BronzeWriter(
