@@ -126,3 +126,76 @@ Consequently these remain outstanding:
 What was verified without a connection: `alembic upgrade head --sql` against
 the PostgreSQL dialect emits `TIMESTAMP WITH TIME ZONE` for all three
 timestamp columns, both indexes, and the `url_hash` primary key.
+
+## Gate 4 — browser and extraction move
+
+Verified: 44 moved function bodies are byte-identical to `CABIACQ.py`
+(AST span comparison, not eyeballing), all 12 browser constants match,
+`git diff CABIACQ.py` is empty.
+
+### The editors question is closed
+
+`extract_editor_details` is correct, not broken. Measured against the eight
+captured issue pages:
+
+- `bookseries_advances_in_parasitology_vol_131_suppl_c` returns
+  David Rollinson, Russell Stothard, Cinzia Cantacessi.
+- All seven journal issue pages return `[]`.
+
+ScienceDirect journal issue pages carry no editor block; book series do.
+The empty `editors` array across all 54 golden articles is therefore correct
+behaviour, not silent extraction failure. `editors` must stay optional in the
+record schema and must never be a QA-fail condition. It is an issue-level
+value, extracted once per issue and stamped onto every article in it.
+
+### Legacy defects preserved deliberately
+
+These exist in `CABIACQ.py` and are reproduced unchanged. The golden files
+encode the buggy output, which is what makes them regression proof.
+
+| Defect | Disposition |
+|---|---|
+| `extract_reference_count` sits under the browser-required banner but only needs soup | Misfiled comment. Cosmetic. |
+| `extract_corporate_author_details` returns `str \| None`, not a list, and swallows exceptions | Normalised in the schema layer by `_json_contacts`. Extractor untouched. |
+| Issue publication day is never extracted; the workflow hardcodes `""` | Keep hardcoding `""`. Changing it breaks byte-identical output. Silver-layer backlog. |
+| Unsafe DOI fallback dereferencing | Frozen. |
+| Potentially unbound `pub_data_txt` | Frozen. |
+| Formatting lost when rich text has a single run | Frozen. Present identically in golden output. |
+| Over-broad funding sibling traversal | Frozen. |
+| Browser fetches can return blocked or partial HTML | **Gate 5b design constraint**: block detection runs before the bronze write; the manifest records `blocked`, never `ok`. `should_fetch` already returns `retry_blocked`. |
+
+## Gate 5a — bronze records and durable writers
+
+### Hash scope
+
+`BronzeArticle.with_payload_hash()` hashes only `content_payload()`: the 29
+legacy content keys in their legacy order. Run id, scrape time, publisher,
+URL hash, source URL, and all rich-text segment fields are outside that
+payload. This keeps re-fetches stable across runs and retains the exclusion
+rules established in Gate 1.
+
+Consequently, a formatting-only change is not detected when the flattened
+article content remains identical. That is the accepted cost of keeping the
+existing hash contract unchanged; the rich segments remain available in the
+bronze record for later consumers.
+
+### Boundary decisions
+
+- Extractors can return `None` for missing issue and article values.
+  `IssueContext` retains those raw extractor results, while the assembler uses
+  the legacy `_json_text` function at the `BronzeArticle` boundary so every
+  flat content field is a string.
+- `BronzeWriter` opens a run part in append mode. Re-entering a writer for the
+  same publisher, date, and run id therefore continues that run instead of
+  silently truncating already-flushed records.
+- Non-positive writer flush sizes are rejected immediately, matching the
+  validation already applied to operator ingestion settings.
+
+### Legacy output quirks retained
+
+The verbatim `_json_contacts` changes every `/` in an affiliation to `\`,
+treats a lone string as a name-only contact, removes all-empty contacts, and
+assumes every non-string contact row contains exactly three values. The
+verbatim `JSON_FIELDS` also exposes `copyright` as `license_type` and
+`funding_details` as `funding_status`. These behaviours were not corrected
+because the golden records encode them.
