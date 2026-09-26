@@ -9,7 +9,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, field_validator
+from pydantic import BaseModel, ConfigDict, SecretStr, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -40,6 +40,23 @@ class EnvironmentSettings(BaseSettings):
     @classmethod
     def normalise_log_level(cls, value: object) -> object:
         return value.upper() if isinstance(value, str) else value
+
+
+class LakeSettings(BaseSettings):
+    """S3 API connection used only by lake commands."""
+
+    s3_endpoint_url: str = "http://localhost:9000"
+    s3_access_key: str
+    s3_secret_key: SecretStr
+    lake_bucket: str = "lakehouse"
+
+    model_config = SettingsConfigDict(
+        case_sensitive=False,
+        env_file=None,
+        env_prefix="",
+        extra="ignore",
+        frozen=True,
+    )
 
 
 class DetailsSettings(BaseModel):
@@ -117,6 +134,14 @@ def load_environment_settings(
     """Load environment-only settings, optionally including a dotenv file."""
 
     return EnvironmentSettings(_env_file=env_file, _env_file_encoding="utf-8")
+
+
+def load_lake_settings(
+    env_file: str | Path | None = DEFAULT_ENV_FILE,
+) -> LakeSettings:
+    """Load lake settings independently of the ingestion database URL."""
+
+    return LakeSettings(_env_file=env_file, _env_file_encoding="utf-8")
 
 
 def load_operator_settings(

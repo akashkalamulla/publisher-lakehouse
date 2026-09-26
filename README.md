@@ -27,7 +27,37 @@ The project follows the review gates in
 The ingestion and CLI commands are intentionally unavailable until their review
 gates are approved. `CABIACQ.py` remains the working scraper and is untouched.
 
-Suite: 217 tests (208 offline, 9 requiring `PL_TEST_DATABASE_URL`).
+Suite: 223 tests (214 offline, 9 requiring `PL_TEST_DATABASE_URL`).
+
+## Lakehouse platform (gate 7a)
+
+Use Docker Desktop with the WSL2 backend. Allocate at least 4 GB to Docker;
+plan for 8 GB when Airflow is added. This gate lands the Phase 1 JSONL and
+compressed HTML unchanged and verifies Delta on object storage. It does not
+create a bronze Delta table from those files.
+
+Set these four variables in `.env` (choose your own credentials, with a secret
+of at least eight characters): `S3_ENDPOINT_URL=http://localhost:9000`,
+`S3_ACCESS_KEY`, `S3_SECRET_KEY`, and `LAKE_BUCKET=lakehouse`. The local MinIO
+service uses the same S3 keys as its root credentials. The Spark service uses
+`http://minio:9000` on the Compose network.
+
+```powershell
+docker compose up -d minio
+publisher-lakehouse lake init
+publisher-lakehouse lake land --publisher sciencedirect
+docker compose build spark
+docker compose run --rm --service-ports spark python -m publisher_lakehouse.transform.smoke
+```
+
+The MinIO console is at http://127.0.0.1:9001; log in with the S3 keys. The
+Spark UI is at http://localhost:4040 while a job started with
+`--service-ports` is running. `docker compose down` keeps the lake's named
+volume. `docker compose down -v` deletes `minio-data` and the whole lake.
+
+Do not run `lake land` while `ingest run` is active: a JSONL part may still be
+growing. A later `lake land` replaces any changed part. Repeated landing runs
+report unchanged files and upload no bytes when the local files are stable.
 
 ### Gate 3 is blocked
 

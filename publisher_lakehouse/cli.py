@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+from dataclasses import asdict
 from typing import Annotated
 
 import typer
@@ -11,8 +12,18 @@ from sqlalchemy import create_engine
 from publisher_lakehouse.common.logging import configure_logging, get_logger
 from publisher_lakehouse.export.journal_export import export_journals
 from publisher_lakehouse.ingestion.pipeline import run_ingestion
+from publisher_lakehouse.landing.sync import (
+    ensure_bucket,
+    make_s3_client,
+    plan_uploads,
+    sync_publisher,
+)
 from publisher_lakehouse.manifest.repository import ManifestRepository
-from publisher_lakehouse.settings import load_settings
+from publisher_lakehouse.settings import (
+    load_lake_settings,
+    load_operator_settings,
+    load_settings,
+)
 
 
 logger = get_logger(__name__)
@@ -20,8 +31,52 @@ logger = get_logger(__name__)
 app = typer.Typer(no_args_is_help=True)
 ingest_app = typer.Typer(no_args_is_help=True)
 export_app = typer.Typer(no_args_is_help=True)
+lake_app = typer.Typer(no_args_is_help=True)
 app.add_typer(ingest_app, name="ingest")
 app.add_typer(export_app, name="export")
+app.add_typer(lake_app, name="lake")
+
+
+@lake_app.command("init")
+def lake_init() -> None:
+    """Ensure the lake bucket exists."""
+
+    settings = load_lake_settings()
+    client = make_s3_client(settings)
+    created = ensure_bucket(client, settings.lake_bucket)
+    state = "created" if created else "already existed"
+    typer.echo(
+        f"Bucket '{settings.lake_bucket}' ready at {settings.s3_endpoint_url} ({state})"
+    )
+
+
+@lake_app.command("land")
+def lake_land(
+    publisher: Annotated[
+        str,
+        typer.Option("--publisher", help="Publisher whose Phase 1 files to land."),
+    ] = "sciencedirect",
+) -> None:
+    """Mirror local bronze JSONL and compressed raw HTML into the lake."""
+
+    lake = load_lake_settings()
+    paths = load_operator_settings().paths
+    configure_logging()
+    client = make_s3_client(lake)
+    ensure_bucket(client, lake.lake_bucket)
+    planned = plan_uploads(publisher, paths.bronze_dir, paths.raw_html_dir)
+    counters = sync_publisher(
+        client, lake.lake_bucket, publisher, paths.bronze_dir, paths.raw_html_dir
+    )
+    jsonl = sum(key.startswith("landing/bronze_jsonl/") for _, key in planned)
+    html = sum(key.startswith("landing/raw_html/") for _, key in planned)
+    logger.info("landing_sync_complete", publisher=publisher, **asdict(counters))
+    typer.echo(
+        f"Landed {publisher}: {jsonl} JSONL + {html} HTML | "
+        f"uploaded {counters.uploaded} | unchanged {counters.unchanged} | "
+        f"replaced {counters.replaced} | "
+        f"{counters.bytes_uploaded / (1024 * 1024):.1f} MB"
+    )
 
 
 @ingest_app.command("run")
