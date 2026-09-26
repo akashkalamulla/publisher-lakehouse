@@ -5,16 +5,13 @@ ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64 \
     PYSPARK_PYTHON=/usr/local/bin/python \
     PYTHONDONTWRITEBYTECODE=1
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends openjdk-17-jre-headless maven \
-    && rm -rf /var/lib/apt/lists/*
-
 # The Python pins choose the Spark and Delta versions. Their JVM artifacts,
 # including hadoop-aws's declared AWS SDK bundle dependency, are resolved here.
 # Nothing invokes Maven when a job starts.
-RUN pip install --no-cache-dir pyspark==4.1.0 delta-spark==4.4.0
-
 RUN set -eu; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends openjdk-17-jre-headless maven; \
+    pip install --no-cache-dir pyspark==4.1.0 delta-spark==4.4.0 pytest==8.3.5; \
     python -c 'from pyspark.sql import SparkSession; s = SparkSession.builder.master("local[1]").appName("detect-hadoop").getOrCreate(); open("/tmp/hadoop-version", "w", encoding="utf-8").write(s._jvm.org.apache.hadoop.util.VersionInfo.getVersion()); s.stop()'; \
     HADOOP_VERSION="$(cat /tmp/hadoop-version)"; \
     test -n "$HADOOP_VERSION"; \
@@ -33,6 +30,10 @@ RUN set -eu; \
     test -f /tmp/lake-jars/delta-spark_4.1_2.13-4.4.0.jar; \
     cp /tmp/lake-jars/*.jar /usr/local/lib/python3.12/site-packages/pyspark/jars/; \
     rm -rf /tmp/lake-jars /tmp/pom.xml /tmp/hadoop-version /root/.m2; \
+    apt-get purge -y --auto-remove maven; \
+    apt-get clean; \
+    rm -rf /var/lib/apt/lists/*; \
+    ! command -v mvn; \
     useradd --uid 10001 --create-home spark
 
 WORKDIR /opt/app

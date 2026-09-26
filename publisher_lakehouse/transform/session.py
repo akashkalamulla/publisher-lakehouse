@@ -48,6 +48,10 @@ def build_spark(app_name: str):
     from pyspark.sql import SparkSession
 
     builder = SparkSession.builder.master("local[*]").appName(app_name)
+    if os.environ.get("SPARK_LOCAL_IP") == "0.0.0.0":
+        # Bind the UI to the container interface but advertise the local driver
+        # address to executors in Spark's local mode.
+        builder = builder.config("spark.driver.host", "127.0.0.1")
     for key, value in lake_conf(endpoint, access_key, secret_key).items():
         builder = builder.config(key, value)
     return builder.getOrCreate()

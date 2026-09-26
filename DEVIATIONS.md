@@ -3,6 +3,26 @@
 This file is cumulative and will be updated at each implementation review
 gate.
 
+## Gate 7b — bronze Delta articles
+
+- Bronze keeps all article content strings exactly as landed. Only `scraped_at`
+  becomes a timestamp; typing and cleaning the content belongs to silver.
+- Raw HTML stays in landing and is referenced by `raw_html_key`. The original
+  plan's bronze schema included a `raw_html` column; the Delta table does not.
+- `(publisher, url_hash, run_id)` identifies a bronze row. An insert-only MERGE
+  preserves changed-payload history across runs, and `delta.appendOnly=true`
+  makes Delta reject updates and deletes.
+- For this job, Delta's `skipRecordingEmptyCommits` is disabled around the
+  MERGE. A zero-insert rerun therefore gets its own history entry and zero-valued
+  MERGE metrics instead of showing the prior run's metrics.
+- Spark 4 enables ANSI casts by default. Silver will use `try_cast` when source
+  values might be invalid. Bronze uses a checked timestamp conversion for
+  `scraped_at`.
+- The Compose Spark UI binds to the container interface, while the local
+  driver advertises `127.0.0.1`. Maven is removed after jar resolution in the
+  image build, and the final image includes pinned `pytest` for local-path
+  Spark tests.
+
 ## Gate 7a — lakehouse platform
 
 - **Object store is RustFS, not MinIO.** MinIO archived its community edition,

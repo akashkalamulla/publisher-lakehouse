@@ -26,9 +26,11 @@ services:
     build: ./docker/spark
     volumes:
       - ./publisher_lakehouse:/opt/app/publisher_lakehouse:ro
+      - ./tests_spark:/opt/app/tests_spark:ro
     environment:
       PYTHONPATH: /opt/app
       PYTHONDONTWRITEBYTECODE: "1"
+      SPARK_LOCAL_IP: 0.0.0.0
       S3_ENDPOINT_URL: http://objectstore:9000
       S3_ACCESS_KEY: ${S3_ACCESS_KEY}
       S3_SECRET_KEY: ${S3_SECRET_KEY}

@@ -23,18 +23,20 @@ The project follows the review gates in
 | 5a | `schemas/article.py`, `sciencedirect/record.py`, `writers/` | Complete, tagged `gate5a` — 8/8 golden comparisons exact |
 | 5b | `base.py`, `scraper.py`, `pipeline.py`, `cli.py` | Complete, tagged `gate5b` |
 | 6 | `export/journal_json.py` + regression test | Not started |
+| 7a | RustFS, Spark, Delta smoke test, file landing | Complete, tagged `gate7a` |
+| 7b | Append-only bronze Delta article table | Complete |
 
 The ingestion and CLI commands are intentionally unavailable until their review
 gates are approved. `CABIACQ.py` remains the working scraper and is untouched.
 
-Suite: 223 tests (214 offline, 9 requiring `PL_TEST_DATABASE_URL`).
+The host suite has 228 tests (219 offline, 9 requiring `PL_TEST_DATABASE_URL`).
 
 ## Lakehouse platform (gate 7a)
 
 Use Docker Desktop with the WSL2 backend. Allocate at least 4 GB to Docker;
-plan for 8 GB when Airflow is added. This gate lands the Phase 1 JSONL and
-compressed HTML unchanged and verifies Delta on object storage. It does not
-create a bronze Delta table from those files.
+plan for 8 GB when Airflow is added. Gate 7a lands the Phase 1 JSONL and
+compressed HTML unchanged and verifies Delta on object storage. Gate 7b loads
+the landed JSONL into a bronze Delta table.
 
 Set these four variables in `.env` (choose your own credentials, with a secret
 of at least eight characters): `S3_ENDPOINT_URL=http://localhost:9000`,
@@ -60,21 +62,36 @@ Do not run `lake land` while `ingest run` is active: a JSONL part may still be
 growing. A later `lake land` replaces any changed part. Repeated landing runs
 report unchanged files and upload no bytes when the local files are stable.
 
-### Gate 3 is blocked
+## Bronze Delta table (gate 7b)
 
-The PostgreSQL server on `localhost:5432` is running, but the password in
-`.env` is still the template placeholder, so connections are rejected. The
-brief forbids falling back to SQLite, creating a database, or rewriting the
-URL, so the migration has not been run. See `DEVIATIONS.md`.
-
-To unblock, put the real password in `.env` and run:
+Build the Spark image after checkout, then load one publisher. Repeating the
+load inserts no rows for keys already present. `--schema` prints the declared
+table schema; each run prints its summary and the last five Delta history rows.
 
 ```powershell
-& .\.venv\Scripts\python.exe -m alembic upgrade head
-psql -d publisher_lakehouse -c "\d ingestion_manifest"
+docker compose build spark
+docker compose run --rm spark python -m publisher_lakehouse.transform.bronze --publisher sciencedirect --schema
+docker compose run --rm spark python -m publisher_lakehouse.transform.bronze --publisher sciencedirect
+docker compose run --rm --no-deps spark python -m pytest -q -p no:cacheprovider tests_spark
 ```
 
-All three timestamp columns must report `timestamp with time zone`.
+The summary reports `landed` JSONL rows, `inserted` new Delta rows, `already
+present` keys found before the MERGE, `table rows` after it, `raw HTML missing`
+referenced objects absent from landing, `files added` by the MERGE, and the
+resulting Delta `version`. `inserted + already present = landed` on every run.
+Missing raw HTML produces a warning and does not prevent the load.
+
+To inspect the Spark UI at http://localhost:4040, run this command and press
+Enter when finished:
+
+```powershell
+docker compose run --rm --service-ports spark python -m publisher_lakehouse.transform.bronze --publisher sciencedirect --hold
+```
+
+The table lives at `bronze/articles/` in the lake bucket. `_delta_log/` holds
+commits, and data files live beneath `publisher=<publisher>/ingest_date=<date>/`.
+Each row contains the raw HTML object's `landing/raw_html/...` key, not its
+HTML bytes.
 
 ## Configuration
 
