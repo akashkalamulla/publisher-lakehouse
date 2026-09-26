@@ -59,6 +59,7 @@ class PathSettings(BaseModel):
     url_details: Path
     raw_html_dir: Path
     bronze_dir: Path
+    export_dir: Path
 
     model_config = ConfigDict(extra="forbid", frozen=True)
 

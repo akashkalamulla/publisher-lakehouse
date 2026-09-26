@@ -27,7 +27,7 @@ The project follows the review gates in
 The ingestion and CLI commands are intentionally unavailable until their review
 gates are approved. `CABIACQ.py` remains the working scraper and is untouched.
 
-Suite: 208 tests (199 offline, 9 requiring `PL_TEST_DATABASE_URL`).
+Suite: 217 tests (208 offline, 9 requiring `PL_TEST_DATABASE_URL`).
 
 ### Gate 3 is blocked
 
@@ -62,6 +62,17 @@ CLI-only.
 
 Importing any module reads neither file and creates no directories; settings
 load explicitly at the application boundary.
+
+## How to run
+
+After each journal completes, the pipeline writes per-journal output to:
+
+    data/exports/<publisher>/<journal_slug>/<journal_slug>.json
+    data/exports/<publisher>/<journal_slug>/<journal_slug>_html.zip
+
+To rebuild all exports from bronze without re-scraping:
+
+    publisher-lakehouse export run --publisher sciencedirect
 
 ## Where the logs go
 

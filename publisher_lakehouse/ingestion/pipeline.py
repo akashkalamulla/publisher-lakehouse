@@ -21,6 +21,10 @@ from sqlalchemy import create_engine
 from publisher_lakehouse.common.ids import new_run_id
 from publisher_lakehouse.common.logging import bind_run_id, get_logger
 from publisher_lakehouse.common.urls import normalize_url, url_hash
+from publisher_lakehouse.export.journal_export import (
+    bundle_journal_html,
+    write_journal_json,
+)
 from publisher_lakehouse.ingestion.base import ArticleProvenance, BaseScraper
 from publisher_lakehouse.ingestion.browser.constants import (
     ARTICLE_TIMEOUT,
@@ -267,6 +271,7 @@ async def run_ingestion(
     try:
         with writer:
             for task in tasks:
+                journal_records: list[Any] = []
                 fetch_journal, journal_reason = should_fetch(
                     task,
                     manifest.get(task.url_hash),
@@ -315,6 +320,13 @@ async def run_ingestion(
                     )
                     continue
 
+                print(
+                    f"Volume: {issue_context.volume} | "
+                    f"Issue: {issue_context.issue} | "
+                    f"Pub Year: {issue_context.issue_publication_year} | "
+                    f"Pub Month: {issue_context.issue_publication_month}"
+                )
+
                 # Gates 1 and 2 are intentionally complete before the retry
                 # loop.  Moving either into it would alter retry counters.
                 survivors: list[_ArticleCandidate] = []
@@ -357,6 +369,10 @@ async def run_ingestion(
                             article_url=normalised_article_url,
                             reason=article_reason,
                         )
+                        pii = normalised_article_url.rsplit("/", 1)[-1]
+                        print(
+                            f"  [skip] {pii} — already captured"
+                        )
                         # Gate 2 is deliberately a read-only decision: never
                         # touch last_seen_at here or the refresh window slides.
                         continue
@@ -392,7 +408,6 @@ async def run_ingestion(
                     block_retries = 0
                     timeout_retries = 0
                     block_start_time = None
-                    MAX_BLOCK_RETRIES = 6
                     fetched_indices: set[int] = set()
                     while idx < total:
                         candidate = survivors[idx]
@@ -415,7 +430,8 @@ async def run_ingestion(
                                 f"| {discovery.issue_url}"
                             )
                             print(
-                                f"  Timeout on article {idx + 1} - "
+                                f"  ⏱ Stuck on article {idx + 1} "
+                                f"— timeout "
                                 f"({timeout_retries}/{MAX_TIMEOUT_RETRIES}), "
                                 "restarting browser..."
                             )
@@ -426,8 +442,9 @@ async def run_ingestion(
                                     f"{discovery.issue_url}"
                                 )
                                 print(
-                                    f"  Gave up on article {idx + 1} after "
-                                    f"{MAX_TIMEOUT_RETRIES} timeouts - skipping"
+                                    f"  ✋ Gave up on article "
+                                    f"{idx + 1} after {MAX_TIMEOUT_RETRIES} "
+                                    "timeouts — skipping"
                                 )
                                 counters.fetch_failed += 1
                                 stage_manifest_row(
@@ -450,8 +467,8 @@ async def run_ingestion(
                                     discovery.issue_url,
                                 )
                                 print(
-                                    f"  Browser ready - retrying article "
-                                    f"{idx + 1}..."
+                                    f"  🔄 Browser ready "
+                                    f"— retrying article {idx + 1}..."
                                 )
                             continue
                         except Exception as exc:
@@ -488,7 +505,8 @@ async def run_ingestion(
                                     f"{reason} | {candidate.node}"
                                 )
                                 print(
-                                    f"  Gave up on article {idx + 1} - {reason}"
+                                    f"  ✋ Gave up on article "
+                                    f"{idx + 1} — {reason}"
                                 )
                                 counters.blocked_gave_up += 1
                                 stage_manifest_row(
@@ -500,9 +518,10 @@ async def run_ingestion(
                                 continue
 
                             print(
-                                f"  Block on article {idx + 1} "
+                                f"  🔁 Block on article {idx + 1} "
                                 f"(retry {block_retries}/{MAX_BLOCK_RETRIES}, "
-                                f"{elapsed:.0f}s elapsed) - restarting browser..."
+                                f"{elapsed:.0f}s elapsed) — "
+                                "restarting browser..."
                             )
                             try:
                                 await _call_optional(
@@ -518,7 +537,8 @@ async def run_ingestion(
                                 discovery.issue_url,
                             )
                             print(
-                                f"  Browser ready - retrying article {idx + 1}..."
+                                f"  🔄 Browser ready "
+                                f"— retrying article {idx + 1}..."
                             )
                             continue
 
@@ -536,6 +556,7 @@ async def run_ingestion(
                                 discovery,
                                 provenance,
                             )
+                            print(f"  {record.english_title}")
                         except Exception as exc:
                             counters.parse_failed += 1
                             error_list.append(
@@ -572,6 +593,10 @@ async def run_ingestion(
                                     == record.payload_hash
                                 ):
                                     counters.unchanged_payload += 1
+                                    print(
+                                        "  [unchanged] payload identical "
+                                        "— no new bronze row"
+                                    )
                                     stage_manifest_row(
                                         outcome_row(
                                             candidate,
@@ -608,6 +633,7 @@ async def run_ingestion(
                                         )
                                     else:
                                         counters.bronze_written += 1
+                                        journal_records.append(record)
                                         # This successful manifest claim is
                                         # staged only after the bronze write.
                                         stage_manifest_row(
@@ -637,6 +663,31 @@ async def run_ingestion(
                         await _call_optional(scraper, "stop_article_session")
                     except Exception:
                         pass
+
+                if journal_records:
+                    _flush_bronze(writer)
+                    flush_manifest()
+                    export_out = settings.operator.paths.export_dir / publisher
+                    try:
+                        json_path = write_journal_json(
+                            task.raw_url,
+                            journal_records,
+                            export_out,
+                        )
+                        html_path = bundle_journal_html(
+                            journal_records,
+                            settings.operator.paths.raw_html_dir,
+                            export_out,
+                        )
+                        if json_path:
+                            print(f"  JSON saved: {json_path}")
+                        if html_path:
+                            print(f"  HTML saved: {html_path}")
+                    except Exception as exc:
+                        error_list.append(
+                            f"journal export failed | {task.raw_url} | "
+                            f"{type(exc).__name__}: {exc}"
+                        )
 
             # Close the run with every partial batch accounted for.  Bronze is
             # flushed first inside flush_manifest even though its own context

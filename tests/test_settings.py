@@ -24,6 +24,7 @@ output_path = D:\\fixture_output\\
 url_details = inputs/url_details.csv
 raw_html_dir = data/raw_html
 bronze_dir = data/bronze
+export_dir = data/exports
 
 [ingestion]
 bronze_flush_every = 5
@@ -80,6 +81,7 @@ def test_operator_settings_are_read_from_the_given_ini(tmp_path: Path) -> None:
 
     assert operator.details.output_path == Path("D:\\fixture_output")
     assert operator.paths.url_details == Path("inputs/url_details.csv")
+    assert operator.paths.export_dir == Path("data/exports")
     assert operator.ingestion.bronze_flush_every == 5
     assert operator.ingestion.manifest_flush_every == 3
     assert operator.refresh.journal_days == 0

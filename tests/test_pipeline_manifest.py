@@ -24,6 +24,7 @@ NOW = datetime(2026, 9, 13, 12, tzinfo=timezone.utc)
 RUN_ID = "20260913120000"
 PUBLISHER = "sciencedirect"
 BASED_URL = "https://www.sciencedirect.com"
+JOURNAL_TITLE = "Example Journal"
 JOURNAL_URL = f"{BASED_URL}/journal/example/issues"
 ISSUE_URL = f"{BASED_URL}/journal/example/vol/1/issue/1"
 ARTICLE_ONE = f"{BASED_URL}/science/article/pii/S0000000000000001"
@@ -156,7 +157,14 @@ def deterministic_pipeline(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(
         pipeline,
         "build_issue_context",
-        lambda *args, **kwargs: object(),
+        lambda *args, **kwargs: SimpleNamespace(
+            journal_title=JOURNAL_TITLE,
+            journal_url=JOURNAL_URL,
+            volume="1",
+            issue="1",
+            issue_publication_year="2026",
+            issue_publication_month="September",
+        ),
     )
 
 
@@ -179,6 +187,7 @@ def _settings(
                 url_details=input_path,
                 raw_html_dir=tmp_path / "raw",
                 bronze_dir=tmp_path / "bronze",
+                export_dir=tmp_path / "exports",
             ),
             ingestion=SimpleNamespace(
                 bronze_flush_every=bronze_flush_every,
@@ -198,8 +207,12 @@ def _record(
     provenance: ArticleProvenance,
     *,
     doi: str = "",
+    journal_title: str = JOURNAL_TITLE,
+    journal_url: str = JOURNAL_URL,
 ) -> BronzeArticle:
     return BronzeArticle(
+        journal_title=journal_title,
+        journal_url=journal_url,
         article_url=article_url,
         english_title=f"Record for {article_url.rsplit('/', 1)[-1]}",
         article_type="Research article",

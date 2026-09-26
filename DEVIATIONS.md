@@ -258,3 +258,12 @@ byte comparison. It does not exercise Cloudflare retry exhaustion, elapsed
 block timeout, fetch timeout/exception recovery, malformed ARP contact rows,
 duplicate DOI handling, partial manifest-batch failure, formatting-only rich
 text changes, non-default discovery refresh windows, or UTC partition rollover.
+
+## Inline per-journal export
+
+The legacy scraper writes `<Title>_<YYYYMMDDHHMMSS>.json` to `output_path`
+as each journal completes. The pipeline writes to
+`data/exports/<publisher>/<slug>/<slug>.json` with no timestamp in the
+filename — the file is overwritten on each run. Bronze JSONL retains the
+full versioned history. The standalone `export run` command remains
+available for rebuilding all exports from bronze.
