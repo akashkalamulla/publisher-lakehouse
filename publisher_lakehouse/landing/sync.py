@@ -32,7 +32,7 @@ class LandingCounters:
 
 
 def make_s3_client(settings: LakeSettings):
-    """Use only the standard S3 API, with MinIO-compatible path addressing."""
+    """Use only the standard S3 API, with S3-compatible path addressing."""
 
     return boto3.client(
         "s3",

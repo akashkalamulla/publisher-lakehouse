@@ -13,11 +13,11 @@ def test_session_import_does_not_import_pyspark() -> None:
 
 
 def test_lake_conf_has_delta_and_s3a_settings() -> None:
-    conf = lake_conf("http://minio:9000", "access", "secret")
+    conf = lake_conf("http://objectstore:9000", "access", "secret")
     assert conf == {
         "spark.sql.extensions": "io.delta.sql.DeltaSparkSessionExtension",
         "spark.sql.catalog.spark_catalog": "org.apache.spark.sql.delta.catalog.DeltaCatalog",
-        "spark.hadoop.fs.s3a.endpoint": "http://minio:9000",
+        "spark.hadoop.fs.s3a.endpoint": "http://objectstore:9000",
         "spark.hadoop.fs.s3a.endpoint.region": "us-east-1",
         "spark.hadoop.fs.s3a.path.style.access": "true",
         "spark.hadoop.fs.s3a.connection.ssl.enabled": "false",

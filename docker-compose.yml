@@ -1,17 +1,21 @@
 services:
-  minio:
-    image: quay.io/minio/minio:RELEASE.2025-09-07T16-13-09Z@sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e
-    command: server /data --console-address ":9001"
+  objectstore:
+    image: rustfs/rustfs:1.0.0@sha256:8cc9801755448b71a786705ce76692c77e14936cccd87cf2fc31842e58f4d1ff
     environment:
-      MINIO_ROOT_USER: ${S3_ACCESS_KEY}
-      MINIO_ROOT_PASSWORD: ${S3_SECRET_KEY}
+      RUSTFS_VOLUMES: /data
+      RUSTFS_ADDRESS: 0.0.0.0:9000
+      RUSTFS_CONSOLE_ENABLE: "true"
+      RUSTFS_CONSOLE_ADDRESS: 0.0.0.0:9001
+      RUSTFS_ACCESS_KEY: ${S3_ACCESS_KEY}
+      RUSTFS_SECRET_KEY: ${S3_SECRET_KEY}
+      RUSTFS_REGION: us-east-1
     volumes:
-      - minio-data:/data
+      - lake-data:/data
     ports:
       - "127.0.0.1:9000:9000"
       - "127.0.0.1:9001:9001"
     healthcheck:
-      test: ["CMD", "mc", "ready", "local"]
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:9000/health/ready >/dev/null && curl -fsS http://127.0.0.1:9001/rustfs/console/health >/dev/null"]
       interval: 5s
       timeout: 5s
       retries: 12
@@ -25,15 +29,15 @@ services:
     environment:
       PYTHONPATH: /opt/app
       PYTHONDONTWRITEBYTECODE: "1"
-      S3_ENDPOINT_URL: http://minio:9000
+      S3_ENDPOINT_URL: http://objectstore:9000
       S3_ACCESS_KEY: ${S3_ACCESS_KEY}
       S3_SECRET_KEY: ${S3_SECRET_KEY}
       LAKE_BUCKET: ${LAKE_BUCKET:-lakehouse}
     depends_on:
-      minio:
+      objectstore:
         condition: service_healthy
     ports:
       - "127.0.0.1:4040:4040"
 
 volumes:
-  minio-data:
+  lake-data:

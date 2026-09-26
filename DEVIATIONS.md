@@ -5,11 +5,12 @@ gate.
 
 ## Gate 7a — lakehouse platform
 
-- **MinIO is archived.** The last official release image is pinned by tag and
-  digest on Quay, with both ports bound to localhost. Docker Hub withdrew the
-  official repository in September 2026. Application code uses only the S3
-  API, so Garage, SeaweedFS, or AWS S3 can replace MinIO through environment
-  configuration.
+- **Object store is RustFS, not MinIO.** MinIO archived its community edition,
+  and by September 2026 its images were removed from Docker Hub and Quay, with
+  release binaries returning 410. RustFS 1.0 (Apache-2.0) is pinned by tag and
+  digest, with both ports bound to localhost. All pipeline code uses only the
+  S3 API, so the storage swap changed only Compose configuration. SeaweedFS is
+  the fallback candidate if RustFS proves incompatible.
 - **Spark 4.1 with Delta 4.x replaces the plan's Spark 3.5 with Delta 3.x.**
   Delta 4.1 dropped Spark 3.5 support. The Spark and Delta pins follow Delta's
   release compatibility statement for the exact Spark release.
@@ -20,7 +21,7 @@ gate.
 - **Delta on S3 assumes one writer per table.** No DynamoDB log store is
   configured. The Airflow gate must enforce this, for example with
   `max_active_runs=1`.
-- **Local credentials are MinIO root credentials.** Production deployment
+- **Local credentials are the object store's root credentials.** Production deployment
   should use a scoped access key.
 
 ## Implemented at review gate 1
