@@ -68,3 +68,25 @@ def test_metric_mismatch_raises(spark, tmp_path):
             planned_updates=0,
         )
     assert _version(spark, uri) == 1
+
+
+def test_delete_plan_matches_num_target_rows_deleted(spark, tmp_path):
+    uri, insert_sql = _table(spark, tmp_path)
+    merge_with_plan(
+        spark, table_uri=uri, source_view="delta_ops_source",
+        merge_sql=insert_sql, planned_inserts=1, planned_updates=0,
+    )
+    spark.createDataFrame([], "id INT, value STRING").createOrReplaceTempView(
+        "delta_ops_empty"
+    )
+    outcome = merge_with_plan(
+        spark, table_uri=uri, source_view="delta_ops_empty",
+        merge_sql=(
+            f"MERGE INTO delta.`{uri}` AS target USING delta_ops_empty AS source "
+            "ON target.id = source.id WHEN NOT MATCHED BY SOURCE THEN DELETE"
+        ),
+        planned_inserts=0, planned_updates=0, planned_deletes=1,
+    )
+    assert (outcome.deleted, outcome.version, outcome.skipped) == (1, 2, False)
+    assert outcome.metrics["numTargetRowsDeleted"] == "1"
+    assert spark.read.format("delta").load(uri).count() == 0

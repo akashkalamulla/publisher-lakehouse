@@ -26,6 +26,7 @@ The project follows the review gates in
 | 7a | RustFS, Spark, Delta smoke test, file landing | Complete, tagged `gate7a` |
 | 7b | Append-only bronze Delta article table | Complete |
 | 8 | Current-state silver articles and data-quality tables | Complete |
+| 9 | Gold article star schema and weighted author bridge | Complete |
 
 The ingestion and CLI commands are intentionally unavailable until their review
 gates are approved. `CABIACQ.py` remains the working scraper and is untouched.
@@ -126,6 +127,49 @@ Soft flags keep the article in silver: missing or invalid DOI, no authors,
 missing abstract, unparsed publication month, month range, bad reference count,
 bad copyright year, and reversed numeric page range. The printed per-rule table
 shows each failure count and the number of rows evaluated.
+
+## Gold star schema (gate 9)
+
+Build the current article star from silver and inspect four example Spark SQL
+queries:
+
+```powershell
+docker compose run --rm spark python -m publisher_lakehouse.transform.gold --publisher sciencedirect --queries
+docker compose run --rm spark python -m publisher_lakehouse.transform.gold --publisher sciencedirect
+docker compose run --rm --no-deps spark python -m pytest -q -p no:cacheprovider tests_spark
+```
+
+| Delta table under `gold/` | Grain |
+| --- | --- |
+| `dim_date` | One calendar day, 2000-01-01 through 2035-12-31, plus unknown |
+| `dim_article_type` | One normalized article type, plus unknown |
+| `dim_journal` | One journal title version per effective interval, plus unknown |
+| `dim_issue` | One publisher and issue URL, plus unknown |
+| `dim_author` | One normalized author name across all three roles, plus unknown |
+| `fact_article` | One current silver article per publisher |
+| `bridge_article_author` | One article, role, and 1-based position |
+
+```text
+ dim_date (publication month, first seen)      dim_article_type
+                  \                            /
+ dim_journal ---- fact_article ---- dim_issue
+                         |
+             bridge_article_author ---- dim_author
+```
+
+Journal titles use SCD Type 2. A title change expires the old journal row at
+the changed article's `last_changed_at` and inserts a new current row. The fact
+uses the journal version valid when its article last changed, so older articles
+keep the earlier title version. Each dimension includes surrogate key `-1` for
+unknowns; articles without a known publication month use the unknown date.
+
+The bridge stores authors, editors, and corporate authors separately. Its
+`weight` is `1 / entries in that role on that article`; sum weights for the
+`author` role to count coauthored articles without inflating totals. A rerun
+with unchanged silver skips every gold MERGE and leaves all gold versions
+unchanged. Every build checks foreign keys, key uniqueness, journal intervals,
+fact grain, bridge counts, and weights. `silver/dq_results` is compacted once
+and each later silver run appends one Parquet file.
 
 ## Configuration
 

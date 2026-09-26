@@ -120,3 +120,8 @@ def bronze_setup(spark, silver_lake):
         )
 
     return add
+
+
+@pytest.fixture
+def gold_lake(tmp_path: Path, silver_lake):
+    return {**silver_lake, "gold_root_uri": (tmp_path / "gold").as_uri()}

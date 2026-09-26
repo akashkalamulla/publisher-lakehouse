@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from calendar import month_abbr, month_name
+from dataclasses import dataclass
 from pathlib import PurePosixPath
 
 
@@ -218,3 +219,107 @@ def quarantine_ddl() -> str:
 
 def dq_ddl() -> str:
     return ", ".join(f"{name} {kind}" for name, kind in DQ_RESULT_COLUMNS)
+
+
+@dataclass(frozen=True)
+class GoldTableSpec:
+    columns: tuple[tuple[str, str], ...]
+    surrogate_key: str | None
+    natural_key: tuple[str, ...]
+    partitions: tuple[str, ...] = ()
+    foreign_keys: tuple[tuple[str, str], ...] = ()
+
+
+GOLD_SPECS: dict[str, GoldTableSpec] = {
+    "dim_date": GoldTableSpec(
+        columns=(
+            ("date_sk", "INT"), ("date", "DATE"), ("year", "INT"),
+            ("quarter", "INT"), ("month", "INT"), ("month_name", "STRING"),
+            ("day", "INT"), ("day_of_week", "INT"), ("iso_week", "INT"),
+            ("is_month_start", "BOOLEAN"),
+        ),
+        surrogate_key="date_sk", natural_key=("date",),
+    ),
+    "dim_article_type": GoldTableSpec(
+        columns=(
+            ("article_type_sk", "BIGINT"), ("article_type_key", "STRING"),
+            ("article_type", "STRING"), ("content_class", "STRING"),
+            ("is_scholarly", "BOOLEAN"),
+        ),
+        surrogate_key="article_type_sk", natural_key=("article_type_key",),
+    ),
+    "dim_journal": GoldTableSpec(
+        columns=(
+            ("journal_sk", "BIGINT"), ("publisher", "STRING"),
+            ("journal_url", "STRING"), ("journal_title", "STRING"),
+            ("effective_from", "TIMESTAMP"), ("effective_to", "TIMESTAMP"),
+            ("is_current", "BOOLEAN"), ("_attr_hash", "STRING"),
+        ),
+        surrogate_key="journal_sk", natural_key=("publisher", "journal_url"),
+    ),
+    "dim_issue": GoldTableSpec(
+        columns=(
+            ("issue_sk", "BIGINT"), ("publisher", "STRING"),
+            ("issue_url", "STRING"), ("journal_url", "STRING"),
+            ("volume", "STRING"), ("issue", "STRING"),
+            ("volume_num", "INT"), ("issue_num", "INT"),
+            ("issue_pub_year", "INT"), ("issue_pub_month", "INT"),
+            ("issue_pub_day", "INT"), ("issue_date_precision", "STRING"),
+            ("issue_pub_month_start", "DATE"),
+        ),
+        surrogate_key="issue_sk", natural_key=("publisher", "issue_url"),
+    ),
+    "dim_author": GoldTableSpec(
+        columns=(
+            ("author_sk", "BIGINT"), ("author_nk", "STRING"),
+            ("display_name", "STRING"), ("latest_affiliation", "STRING"),
+            ("latest_email", "STRING"), ("first_seen_at", "TIMESTAMP"),
+        ),
+        surrogate_key="author_sk", natural_key=("author_nk",),
+    ),
+    "fact_article": GoldTableSpec(
+        columns=(
+            ("article_sk", "BIGINT"), ("journal_sk", "BIGINT"),
+            ("issue_sk", "BIGINT"), ("article_type_sk", "BIGINT"),
+            ("pub_month_date_sk", "INT"), ("first_seen_date_sk", "INT"),
+            ("article_count", "INT"), ("reference_count", "INT"),
+            ("page_count", "INT"), ("author_count", "INT"),
+            ("keyword_count", "INT"), ("version_count", "INT"),
+            ("dq_flag_count", "INT"), ("publisher", "STRING"),
+            ("url_hash", "STRING"), ("doi", "STRING"),
+            ("english_title", "STRING"), ("article_url", "STRING"),
+            ("pub_year", "INT"), ("pub_date_precision", "STRING"),
+            ("license_code", "STRING"), ("has_cc_license", "BOOLEAN"),
+            ("_row_hash", "STRING"),
+        ),
+        surrogate_key="article_sk", natural_key=("publisher", "url_hash"),
+        partitions=("publisher",),
+        foreign_keys=(
+            ("journal_sk", "dim_journal"), ("issue_sk", "dim_issue"),
+            ("article_type_sk", "dim_article_type"),
+            ("pub_month_date_sk", "dim_date"),
+            ("first_seen_date_sk", "dim_date"),
+        ),
+    ),
+    "bridge_article_author": GoldTableSpec(
+        columns=(
+            ("article_sk", "BIGINT"), ("author_sk", "BIGINT"),
+            ("role", "STRING"), ("author_position", "INT"),
+            ("affiliation_at_publication", "STRING"),
+            ("email_at_publication", "STRING"), ("weight", "DOUBLE"),
+            ("publisher", "STRING"), ("_row_hash", "STRING"),
+        ),
+        surrogate_key=None,
+        natural_key=("article_sk", "role", "author_position"),
+        partitions=("publisher",),
+        foreign_keys=(("article_sk", "fact_article"), ("author_sk", "dim_author")),
+    ),
+}
+
+GOLD_BUILD_ORDER = tuple(GOLD_SPECS)
+
+
+def gold_ddl(table_name: str) -> str:
+    return ", ".join(
+        f"{name} {kind}" for name, kind in GOLD_SPECS[table_name].columns
+    )

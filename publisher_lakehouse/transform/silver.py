@@ -442,7 +442,9 @@ def build_silver(
         )
         for rule, severity in DQ_RULES
     ]
-    spark.createDataFrame(dq_rows, schema=dq_ddl()).write.format("delta").mode("append").save(dq_uri)
+    spark.createDataFrame(dq_rows, schema=dq_ddl()).coalesce(1).write.format(
+        "delta"
+    ).mode("append").save(dq_uri)
 
     silver_after = spark.read.format("delta").load(silver_uri).filter(
         F.col("publisher") == publisher

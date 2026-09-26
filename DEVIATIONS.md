@@ -3,6 +3,22 @@
 This file is cumulative and will be updated at each implementation review
 gate.
 
+## Gate 9 — gold star schema
+
+- Gold uses deterministic `xxhash64` surrogate keys rather than identity
+  columns, so rebuilding the same natural keys reproduces their IDs. Each
+  build checks key uniqueness to catch hash collisions.
+- Author identity uses a normalized name because source records have no ORCID.
+  It can merge different people with the same name and split spelling variants
+  such as `V.K. Arora` and `V. K. Arora`.
+- Book-series articles without publication date parts point to the unknown
+  date member (`date_sk = -1`).
+- `silver/dq_results` was compacted with `OPTIMIZE` while retaining
+  `delta.appendOnly`; its appends now coalesce to one Parquet file per run.
+- The reference mapping covers every observed article type. `miscellaneous`
+  is assigned to `other_content`; this broad source label is the one
+  classification to review if more detailed article metadata becomes available.
+
 ## Gate 8 — current-state silver articles
 
 - Bronze and silver plan inserts and updates before MERGE. A zero-change plan
