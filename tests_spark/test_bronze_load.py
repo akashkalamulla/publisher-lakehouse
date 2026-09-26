@@ -49,8 +49,9 @@ def test_first_load_rerun_and_new_run_keep_history(spark, local_lake, article_fa
 
     second = load(spark, local_lake)
     assert (second.inserted, second.already_present, second.table_rows) == (0, 3, 3)
-    assert [row["operation"] for row in history(spark, local_lake)[:3]] == [
-        "MERGE", "MERGE", "CREATE TABLE"
+    assert second.table_version == first.table_version
+    assert [row["operation"] for row in history(spark, local_lake)] == [
+        "MERGE", "CREATE TABLE"
     ]
 
     local_lake["write"]([article_factory("hash-0", run_id="run-2")], part="run-2")

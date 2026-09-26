@@ -3,6 +3,25 @@
 This file is cumulative and will be updated at each implementation review
 gate.
 
+## Gate 8 — current-state silver articles
+
+- Bronze and silver plan inserts and updates before MERGE. A zero-change plan
+  skips the write and leaves the article table version unchanged. Delta metrics
+  and a single new version are checked after every nonempty MERGE.
+- The silver MERGE has a second matched hash check that recomputes the target's
+  business hash. A direct SQL edit can change a business value without changing
+  its stored `_row_hash`; this check lets the next build repair that drift while
+  the required stored-hash comparison remains the first matched clause.
+- Authors, editors, and corporate authors stay nested and cleaned in silver;
+  gold will explode them. Rich-text arrays remain in bronze only.
+- Silver calls the source's free-text `funding_status` field
+  `funding_statement`. Publication dates are stored as parsed parts and a
+  precision rather than inventing a full date when only a month or year is
+  known.
+- `silver/dq_results` appends a quality event for every rule on every run,
+  including no-op article runs. Its version advances even when the article and
+  quarantine versions do not.
+
 ## Gate 7b — bronze Delta articles
 
 - Bronze keeps all article content strings exactly as landed. Only `scraped_at`
@@ -12,9 +31,8 @@ gate.
 - `(publisher, url_hash, run_id)` identifies a bronze row. An insert-only MERGE
   preserves changed-payload history across runs, and `delta.appendOnly=true`
   makes Delta reject updates and deletes.
-- For this job, Delta's `skipRecordingEmptyCommits` is disabled around the
-  MERGE. A zero-insert rerun therefore gets its own history entry and zero-valued
-  MERGE metrics instead of showing the prior run's metrics.
+- Bronze now uses the Gate 8 planned no-op MERGE helper. A zero-insert rerun
+  keeps its prior version, while a write verifies the actual Delta metrics.
 - Spark 4 enables ANSI casts by default. Silver will use `try_cast` when source
   values might be invalid. Bronze uses a checked timestamp conversion for
   `scraped_at`.

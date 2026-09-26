@@ -25,11 +25,12 @@ The project follows the review gates in
 | 6 | `export/journal_json.py` + regression test | Not started |
 | 7a | RustFS, Spark, Delta smoke test, file landing | Complete, tagged `gate7a` |
 | 7b | Append-only bronze Delta article table | Complete |
+| 8 | Current-state silver articles and data-quality tables | Complete |
 
 The ingestion and CLI commands are intentionally unavailable until their review
 gates are approved. `CABIACQ.py` remains the working scraper and is untouched.
 
-The host suite has 228 tests (219 offline, 9 requiring `PL_TEST_DATABASE_URL`).
+The host suite has 233 tests (224 offline, 9 requiring `PL_TEST_DATABASE_URL`).
 
 ## Lakehouse platform (gate 7a)
 
@@ -92,6 +93,39 @@ The table lives at `bronze/articles/` in the lake bucket. `_delta_log/` holds
 commits, and data files live beneath `publisher=<publisher>/ingest_date=<date>/`.
 Each row contains the raw HTML object's `landing/raw_html/...` key, not its
 HTML bytes.
+
+## Silver layer (gate 8)
+
+Build current, typed articles for one publisher from bronze, then rerun to
+verify the article table version stays the same. Use `--sample 5` to inspect
+typed columns and `--hold` with `--service-ports` to keep the Spark UI open.
+
+```powershell
+docker compose run --rm spark python -m publisher_lakehouse.transform.silver --publisher sciencedirect --sample 5
+docker compose run --rm spark python -m publisher_lakehouse.transform.silver --publisher sciencedirect
+docker compose run --rm --no-deps spark python -m pytest -q -p no:cacheprovider tests_spark
+docker compose run --rm --service-ports spark python -m publisher_lakehouse.transform.silver --publisher sciencedirect --hold
+```
+
+The summary reports bronze rows checked, latest valid candidates, new silver
+inserts, changed silver updates, unchanged candidates, newly quarantined bronze
+rows, candidates with at least one soft flag, current silver rows, and the
+silver Delta version. A rerun with no new or changed candidates leaves the
+versions of `silver/articles` and `silver/articles_quarantine` unchanged.
+
+The lake bucket contains three silver tables:
+
+- `silver/articles/` has one latest valid, typed row per article. Authors stay
+  nested; rich-text segments remain in bronze.
+- `silver/articles_quarantine/` keeps bronze versions with a missing article
+  URL, journal URL, or both titles. It never duplicates an existing bronze key.
+- `silver/dq_results/` appends one result per hard or soft rule on every run,
+  including no-op runs. Its version therefore advances on a rerun.
+
+Soft flags keep the article in silver: missing or invalid DOI, no authors,
+missing abstract, unparsed publication month, month range, bad reference count,
+bad copyright year, and reversed numeric page range. The printed per-rule table
+shows each failure count and the number of rows evaluated.
 
 ## Configuration
 

@@ -24,7 +24,9 @@ def spark():
 
 @pytest.fixture
 def article_factory():
-    def make(url_hash: str, run_id: str = "run-1", publisher: str = "sciencedirect"):
+    def make(
+        url_hash: str, run_id: str = "run-1", publisher: str = "sciencedirect", **fields
+    ):
         record = {
             name: ([] if kind.startswith("ARRAY<") else "")
             for name, kind in BRONZE_SOURCE_COLUMNS
@@ -36,6 +38,7 @@ def article_factory():
             url_hash=url_hash,
             source_url=f"https://example.test/{url_hash}",
         )
+        record.update(fields)
         return record
 
     return make
@@ -68,3 +71,52 @@ def local_lake(tmp_path: Path):
         "table_uri": table.as_uri(),
         "publisher": publisher,
     }
+
+
+@pytest.fixture
+def silver_article_factory(article_factory):
+    def make(url_hash: str, run_id: str = "run-1", **fields):
+        record = article_factory(
+            url_hash,
+            run_id=run_id,
+            article_url=f"https://example.test/articles/{url_hash}",
+            journal_url="https://example.test/journals/example",
+            english_title=f"Title {url_hash}",
+            doi=f"10.1016/{url_hash}",
+            authors=[{"name": "Author", "affiliation": "Institute", "email": ""}],
+        )
+        record.update(fields)
+        return record
+
+    return make
+
+
+@pytest.fixture
+def silver_lake(tmp_path: Path, local_lake):
+    return {
+        **local_lake,
+        "bronze_uri": local_lake["table_uri"],
+        "silver_uri": (tmp_path / "silver" / "articles").as_uri(),
+        "quarantine_uri": (tmp_path / "silver" / "articles_quarantine").as_uri(),
+        "dq_uri": (tmp_path / "silver" / "dq_results").as_uri(),
+    }
+
+
+@pytest.fixture
+def bronze_setup(spark, silver_lake):
+    from datetime import datetime, timezone
+
+    from publisher_lakehouse.transform.bronze import load_bronze
+
+    def add(records: list[dict], part: str = "run-1"):
+        silver_lake["write"](records, part=part)
+        return load_bronze(
+            spark,
+            publisher=silver_lake["publisher"],
+            landing_uri=silver_lake["landing_uri"],
+            table_uri=silver_lake["bronze_uri"],
+            raw_html_uri=silver_lake["raw_html_uri"],
+            loaded_at=datetime(2026, 9, 26, 12, 0, tzinfo=timezone.utc),
+        )
+
+    return add

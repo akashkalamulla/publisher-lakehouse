@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from uuid import uuid4
 
+from publisher_lakehouse.transform.delta_ops import merge_with_plan
 from publisher_lakehouse.transform.schemas import (
     BRONZE_KEY,
     BRONZE_PARTITIONS,
@@ -159,42 +160,33 @@ def load_bronze(
     already_present = batch.join(
         table_before.select(*BRONZE_KEY), on=list(BRONZE_KEY), how="left_semi"
     ).count()
+    planned_inserts = landed_rows - already_present
 
     view_name = f"_bronze_batch_{uuid4().hex}"
     batch.createOrReplaceTempView(view_name)
     prior_shuffle_partitions = spark.conf.get("spark.sql.shuffle.partitions")
-    empty_commit_conf = "spark.databricks.delta.skipRecordingEmptyCommits"
-    prior_skip_empty = spark.conf.get(empty_commit_conf, "true")
     try:
         # Four shuffle partitions are enough for the Phase 1 publisher volume.
         spark.conf.set("spark.sql.shuffle.partitions", "4")
-        # Keep a zero-insert MERGE in Delta history so its metrics describe this
-        # run instead of silently reusing the previous MERGE's metrics.
-        spark.conf.set(empty_commit_conf, "false")
         match = " AND ".join(f"target.{key} = source.{key}" for key in BRONZE_KEY)
-        spark.sql(
-            f"MERGE INTO delta.`{table_uri}` AS target USING {view_name} AS source "
-            f"ON {match} WHEN NOT MATCHED THEN INSERT *"
+        outcome = merge_with_plan(
+            spark,
+            table_uri=table_uri,
+            source_view=view_name,
+            merge_sql=(
+                f"MERGE INTO delta.`{table_uri}` AS target USING {view_name} AS source "
+                f"ON {match} WHEN NOT MATCHED THEN INSERT *"
+            ),
+            planned_inserts=planned_inserts,
+            planned_updates=0,
         )
     finally:
-        spark.conf.set(empty_commit_conf, prior_skip_empty)
         spark.conf.set("spark.sql.shuffle.partitions", prior_shuffle_partitions)
         spark.catalog.dropTempView(view_name)
 
-    latest = DeltaTable.forPath(spark, table_uri).history(1).first()
-    if latest["operation"] != "MERGE":
-        raise RuntimeError(f"Expected MERGE history entry, got {latest['operation']}")
-    metrics = latest["operationMetrics"]
-    for key in ("numTargetRowsInserted", "numTargetFilesAdded"):
-        if key not in metrics:
-            raise RuntimeError(f"MERGE metric {key} missing; available: {sorted(metrics)}")
-    inserted = int(metrics["numTargetRowsInserted"])
-    files_added = int(metrics["numTargetFilesAdded"])
-    table_version = int(latest["version"])
-    if table_version != version_before + 1:
-        raise RuntimeError(
-            f"MERGE version {table_version} did not follow prior version {version_before}"
-        )
+    inserted = outcome.inserted
+    files_added = outcome.files_added
+    table_version = outcome.version
     table_rows = spark.read.format("delta").load(table_uri).count()
     old_rows = (
         spark.read.format("delta")
