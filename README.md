@@ -29,6 +29,7 @@ The project follows the review gates in
 | 9 | Gold article star schema and weighted author bridge | Complete, tagged `gate9` |
 | 10a | Postgres serving warehouse and atomic publish | Complete, tagged `gate10a`; live verification passed |
 | 10b | Provisioned Grafana dashboards and API checks | Complete |
+| 11a | Marker-driven Airflow orchestration and immutable Spark jobs | Complete |
 
 The ingestion, export, and lake CLI commands are available. `CABIACQ.py` is
 untouched and remains the extraction regression reference.
@@ -241,6 +242,50 @@ Grafana applies the admin password only when `grafana-data` is first created.
 To change it later, use `grafana cli admin reset-admin-password` inside the
 container, or stop Grafana and remove only the `grafana-data` volume before
 starting it with the new `.env` value.
+
+## Orchestration (gate 11a)
+
+The producer and consumer connect through an object-store marker:
+
+```text
+Windows scraper -> lake land (marker) -> Airflow DAG -> bronze -> silver -> gold
+                                                         -> publish -> warehouse -> Grafana
+```
+
+Set the five `AIRFLOW_*` values shown in `.env.example`, then start Airflow:
+
+```powershell
+docker compose up -d airflow-init
+docker compose up -d airflow-apiserver airflow-scheduler airflow-dag-processor
+```
+
+Open http://127.0.0.1:8080 and log in with `AIRFLOW_ADMIN_USER` and
+`AIRFLOW_ADMIN_PASSWORD` from the local `.env`. The DAG is paused when first
+created. Unpause `lakehouse_sciencedirect` in the UI to enable its hourly
+schedule. Use **Trigger** with a JSON configuration of `{"force": true}` to
+run the four jobs when there are no pending markers.
+
+On the Windows host, `lake land --publisher sciencedirect` uploads changed
+files and then writes one `landing/_markers/sciencedirect/*.json` marker. A
+run with no changed files writes no marker. The DAG lists markers without a
+matching `.json.processed` object, runs all four jobs, and writes an
+acknowledgement for each pending marker only after publish succeeds. A forced
+run with no pending markers writes no acknowledgement. The `lake_writer`
+pool has one slot, so Delta and publish jobs cannot overlap across runs.
+
+The scheduler uses an immutable job image containing the Python package; the
+development `spark` service still bind-mounts the code. After committing code
+changes, rebuild the job image and set its revision label to the commit SHA:
+
+```powershell
+$env:GIT_COMMIT = (git rev-parse HEAD).Trim()
+docker compose --profile jobs build spark-job
+Remove-Item Env:GIT_COMMIT
+```
+
+Docker Desktop needs at least 6 GiB of available memory for this stack; 8 GiB
+or more gives Spark and Airflow more headroom. The Windows scraper remains a
+host process and is never launched by Airflow.
 
 ## Configuration
 

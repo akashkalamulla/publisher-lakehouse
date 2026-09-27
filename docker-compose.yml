@@ -71,7 +71,11 @@ services:
     restart: unless-stopped
 
   spark:
-    build: ./docker/spark
+    image: publisher-lakehouse-runtime:local
+    build:
+      context: .
+      dockerfile: docker/spark/Dockerfile
+      target: runtime
     volumes:
       - ./publisher_lakehouse:/opt/app/publisher_lakehouse:ro
       - ./tests_spark:/opt/app/tests_spark:ro
@@ -96,7 +100,136 @@ services:
     ports:
       - "127.0.0.1:4040:4040"
 
+  spark-job:
+    profiles: ["jobs"]
+    image: publisher-lakehouse-job:local
+    build:
+      context: .
+      dockerfile: docker/spark/Dockerfile
+      target: job
+      args:
+        GIT_COMMIT: ${GIT_COMMIT:-c756929d5b3015595398b10a2818fae8824812fe}
+
+  airflow-db:
+    image: postgres:17.11@sha256:d74eeac9a635390a49bc21bd49fccd973de707e2a53a76ac49b552b8712ec46f
+    environment:
+      POSTGRES_DB: airflow
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: ${AIRFLOW_DB_PASSWORD}
+    volumes:
+      - airflow-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U airflow -d airflow"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+    restart: unless-stopped
+
+  airflow-init:
+    image: &airflow-image apache/airflow:3.3.2-python3.12@sha256:9df9c8be4096b9cc626bd7cb1f2b8c712eef66c59c615f8c7e6200871ca10bd1
+    environment: &airflow-env
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__EXECUTION_API_SERVER_URL: http://airflow-apiserver:8080/execution/
+      AIRFLOW__CORE__FERNET_KEY: ${AIRFLOW_FERNET_KEY}
+      AIRFLOW__API_AUTH__JWT_SECRET: ${AIRFLOW_JWT_SECRET}
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "true"
+      AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_ALL_ADMINS: "false"
+      AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_USERS: ${AIRFLOW_ADMIN_USER}:admin
+      AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_PASSWORDS_FILE: /opt/airflow/logs/simple_auth_manager_passwords.json
+      AIRFLOW_DB_PASSWORD: ${AIRFLOW_DB_PASSWORD}
+      AIRFLOW_ADMIN_USER: ${AIRFLOW_ADMIN_USER}
+      AIRFLOW_ADMIN_PASSWORD: ${AIRFLOW_ADMIN_PASSWORD}
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN_CMD: >-
+        python -c 'import os, sys; from urllib.parse import quote; sys.stdout.write("postgresql+psycopg2://airflow:" + quote(os.environ["AIRFLOW_DB_PASSWORD"], safe="") + "@airflow-db:5432/airflow")'
+    volumes: &airflow-volumes
+      - ./dags:/opt/airflow/dags:ro
+      - airflow-logs:/opt/airflow/logs
+    depends_on:
+      airflow-db:
+        condition: service_healthy
+    entrypoint: /bin/bash
+    command:
+      - -euc
+      - |
+        python - <<'PY'
+        import json
+        import os
+        from pathlib import Path
+        path = Path(os.environ["AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_PASSWORDS_FILE"])
+        path.write_text(json.dumps({os.environ["AIRFLOW_ADMIN_USER"]: os.environ["AIRFLOW_ADMIN_PASSWORD"]}), encoding="utf-8")
+        path.chmod(0o600)
+        PY
+        airflow db migrate
+        airflow pools set lake_writer 1 "Single Delta lake writer"
+
+  airflow-apiserver:
+    image: *airflow-image
+    environment: *airflow-env
+    volumes: *airflow-volumes
+    command: api-server
+    ports:
+      - "127.0.0.1:8080:8080"
+    depends_on:
+      airflow-init:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8080/api/v2/monitor/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    restart: unless-stopped
+
+  airflow-scheduler:
+    image: *airflow-image
+    environment: &airflow-job-env
+      <<: *airflow-env
+      S3_ENDPOINT_URL: http://objectstore:9000
+      S3_ACCESS_KEY: ${S3_ACCESS_KEY}
+      S3_SECRET_KEY: ${S3_SECRET_KEY}
+      LAKE_BUCKET: ${LAKE_BUCKET:-lakehouse}
+      WAREHOUSE_HOST: warehouse
+      WAREHOUSE_DB: ${WAREHOUSE_DB}
+      WAREHOUSE_USER: ${WAREHOUSE_USER}
+      WAREHOUSE_PASSWORD: ${WAREHOUSE_PASSWORD}
+      GRAFANA_DB_PASSWORD: ${GRAFANA_DB_PASSWORD}
+    volumes:
+      - ./dags:/opt/airflow/dags:ro
+      - airflow-logs:/opt/airflow/logs
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: scheduler
+    depends_on:
+      airflow-init:
+        condition: service_completed_successfully
+      airflow-apiserver:
+        condition: service_healthy
+      objectstore:
+        condition: service_healthy
+      warehouse:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "airflow", "jobs", "check", "--job-type", "SchedulerJob", "--local"]
+      interval: 15s
+      timeout: 10s
+      retries: 6
+      start_period: 30s
+    restart: unless-stopped
+
+  airflow-dag-processor:
+    image: *airflow-image
+    environment: *airflow-job-env
+    volumes: *airflow-volumes
+    command: dag-processor
+    depends_on:
+      airflow-init:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
 volumes:
+  airflow-db-data:
+  airflow-logs:
   grafana-data:
   lake-data:
   warehouse-data:

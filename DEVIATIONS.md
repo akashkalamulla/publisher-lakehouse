@@ -3,6 +3,29 @@
 This file is cumulative and will be updated at each implementation review
 gate.
 
+## Gate 11a — Airflow orchestration
+
+- The Windows browser scraper remains outside Airflow. It needs the host
+  browser environment; `lake land` writes a complete-data marker as the only
+  handoff to the container DAG.
+- The job image copies the Python package at build time so scheduled jobs use
+  fixed code. The root `.dockerignore` is an allowlist for `docker/spark` and
+  `publisher_lakehouse`, excluding `.env`, data, virtual environments, and
+  tests from the build context. The development `spark` service keeps its bind
+  mount.
+- Only the scheduler mounts `/var/run/docker.sock`. Its Airflow user has group
+  `0`, matching the socket's group permissions on Docker Desktop. Access to
+  this socket grants root-equivalent control of the Docker host, so this
+  design is for local development only. Airflow's published API port binds to
+  `127.0.0.1`.
+- No triggerer runs because the DAG has no deferrable tasks.
+- `lake_writer` has one pool slot. All four DockerOperator jobs use it to
+  preserve Delta's single-writer assumption across DAG runs and publishers.
+- An unchanged article input still causes the existing silver job to append a
+  fresh `silver/dq_results` batch. Publish then sees that table version change
+  and republishes the warehouse. Bronze, `silver/articles`, and gold stay at
+  their prior versions; the Gate 8 and Gate 10a job logic remains frozen.
+
 ## Gate 10b — provisioned Grafana
 
 - The image is `grafana/grafana` rather than the plan's `grafana-oss` because

@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import base64
 import hashlib
+import json
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from pathlib import Path, PurePosixPath
 
 import boto3
@@ -25,6 +27,8 @@ class LandingCounters:
     unchanged: int = 0
     replaced: int = 0
     bytes_uploaded: int = 0
+    jsonl_keys: tuple[str, ...] = ()
+    html_count: int = 0
 
     def assert_balanced(self) -> None:
         if self.uploaded + self.unchanged + self.replaced != self.files_seen:
@@ -99,7 +103,8 @@ def sync_publisher(
     """Upload new and changed files, verifying each single PUT with MD5."""
 
     planned = plan_uploads(publisher, bronze_dir, raw_html_dir)
-    uploaded = unchanged = replaced = bytes_uploaded = 0
+    uploaded = unchanged = replaced = bytes_uploaded = html_count = 0
+    jsonl_keys: list[str] = []
     for path, key in planned:
         size = path.stat().st_size
         if size > MAX_SINGLE_PUT_BYTES:
@@ -135,6 +140,10 @@ def sync_publisher(
             uploaded += 1
         else:
             replaced += 1
+        if key.startswith("landing/bronze_jsonl/"):
+            jsonl_keys.append(key)
+        elif key.startswith("landing/raw_html/"):
+            html_count += 1
 
     counters = LandingCounters(
         files_seen=len(planned),
@@ -142,6 +151,48 @@ def sync_publisher(
         unchanged=unchanged,
         replaced=replaced,
         bytes_uploaded=bytes_uploaded,
+        jsonl_keys=tuple(jsonl_keys),
+        html_count=html_count,
     )
     counters.assert_balanced()
     return counters
+
+
+def land_publisher(
+    client,
+    bucket: str,
+    publisher: str,
+    bronze_dir: str | Path,
+    raw_html_dir: str | Path,
+    *,
+    now: datetime | None = None,
+) -> tuple[LandingCounters, str | None]:
+    """Sync files, then signal one complete landing batch if anything changed."""
+
+    counters = sync_publisher(client, bucket, publisher, bronze_dir, raw_html_dir)
+    if counters.uploaded + counters.replaced == 0:
+        return counters, None
+
+    landed_at = now or datetime.now(timezone.utc)
+    if landed_at.tzinfo is None or landed_at.utcoffset() is None:
+        raise ValueError("Landing marker timestamp must be timezone-aware")
+    landed_at = landed_at.astimezone(timezone.utc)
+    marker_key = (
+        f"landing/_markers/{publisher}/"
+        f"{landed_at.strftime('%Y%m%dT%H%M%SZ')}.json"
+    )
+    marker = {
+        "publisher": publisher,
+        "landed_at": landed_at.isoformat(),
+        "uploaded": counters.uploaded,
+        "replaced": counters.replaced,
+        "jsonl_keys": list(counters.jsonl_keys),
+        "html_count": counters.html_count,
+    }
+    client.put_object(
+        Bucket=bucket,
+        Key=marker_key,
+        Body=json.dumps(marker, sort_keys=True).encode("utf-8"),
+        ContentType="application/json",
+    )
+    return counters, marker_key

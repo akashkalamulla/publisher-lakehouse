@@ -14,9 +14,9 @@ from publisher_lakehouse.export.journal_export import export_journals
 from publisher_lakehouse.ingestion.pipeline import run_ingestion
 from publisher_lakehouse.landing.sync import (
     ensure_bucket,
+    land_publisher,
     make_s3_client,
     plan_uploads,
-    sync_publisher,
 )
 from publisher_lakehouse.manifest.repository import ManifestRepository
 from publisher_lakehouse.settings import (
@@ -65,7 +65,7 @@ def lake_land(
     client = make_s3_client(lake)
     ensure_bucket(client, lake.lake_bucket)
     planned = plan_uploads(publisher, paths.bronze_dir, paths.raw_html_dir)
-    counters = sync_publisher(
+    counters, marker_key = land_publisher(
         client, lake.lake_bucket, publisher, paths.bronze_dir, paths.raw_html_dir
     )
     jsonl = sum(key.startswith("landing/bronze_jsonl/") for _, key in planned)
@@ -77,6 +77,7 @@ def lake_land(
         f"replaced {counters.replaced} | "
         f"{counters.bytes_uploaded / (1024 * 1024):.1f} MB"
     )
+    typer.echo(f"marker: {marker_key}" if marker_key else "no marker: nothing new landed")
 
 
 @ingest_app.command("run")

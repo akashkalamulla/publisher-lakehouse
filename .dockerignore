@@ -1,0 +1,8 @@
+*
+!docker/
+!docker/spark/
+!docker/spark/**
+!publisher_lakehouse/
+!publisher_lakehouse/**
+**/__pycache__/
+**/*.pyc

@@ -1,4 +1,4 @@
-FROM python:3.12-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e
+FROM python:3.12-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e AS runtime
 
 ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64 \
     SPARK_LOCAL_IP=127.0.0.1 \
@@ -40,3 +40,8 @@ RUN set -eu; \
 
 WORKDIR /opt/app
 USER spark
+
+FROM runtime AS job
+ARG GIT_COMMIT
+LABEL org.opencontainers.image.revision=${GIT_COMMIT}
+COPY --chown=spark:spark publisher_lakehouse /opt/app/publisher_lakehouse
