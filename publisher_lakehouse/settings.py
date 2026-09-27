@@ -59,6 +59,24 @@ class LakeSettings(BaseSettings):
     )
 
 
+class WarehouseSettings(BaseSettings):
+    """Host-side connection to the Docker serving warehouse, for ops commands."""
+
+    host: str = "127.0.0.1"
+    port: int = 5433
+    db: str
+    user: str
+    password: SecretStr
+
+    model_config = SettingsConfigDict(
+        case_sensitive=False,
+        env_file=None,
+        env_prefix="warehouse_",
+        extra="ignore",
+        frozen=True,
+    )
+
+
 class DetailsSettings(BaseModel):
     output_path: Path
 
@@ -142,6 +160,14 @@ def load_lake_settings(
     """Load lake settings independently of the ingestion database URL."""
 
     return LakeSettings(_env_file=env_file, _env_file_encoding="utf-8")
+
+
+def load_warehouse_settings(
+    env_file: str | Path | None = DEFAULT_ENV_FILE,
+) -> WarehouseSettings:
+    """Load the warehouse connection independently of the other domains."""
+
+    return WarehouseSettings(_env_file=env_file, _env_file_encoding="utf-8")
 
 
 def load_operator_settings(

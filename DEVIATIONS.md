@@ -3,6 +3,68 @@
 This file is cumulative and will be updated at each implementation review
 gate.
 
+## Gate 11b — producer, scraper health
+
+- The scraper stays on Windows Task Scheduler, not Airflow, for the reason in
+  the first Gate 11a entry. The task runs only while the user is logged on
+  (`InteractiveToken`), so it stores no password. Its start boundary is local
+  time, not UTC, so 02:00 stays 02:00 local. It also sets
+  `DontStopIfGoingOnBatteries`, so unplugging a laptop does not kill a run
+  that battery power was allowed to start.
+- **PowerShell 5.1 logging.** Every Python step runs through `Start-Process
+  -NoNewWindow -Wait -PassThru` with stdout and stderr redirected to files.
+  The child process writes those files directly, so the bytes are Python's own
+  UTF-8 (`PYTHONUTF8=1`). No step uses `2>&1`, which would turn 5.1 stderr
+  lines into `ErrorRecord`s. `Start-Process` cannot redirect both streams to
+  one file, so `land.log` and `push.log` hold stdout followed by stderr,
+  appended byte for byte. `producer.log` is written through .NET with UTF-8
+  without a BOM. `Start-Process -Wait` also waits for the step's child
+  processes, such as the browser.
+- `PL_PRODUCER_DRY_RUN=1` exists only to verify the producer without
+  scraping. The push still receives the dry run's empty `ingest.err.log`, so
+  every dry run records an `incomplete` run with exit code 0.
+- Scrape runs are recorded from the structlog `ingestion_run_complete` event
+  in the ingest stderr log. The last such event wins. A log without one is an
+  `incomplete` run with id `incomplete-<log directory>`. It cannot collide
+  with a 14-digit run id. It has NULL counters, and its `finished_at` is the
+  log file's modification time.
+- `ops.scrape_runs` lists its counter columns explicitly. A test compares
+  them with `RunCounters`, so adding a counter fails the suite until the
+  table is extended. The push then adds the missing column to an existing
+  table.
+- The push reads the manifest through `ManifestRepository` on sessions opened
+  with `default_transaction_read_only=on`, so it cannot write the manifest.
+- `ops.scrape_journals` is currently empty. Gate 5b stages only article rows,
+  so the manifest has no journal rows. "Journals needing attention" stays
+  empty until journal rows exist. `check_grafana.py` allows exactly this panel
+  to return no rows. Its scraper check asserts that the table count equals the
+  manifest's journal count and that `ops.scrape_status` equals the manifest's
+  counts.
+- **The Airflow auth file moved to its own volume.** It is now
+  `airflow-auth:/opt/airflow/auth` and keeps mode `0600`. The log volume is
+  mounted into more containers and can be served, so the password file no
+  longer lives there. Docker creates the new volume's mount point owned by
+  root. `airflow-init` therefore starts as root only to create the directory
+  (`0700`, owned by `airflow`) and delete the old file from the log volume.
+  It runs every other step as the `airflow` user through `runuser`. Only
+  `airflow-init` and `airflow-apiserver` mount the volume.
+- The job-image `GIT_COMMIT` default is `unknown`, not a fixed SHA.
+  `scripts/build_job_image.ps1` sets it to `HEAD`, adding `-dirty` when the
+  working tree has changes.
+
+Found at this gate and left unchanged because they are outside its write set:
+
+- `BronzeWriter` creates a zero-byte JSONL part for a run that writes no
+  records. `lake land` uploads it as a new file and writes a marker, so a
+  producer run with nothing new still triggers a full DAG run.
+- The Gate 10b stats "Last successful publish" and "Last publish status" show
+  "No data". A stat panel reduces only numeric fields by default, and those
+  queries return a time and a string. The new scraper stats set
+  `reduceOptions.fields` explicitly.
+- The `check_grafana.py` headline check pins 36 DQ rows and 3 DQ runs. Each
+  DAG run appends a DQ batch (see Gate 11a), so the check has failed since
+  the Gate 11a runs.
+
 ## Gate 11a — Airflow orchestration
 
 - The Windows browser scraper remains outside Airflow. It needs the host

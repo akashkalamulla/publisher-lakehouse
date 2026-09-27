@@ -30,6 +30,7 @@ The project follows the review gates in
 | 10a | Postgres serving warehouse and atomic publish | Complete, tagged `gate10a`; live verification passed |
 | 10b | Provisioned Grafana dashboards and API checks | Complete |
 | 11a | Marker-driven Airflow orchestration and immutable Spark jobs | Complete |
+| 11b | Scheduled Windows producer, scraper health in Grafana | Complete |
 
 The ingestion, export, and lake CLI commands are available. `CABIACQ.py` is
 untouched and remains the extraction regression reference.
@@ -227,7 +228,7 @@ The **Publisher Lakehouse** folder contains three dashboards:
 | --- | --- |
 | Corpus overview | Article, journal, author, publication-month, license, and classification questions for a selected publisher. |
 | Data quality | Latest rule failures, their recent trend, quarantine counts, soft flags, and run count. |
-| Pipeline health | Published Delta versions and row counts, commit ages, and warehouse publish history. |
+| Pipeline health | Published Delta versions and row counts, commit ages, warehouse publish history, and scraper health. |
 
 Dashboards are code in `docker/grafana/dashboards/`. UI saves to the provisioned
 dashboards are blocked. To change a panel, edit a copy in the UI, export its
@@ -275,17 +276,145 @@ pool has one slot, so Delta and publish jobs cannot overlap across runs.
 
 The scheduler uses an immutable job image containing the Python package; the
 development `spark` service still bind-mounts the code. After committing code
-changes, rebuild the job image and set its revision label to the commit SHA:
-
-```powershell
-$env:GIT_COMMIT = (git rev-parse HEAD).Trim()
-docker compose --profile jobs build spark-job
-Remove-Item Env:GIT_COMMIT
-```
+changes, rebuild the job image; see "Rebuilding the job image" below.
 
 Docker Desktop needs at least 6 GiB of available memory for this stack; 8 GiB
 or more gives Spark and Airflow more headroom. The Windows scraper remains a
 host process and is never launched by Airflow.
+
+## Producer (gate 11b)
+
+`scripts\producer.ps1` is the Windows half of the pipeline. Task Scheduler
+runs it daily; you can also run it by hand. It works in Windows PowerShell 5.1
+and PowerShell 7. Each run does four things:
+
+1. `ingest run --publisher <p> [--limit N]` scrapes with the browser.
+2. A Docker preflight checks that `objectstore` and `warehouse` report
+   `healthy` in `docker compose ps`. If either does not, the run skips steps 3
+   and 4 and exits 3. The scraped files stay on disk, and the next run's
+   `lake land` uploads them.
+3. `lake land --publisher <p>` uploads changed files and writes the marker
+   that the Airflow DAG picks up.
+4. `ops push-scrape-health` records this run and a fresh manifest snapshot in
+   the warehouse for Grafana.
+
+Steps 3 and 4 still run after a failed ingest: whatever the scraper wrote is
+durable, and the push records the run as `incomplete`.
+
+| Parameter | Default | Meaning |
+| --- | --- | --- |
+| `-Publisher` | `sciencedirect` | Publisher to run |
+| `-Limit` | `0` (no limit) | Only the first N enabled journals; `ingest run` logs its coverage warning |
+
+| Exit code | Meaning |
+| --- | --- |
+| 0 | Success |
+| 1 | Ingest failed (or the script itself failed; see `producer.log`) |
+| 2 | Land failed |
+| 3 | Docker unavailable; land and push skipped |
+| 4 | Push failed |
+| 5 | Another producer run is active |
+
+When several steps fail, the exit code is the first match in the order 5, 3,
+1, 2, 4.
+
+Each run writes UTF-8 logs to
+`logs\producer\<UTC yyyyMMddTHHmmssZ>-<publisher>\`:
+
+| File | Contents |
+| --- | --- |
+| `ingest.out.log` | Scraper progress (stdout) |
+| `ingest.err.log` | structlog JSON, including `ingestion_run_complete` with the run counters |
+| `land.log` | `lake land` output, then its JSON log |
+| `push.log` | Push summary line, then its JSON log |
+| `producer.log` | Timestamped step results; the last line is the run summary |
+
+```text
+Producer sciencedirect: ingest=0 land=ok marker=written push=ok exit=0
+```
+
+`logs\producer\.lock` holds the PID and start time of the active run. A second
+start exits 5 with `another producer run is active (pid N)`. If the lock's
+process is gone, for example after a killed run, the next run replaces the
+lock.
+
+Run the producer by hand:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\producer.ps1 -Publisher sciencedirect
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\producer.ps1 -Publisher sciencedirect -Limit 1
+```
+
+`PL_PRODUCER_DRY_RUN=1` skips the ingest step and still runs the preflight,
+land and push. It exists only to verify the script. Each dry run records an
+`incomplete` run with exit code 0, because it produces no completion event.
+
+### Scheduling
+
+Register or update the daily task, `PublisherLakehouse-Producer`:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\register_producer_task.ps1 -At 02:00
+```
+
+`-At` is local time. Add `-PrintOnly` to print the task XML without
+registering it. To unregister the task:
+
+```powershell
+Unregister-ScheduledTask -TaskName PublisherLakehouse-Producer -Confirm:$false
+```
+
+The task is set to **Run only when user is logged on**. The scraper drives a
+real Chrome window, which needs your desktop session. A task set to "Run
+whether user is logged on or not" runs without a desktop, so the browser
+cannot work, and Windows would have to store your password. The task
+therefore stores none. It runs while your session is locked, but not while
+you are signed out or the computer is asleep. A missed start runs as soon as
+possible after that. A second start while a run is active is ignored, and a
+run is stopped after 10 hours. Battery power neither prevents nor stops a
+run.
+
+### Scraper health
+
+`ops push-scrape-health` writes three warehouse tables. `grafana_ro` can read
+them.
+
+| Table | Contents |
+| --- | --- |
+| `ops.scrape_runs` | One row per run: `run_id`, `finished_at`, `ingest_exit_code`, `status`, and one column per run counter |
+| `ops.scrape_status` | Manifest rows per URL type and status, with the oldest and newest `last_seen_at` |
+| `ops.scrape_journals` | The manifest's journal-tier rows |
+
+A run whose log has an `ingestion_run_complete` event is `complete`. A run
+without one, such as a crash, is `incomplete` with the id
+`incomplete-<log directory>`. It has no counters. Each push replaces the
+publisher's snapshot rows. It reads the manifest in a read-only session. To
+refresh only the snapshot:
+
+```powershell
+.venv\Scripts\python.exe -m publisher_lakehouse.cli ops push-scrape-health --publisher sciencedirect
+```
+
+The **Scraper health** row on the Pipeline health dashboard shows when the
+last scrape finished, the last run's status and exit code, the last 10 runs,
+manifest rows by type and status, and the journals needing attention.
+`scripts\check_grafana.py` checks these panels against the manifest. The
+pipeline stages only article rows in the manifest, so "Journals needing
+attention" stays empty until journal rows are recorded.
+
+### Rebuilding the job image
+
+After committing changes under `publisher_lakehouse/`, rebuild the Airflow
+job image:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\build_job_image.ps1
+```
+
+The script labels the image with `git rev-parse HEAD`. It adds `-dirty` when
+the working tree has uncommitted changes. Then it prints the image's
+`org.opencontainers.image.revision` label. A build that sets no `GIT_COMMIT`
+is labelled `unknown`.
 
 ## Configuration
 

@@ -23,6 +23,9 @@ DASHBOARDS = {
     "pl-pipeline-health": ROOT / "docker/grafana/dashboards/pipeline_health.json",
 }
 DATASOURCE = {"type": "grafana-postgresql-datasource", "uid": "warehouse"}
+# Panels whose healthy state is no rows; the scraper-health check asserts them.
+MAY_BE_EMPTY = {("pl-pipeline-health", "Journals needing attention")}
+PUBLISHER = "sciencedirect"
 
 
 class GrafanaSettings(BaseSettings):
@@ -140,6 +143,20 @@ def row_count(rows: list[dict]) -> str:
     return f"{len(rows)} {'row' if len(rows) == 1 else 'rows'}"
 
 
+def manifest_counts(publisher: str) -> dict[tuple[str, str], int]:
+    """Read ``{(url_type, status): rows}`` from the manifest, read-only."""
+
+    from publisher_lakehouse.manifest.repository import ManifestRepository
+    from publisher_lakehouse.ops.scrape_health import read_only_manifest_engine
+    from publisher_lakehouse.settings import load_environment_settings
+
+    engine = read_only_manifest_engine(load_environment_settings().database_url)
+    try:
+        return ManifestRepository(engine).counts_by_status(publisher)
+    finally:
+        engine.dispose()
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--url", default="http://127.0.0.1:3000")
@@ -229,13 +246,14 @@ def main() -> int:
             for target in item["targets"]:
                 label = f"{dashboard['title']} / {item['title']} / {target['refId']}"
 
-                def query_panel(item=item, target=target):
+                def query_panel(item=item, target=target, uid=uid):
                     rows = api.query(
                         substitute(target["rawSql"], classes),
                         format=target.get("format", "table"),
                         start_ms=start_ms, end_ms=end_ms,
                     )
-                    assert rows, "panel returned no data"
+                    if (uid, item["title"]) not in MAY_BE_EMPTY:
+                        assert rows, "panel returned no data"
                     results[(uid, item["title"])] = rows
                     return row_count(rows)
 
@@ -275,6 +293,53 @@ def main() -> int:
         return "204 scholarly; 11 journals; months 32/10/14/145; 3 unknown; top weight 1.00; Dairy CC 1.00; 36 DQ rows; 3 DQ runs; 11 lake tables"
 
     check("Known headline values", headline)
+
+    def scraper_health():
+        pipeline = lambda title: results[("pl-pipeline-health", title)]
+        finished = only_value(pipeline("Last scrape finished"), "last_scrape_finished")
+        assert finished is not None, "ops.scrape_runs has no finished run"
+        status = pipeline("Last run status")
+        assert len(status) == 1, f"expected one last run, got {len(status)}"
+        assert status[0]["status"] in {"complete", "incomplete"}, status[0]
+        runs = pipeline("Last 10 runs")
+        assert 1 <= len(runs) <= 10, f"{len(runs)} runs"
+        assert len({row["run_id"] for row in runs}) == len(runs), "duplicate run ids"
+        assert runs[0]["finished_at"] == finished, "latest run is not first"
+
+        counts = manifest_counts(PUBLISHER)
+        pushed = {
+            (row["url_type"], row["status"]): row["row_count"]
+            for row in api.query(
+                "SELECT url_type, status, row_count FROM ops.scrape_status "
+                f"WHERE publisher = {quote(PUBLISHER)}",
+                start_ms=start_ms, end_ms=end_ms,
+            )
+        }
+        assert pushed == counts, f"ops.scrape_status {pushed} != manifest {counts}"
+        charted = sum(row["manifest_rows"] for row in pipeline("Manifest rows by type and status"))
+        assert charted >= sum(counts.values()), "bar chart is missing manifest rows"
+        manifest_journals = sum(n for (url_type, _), n in counts.items() if url_type == "journal")
+        journals = only_value(
+            api.query(
+                "SELECT COUNT(*) AS journal_rows FROM ops.scrape_journals "
+                f"WHERE publisher = {quote(PUBLISHER)}",
+                start_ms=start_ms, end_ms=end_ms,
+            ),
+            "journal_rows",
+        )
+        assert journals == manifest_journals, (
+            f"ops.scrape_journals has {journals} rows, manifest has {manifest_journals}"
+        )
+        attention = pipeline("Journals needing attention")
+        assert len(attention) <= journals, "more journals need attention than exist"
+        return (
+            f"last run {status[0]['status']} (exit {status[0]['ingest_exit_code']}); "
+            f"{len(runs)} recent runs; scrape_status matches manifest "
+            f"({sum(counts.values())} rows); {journals} journal rows = manifest "
+            f"{manifest_journals}; {len(attention)} need attention"
+        )
+
+    check("Scraper health", scraper_health)
 
     def anonymous_refused():
         status, _ = api.request("GET", "/api/search", authenticate=False)

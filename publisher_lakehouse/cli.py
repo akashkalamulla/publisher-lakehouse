@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 from dataclasses import asdict
+from pathlib import Path
 from typing import Annotated
 
 import typer
@@ -19,10 +20,13 @@ from publisher_lakehouse.landing.sync import (
     plan_uploads,
 )
 from publisher_lakehouse.manifest.repository import ManifestRepository
+from publisher_lakehouse.ops.scrape_health import push_scrape_health
 from publisher_lakehouse.settings import (
+    load_environment_settings,
     load_lake_settings,
     load_operator_settings,
     load_settings,
+    load_warehouse_settings,
 )
 
 
@@ -32,9 +36,11 @@ app = typer.Typer(no_args_is_help=True)
 ingest_app = typer.Typer(no_args_is_help=True)
 export_app = typer.Typer(no_args_is_help=True)
 lake_app = typer.Typer(no_args_is_help=True)
+ops_app = typer.Typer(no_args_is_help=True)
 app.add_typer(ingest_app, name="ingest")
 app.add_typer(export_app, name="export")
 app.add_typer(lake_app, name="lake")
+app.add_typer(ops_app, name="ops")
 
 
 @lake_app.command("init")
@@ -157,6 +163,43 @@ def export_run(
         engine.dispose()
 
     logger.info("journal_export_complete", publisher=publisher, journals=len(exported))
+
+
+@ops_app.command("push-scrape-health")
+def ops_push_scrape_health(
+    publisher: Annotated[
+        str,
+        typer.Option("--publisher", help="Publisher whose scrape health to push."),
+    ] = "sciencedirect",
+    run_log: Annotated[
+        Path | None,
+        typer.Option("--run-log", help="An ingest run's stderr log to record as a run."),
+    ] = None,
+    ingest_exit_code: Annotated[
+        int | None,
+        typer.Option("--ingest-exit-code", help="Exit code of the ingest run."),
+    ] = None,
+) -> None:
+    """Copy manifest health and run counters into warehouse ops tables."""
+
+    environment = load_environment_settings()
+    warehouse = load_warehouse_settings()
+    configure_logging(environment.log_level)
+    result = push_scrape_health(
+        publisher,
+        database_url=environment.database_url,
+        warehouse=warehouse,
+        run_log=run_log,
+        ingest_exit_code=ingest_exit_code,
+    )
+    logger.info(
+        "scrape_health_pushed",
+        publisher=publisher,
+        run_id=result.run["run_id"] if result.run else None,
+        manifest_rows=result.manifest_rows,
+        journal_rows=result.journal_rows,
+    )
+    typer.echo(result.summary())
 
 
 if __name__ == "__main__":

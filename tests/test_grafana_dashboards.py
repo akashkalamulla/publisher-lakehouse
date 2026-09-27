@@ -98,7 +98,7 @@ def test_required_dashboard_shapes_and_variables():
     )
     assert len(list(panels(corpus["panels"]))) == 11
     assert len(list(panels(quality["panels"]))) == 5
-    assert len(list(panels(health["panels"]))) == 5
+    assert len(list(panels(health["panels"]))) == 11
     row = next(panel for panel in corpus["panels"] if panel["type"] == "row")
     assert row["title"] == "Classification review" and row["collapsed"]
     assert [v["name"] for v in corpus["templating"]["list"]] == [
@@ -107,6 +107,44 @@ def test_required_dashboard_shapes_and_variables():
     content_class = corpus["templating"]["list"][1]
     assert content_class["multi"] and content_class["includeAll"]
     assert quality["time"] == {"from": "now-7d", "to": "now"}
+
+
+def test_scraper_health_row_sits_below_the_publish_panels_and_reads_scrape_tables():
+    health = dashboards()["pl-pipeline-health"]["panels"]
+    start = next(i for i, panel in enumerate(health) if panel["type"] == "row")
+    row, existing, scraper = health[start], health[:start], health[start + 1:]
+    assert row["title"] == "Scraper health" and not row["collapsed"]
+    assert [panel["title"] for panel in existing] == [
+        "Lake tables", "Last successful publish", "Last publish status",
+        "Publish history", "Rows per lake table",
+    ]
+    assert [(panel["type"], panel["title"]) for panel in scraper] == [
+        ("stat", "Last scrape finished"),
+        ("stat", "Last run status"),
+        ("table", "Last 10 runs"),
+        ("barchart", "Manifest rows by type and status"),
+        ("table", "Journals needing attention"),
+    ]
+    row_y = row["gridPos"]["y"]
+    assert all(p["gridPos"]["y"] + p["gridPos"]["h"] <= row_y for p in existing)
+    assert all(p["gridPos"]["y"] > row_y for p in scraper)
+
+    sql = {panel["title"]: panel["targets"][0]["rawSql"] for panel in scraper}
+    for query in sql.values():
+        assert re.search(r"\bFROM ops\.scrape_(?:runs|status|journals)\b", query), query
+        assert len(re.findall(r"\bROUND\(", query)) == len(re.findall(r"::numeric,", query))
+    assert scraper[0]["fieldConfig"]["defaults"]["unit"] == "dateTimeFromNow"
+    assert "MAX(finished_at)" in sql["Last scrape finished"]
+    assert re.search(r"SELECT status,\s+ingest_exit_code\b", sql["Last run status"])
+    assert "LIMIT 10" in sql["Last 10 runs"]
+    for counter in (
+        "articles_discovered", "fetched", "bronze_written", "skipped_manifest",
+        "fetch_failed", "blocked_gave_up", "parse_failed",
+    ):
+        assert counter in sql["Last 10 runs"]
+    attention = sql["Journals needing attention"]
+    assert "WHERE status <> 'ok'\n   OR last_seen_at < now() - interval '7 days'" in attention
+    assert "ORDER BY last_seen_at ASC" in attention
 
 
 def test_provisioning_is_read_only_and_credentials_are_interpolated():
