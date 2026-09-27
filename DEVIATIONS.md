@@ -3,6 +3,19 @@
 This file is cumulative and will be updated at each implementation review
 gate.
 
+## Gate 10a — analytical serving warehouse
+
+- Serving uses a separate Postgres database and credentials rather than the
+  Windows ingestion manifest database.
+- Serving has primary keys and indexes but no foreign-key constraints. Gold
+  validates integrity, and the publisher verifies counts and orphan keys. A
+  full-refresh swap is simpler at the current data volume without FK-driven
+  truncate ordering.
+- Spark writes only to `serving_stage`; one Postgres transaction replaces the
+  live serving and ops snapshot. Each source read is pinned to a Delta version.
+- The warehouse init script runs only on an empty `warehouse-data` volume.
+  Later password changes need `ALTER ROLE` or a recreated volume.
+
 ## Gate 9 — gold star schema
 
 - Gold uses deterministic `xxhash64` surrogate keys rather than identity

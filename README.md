@@ -27,11 +27,13 @@ The project follows the review gates in
 | 7b | Append-only bronze Delta article table | Complete |
 | 8 | Current-state silver articles and data-quality tables | Complete |
 | 9 | Gold article star schema and weighted author bridge | Complete |
+| 10a | Postgres serving warehouse and atomic publish | Complete; live warehouse verification passed |
 
 The ingestion and CLI commands are intentionally unavailable until their review
 gates are approved. `CABIACQ.py` remains the working scraper and is untouched.
 
-The host suite has 233 tests (224 offline, 9 requiring `PL_TEST_DATABASE_URL`).
+The host suite includes warehouse schema contracts; the manifest integration
+tests still require `PL_TEST_DATABASE_URL`.
 
 ## Lakehouse platform (gate 7a)
 
@@ -170,6 +172,44 @@ with unchanged silver skips every gold MERGE and leaves all gold versions
 unchanged. Every build checks foreign keys, key uniqueness, journal intervals,
 fact grain, bridge counts, and weights. `silver/dq_results` is compacted once
 and each later silver run appends one Parquet file.
+
+## Serving layer (gate 10a)
+
+The analytical warehouse is a separate Postgres database from the Windows
+ingestion manifest database. Docker exposes it on `127.0.0.1:5433`, leaving
+the manifest's port 5432 untouched. Set `WAREHOUSE_DB`, `WAREHOUSE_USER`,
+`WAREHOUSE_PASSWORD`, and `GRAFANA_DB_PASSWORD` in the local `.env`; see
+`.env.example` for placeholders. Do not reuse manifest credentials.
+
+```powershell
+docker compose up -d warehouse
+docker compose build spark
+docker compose run --rm spark python -m publisher_lakehouse.transform.publish --dry-run
+docker compose run --rm spark python -m publisher_lakehouse.transform.publish
+docker compose run --rm spark python -m publisher_lakehouse.transform.publish --force
+docker compose run --rm -e PL_TEST_WAREHOUSE=1 spark python -m pytest -q -p no:cacheprovider tests_spark/test_publish.py
+```
+
+`serving` holds the seven gold tables. `serving_stage` receives Spark JDBC
+writes. `ops` holds DQ results, one status row per tracked lake table, and the
+publish log. The `grafana_ro` role has read access to `serving` and `ops`; it
+has no stage or write access. Serving tables have primary keys and indexes,
+but no foreign-key constraints. Each gold build checks integrity, and the
+publisher checks serving counts and orphan keys after the swap. Omitting FK
+constraints keeps the full-refresh transaction simple at this data volume.
+
+The job plans the current versions of 11 Delta tables, stages data read with
+`versionAsOf`, overwrites each precreated stage table through Spark JDBC with
+`truncate=true` and batches of 1000, and swaps all live tables and status rows
+in one Postgres transaction before verifying the result. A rerun skips when every
+version equals the latest successful publish. `--force` republishes the same
+versions; `--dry-run` shows the plan without writing. Failed swaps roll back
+the live tables and record a failed attempt separately.
+
+Connect with a GUI to `localhost:5433` using the warehouse database and role,
+or run `docker compose exec warehouse psql -U <WAREHOUSE_USER> -d
+<WAREHOUSE_DB>`. The init script runs only when `warehouse-data` is empty;
+changing passwords later requires `ALTER ROLE` or recreating that volume.
 
 ## Configuration
 

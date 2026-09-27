@@ -11,7 +11,7 @@ ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64 \
 RUN set -eu; \
     apt-get update; \
     apt-get install -y --no-install-recommends openjdk-17-jre-headless maven; \
-    pip install --no-cache-dir pyspark==4.1.0 delta-spark==4.4.0 pytest==8.3.5; \
+    pip install --no-cache-dir pyspark==4.1.0 delta-spark==4.4.0 pytest==8.3.5 'psycopg[binary]==3.2.9'; \
     python -c 'from pyspark.sql import SparkSession; s = SparkSession.builder.master("local[1]").appName("detect-hadoop").getOrCreate(); open("/tmp/hadoop-version", "w", encoding="utf-8").write(s._jvm.org.apache.hadoop.util.VersionInfo.getVersion()); s.stop()'; \
     HADOOP_VERSION="$(cat /tmp/hadoop-version)"; \
     test -n "$HADOOP_VERSION"; \
@@ -22,12 +22,14 @@ RUN set -eu; \
       '<groupId>local.lakehouse</groupId><artifactId>runtime-jars</artifactId><version>1</version>' \
       '<dependencies>' \
       '<dependency><groupId>io.delta</groupId><artifactId>delta-spark_4.1_2.13</artifactId><version>4.4.0</version></dependency>' \
+      '<dependency><groupId>org.postgresql</groupId><artifactId>postgresql</artifactId><version>42.7.13</version></dependency>' \
       "<dependency><groupId>org.apache.hadoop</groupId><artifactId>hadoop-aws</artifactId><version>$HADOOP_VERSION</version></dependency>" \
       '</dependencies></project>' > /tmp/pom.xml; \
     mvn -B -q -f /tmp/pom.xml dependency:copy-dependencies \
       -DincludeScope=runtime -DoutputDirectory=/tmp/lake-jars; \
     test -f "/tmp/lake-jars/hadoop-aws-$HADOOP_VERSION.jar"; \
     test -f /tmp/lake-jars/delta-spark_4.1_2.13-4.4.0.jar; \
+    test -f /tmp/lake-jars/postgresql-42.7.13.jar; \
     cp /tmp/lake-jars/*.jar /usr/local/lib/python3.12/site-packages/pyspark/jars/; \
     rm -rf /tmp/lake-jars /tmp/pom.xml /tmp/hadoop-version /root/.m2; \
     apt-get purge -y --auto-remove maven; \
