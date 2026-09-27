@@ -1,8 +1,8 @@
 # Publisher Lakehouse
 
-Publisher Lakehouse is being built as a deduplicated academic-metadata
-ingestion platform. ScienceDirect is the Phase 1 pilot; Springer and later
-lakehouse layers remain out of scope for this phase.
+Publisher Lakehouse is a deduplicated academic-metadata ingestion and analytics
+platform. ScienceDirect is the Phase 1 pilot, with bronze, silver, gold, and
+serving layers in place. Springer remains out of scope for this phase.
 
 Phase 1 turns the working `CABIACQ.py` script into an ingestion pipeline with
 deduplication **without changing a single extracted value**. The per-journal
@@ -22,15 +22,16 @@ The project follows the review gates in
 | 4 | `ingestion/browser/`, `sciencedirect/extract.py` | Complete, tagged `gate4` |
 | 5a | `schemas/article.py`, `sciencedirect/record.py`, `writers/` | Complete, tagged `gate5a` — 8/8 golden comparisons exact |
 | 5b | `base.py`, `scraper.py`, `pipeline.py`, `cli.py` | Complete, tagged `gate5b` |
-| 6 | `export/journal_json.py` + regression test | Not started |
+| 6 | `export/journal_export.py`, inline per-journal export in `pipeline.py`, `tests/test_journal_export.py` (including `test_matches_golden_shape`) | Complete before `gate7a`; no `gate6` tag |
 | 7a | RustFS, Spark, Delta smoke test, file landing | Complete, tagged `gate7a` |
-| 7b | Append-only bronze Delta article table | Complete |
-| 8 | Current-state silver articles and data-quality tables | Complete |
-| 9 | Gold article star schema and weighted author bridge | Complete |
-| 10a | Postgres serving warehouse and atomic publish | Complete; live warehouse verification passed |
+| 7b | Append-only bronze Delta article table | Complete, tagged `gate7b` |
+| 8 | Current-state silver articles and data-quality tables | Complete, tagged `gate8` |
+| 9 | Gold article star schema and weighted author bridge | Complete, tagged `gate9` |
+| 10a | Postgres serving warehouse and atomic publish | Complete, tagged `gate10a`; live verification passed |
+| 10b | Provisioned Grafana dashboards and API checks | Complete |
 
-The ingestion and CLI commands are intentionally unavailable until their review
-gates are approved. `CABIACQ.py` remains the working scraper and is untouched.
+The ingestion, export, and lake CLI commands are available. `CABIACQ.py` is
+untouched and remains the extraction regression reference.
 
 The host suite includes warehouse schema contracts; the manifest integration
 tests still require `PL_TEST_DATABASE_URL`.
@@ -211,6 +212,36 @@ or run `docker compose exec warehouse psql -U <WAREHOUSE_USER> -d
 <WAREHOUSE_DB>`. The init script runs only when `warehouse-data` is empty;
 changing passwords later requires `ALTER ROLE` or recreating that volume.
 
+## Dashboards (gate 10b)
+
+Start Grafana with `docker compose up -d grafana`, then open
+http://127.0.0.1:3000 and log in with `GRAFANA_ADMIN_USER` and
+`GRAFANA_ADMIN_PASSWORD` from your local `.env`. Anonymous access and sign-up
+are disabled. The provisioned Warehouse data source connects to Postgres as
+the read-only `grafana_ro` role.
+
+The **Publisher Lakehouse** folder contains three dashboards:
+
+| Dashboard | What it answers |
+| --- | --- |
+| Corpus overview | Article, journal, author, publication-month, license, and classification questions for a selected publisher. |
+| Data quality | Latest rule failures, their recent trend, quarantine counts, soft flags, and run count. |
+| Pipeline health | Published Delta versions and row counts, commit ages, and warehouse publish history. |
+
+Dashboards are code in `docker/grafana/dashboards/`. UI saves to the provisioned
+dashboards are blocked. To change a panel, edit a copy in the UI, export its
+JSON, update the matching repository file, commit it, and Grafana reloads the
+file within 30 seconds. Run the full live API check from the host with:
+
+```powershell
+.venv\Scripts\python.exe scripts\check_grafana.py
+```
+
+Grafana applies the admin password only when `grafana-data` is first created.
+To change it later, use `grafana cli admin reset-admin-password` inside the
+container, or stop Grafana and remove only the `grafana-data` volume before
+starting it with the new `.env` value.
+
 ## Configuration
 
 Two separate domains, deliberately:
@@ -252,7 +283,8 @@ that parses this run's logs reads stderr:
 
 Errors appended by the frozen modules are collected in memory and emitted as
 structured `legacy_error` events at the end of ingestion. The
-legacy-compatible `errors.txt` renderer remains deferred to Gate 6.
+`common/logging.py` provides an `errors.txt` writer, but the pipeline and CLI
+do not call it; no `errors.txt` file is written automatically.
 
 ## The URL model
 
@@ -324,11 +356,10 @@ permanently.
 
 ## The three-run acceptance test
 
-Not fully runnable until Gate 6 supplies the export comparison. The complete
-acceptance sequence will be:
+The Gate 6 export comparison is implemented. The live acceptance sequence is:
 
 1. `ingest run --publisher sciencedirect --limit 3` completes against the real
-   site and produces bronze JSONL; `export json` over that run produces files
+   site and produces bronze JSONL; `export run --publisher sciencedirect` produces files
    byte-identical to `CABIACQ.py`'s output for the same journals.
 2. `ingest run` **immediately again** re-fetches journal and issue pages and
    fetches **zero** articles; `skipped_manifest` equals the discovered article

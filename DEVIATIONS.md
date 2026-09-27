@@ -3,6 +3,19 @@
 This file is cumulative and will be updated at each implementation review
 gate.
 
+## Gate 10b — provisioned Grafana
+
+- The image is `grafana/grafana` rather than the plan's `grafana-oss` because
+  the OSS repository stopped updates after 12.4.0; the official OSS image is
+  now published under `grafana/grafana` and is pinned here to 13.2.2 by digest.
+- The read-only provisioning directory includes minimal empty plugin and
+  alerting YAML files. Grafana logs errors for missing subdirectories when the
+  whole provisioning path is bind-mounted, even though no plugins or alerts
+  are configured. These two files extend the specified write set solely to
+  keep startup logs clean.
+- Scraper-manifest health is absent from this warehouse snapshot and is
+  deferred to Gate 11. Alerting is also deferred.
+
 ## Gate 10a — analytical serving warehouse
 
 - Serving uses a separate Postgres database and credentials rather than the

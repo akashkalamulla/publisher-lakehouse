@@ -1,0 +1,204 @@
+{
+  "id": null,
+  "uid": "pl-pipeline-health",
+  "title": "Pipeline health",
+  "tags": [
+    "publisher-lakehouse"
+  ],
+  "timezone": "browser",
+  "schemaVersion": 41,
+  "version": 1,
+  "editable": false,
+  "graphTooltip": 0,
+  "time": {
+    "from": "now-7d",
+    "to": "now"
+  },
+  "templating": {
+    "list": []
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "table",
+      "title": "Lake tables",
+      "description": "Which Delta tables were last published, with their versions, row counts, and commit ages?",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "warehouse"
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "warehouse"
+          },
+          "refId": "A",
+          "rawSql": "SELECT layer,\n       table_name,\n       delta_version,\n       row_count,\n       last_commit_at,\n       ROUND((EXTRACT(EPOCH FROM now() - last_commit_at) / 3600)::numeric, 1) AS age_hours\nFROM ops.layer_status\nORDER BY layer, table_name",
+          "format": "table"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {}
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "Last successful publish",
+      "description": "How long has it been since the latest successful warehouse publish?",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "warehouse"
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 0,
+        "y": 10
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "warehouse"
+          },
+          "refId": "A",
+          "rawSql": "SELECT MAX(finished_at) AS last_successful_publish\nFROM ops.publish_log\nWHERE status = 'success'",
+          "format": "table"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "dateTimeFromNow"
+        },
+        "overrides": []
+      },
+      "options": {}
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Last publish status",
+      "description": "Did the most recently started publish succeed or fail?",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "warehouse"
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 12,
+        "y": 10
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "warehouse"
+          },
+          "refId": "A",
+          "rawSql": "SELECT status\nFROM ops.publish_log\nORDER BY started_at DESC, publish_id DESC\nLIMIT 1",
+          "format": "table"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "success": {
+                  "text": "success",
+                  "color": "green"
+                },
+                "failed": {
+                  "text": "failed",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        },
+        "overrides": []
+      },
+      "options": {}
+    },
+    {
+      "id": 4,
+      "type": "table",
+      "title": "Publish history",
+      "description": "What happened in the last twenty warehouse publish attempts?",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "warehouse"
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 15
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "warehouse"
+          },
+          "refId": "A",
+          "rawSql": "SELECT publish_id,\n       status,\n       started_at,\n       finished_at,\n       ROUND(EXTRACT(EPOCH FROM finished_at - started_at)::numeric, 1) AS duration_seconds,\n       error\nFROM ops.publish_log\nORDER BY started_at DESC, publish_id DESC\nLIMIT 20",
+          "format": "table"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {}
+    },
+    {
+      "id": 5,
+      "type": "barchart",
+      "title": "Rows per lake table",
+      "description": "How many rows were in each lake table at its last published Delta version?",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "warehouse"
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 25
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "warehouse"
+          },
+          "refId": "A",
+          "rawSql": "SELECT layer || '/' || table_name AS lake_table,\n       row_count\nFROM ops.layer_status\nORDER BY layer, table_name",
+          "format": "table"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {
+        "orientation": "horizontal",
+        "xField": "lake_table",
+        "showValue": "always"
+      }
+    }
+  ]
+}

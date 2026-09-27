@@ -1,0 +1,242 @@
+{
+  "id": null,
+  "uid": "pl-data-quality",
+  "title": "Data quality",
+  "tags": [
+    "publisher-lakehouse"
+  ],
+  "timezone": "browser",
+  "schemaVersion": 41,
+  "version": 1,
+  "editable": false,
+  "graphTooltip": 0,
+  "time": {
+    "from": "now-7d",
+    "to": "now"
+  },
+  "templating": {
+    "list": [
+      {
+        "name": "publisher",
+        "label": "Publisher",
+        "type": "query",
+        "datasource": {
+          "type": "grafana-postgresql-datasource",
+          "uid": "warehouse"
+        },
+        "definition": "SELECT DISTINCT publisher FROM ops.dq_results ORDER BY 1",
+        "query": "SELECT DISTINCT publisher FROM ops.dq_results ORDER BY 1",
+        "refresh": 1,
+        "sort": 1,
+        "multi": false,
+        "includeAll": false,
+        "options": [],
+        "current": {
+          "text": "sciencedirect",
+          "value": "sciencedirect"
+        }
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "table",
+      "title": "Latest check per rule",
+      "description": "Which rules failed in the publisher's most recent data-quality run, and at what rate?",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "warehouse"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "warehouse"
+          },
+          "refId": "A",
+          "rawSql": "SELECT r.rule,\n       r.severity,\n       r.failed_rows,\n       r.total_rows,\n       ROUND((100.0 * r.failed_rows / NULLIF(r.total_rows, 0))::numeric, 1) AS failed_pct\nFROM ops.dq_results r\nWHERE r.publisher IN (${publisher:sqlstring})\n  AND r.dq_run_id = (\n    SELECT d.dq_run_id\n    FROM ops.dq_results d\n    WHERE d.publisher IN (${publisher:sqlstring})\n    GROUP BY d.dq_run_id\n    ORDER BY MAX(d.checked_at) DESC, d.dq_run_id DESC\n    LIMIT 1\n  )\nORDER BY r.severity, r.rule",
+          "format": "table"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "failed_pct"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 1
+                    },
+                    {
+                      "color": "red",
+                      "value": 10
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "unit",
+                "value": "percent"
+              }
+            ]
+          }
+        ]
+      },
+      "options": {}
+    },
+    {
+      "id": 2,
+      "type": "timeseries",
+      "title": "Failed rows by rule",
+      "description": "How have rule failure counts changed over the selected seven-day time range?",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "warehouse"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 9
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "warehouse"
+          },
+          "refId": "A",
+          "rawSql": "SELECT checked_at AS time,\n       rule AS metric,\n       failed_rows AS value\nFROM ops.dq_results\nWHERE publisher IN (${publisher:sqlstring})\n  AND $__timeFilter(checked_at)\nORDER BY checked_at, rule",
+          "format": "time_series"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {}
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Quarantined rows (latest run)",
+      "description": "How many quarantine-severity failures were recorded in the latest quality run?",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "warehouse"
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 8,
+        "x": 0,
+        "y": 18
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "warehouse"
+          },
+          "refId": "A",
+          "rawSql": "SELECT COALESCE(SUM(r.failed_rows), 0) AS quarantined_rows\nFROM ops.dq_results r\nWHERE r.publisher IN (${publisher:sqlstring})\n  AND r.severity = 'quarantine'\n  AND r.dq_run_id = (\n    SELECT d.dq_run_id\n    FROM ops.dq_results d\n    WHERE d.publisher IN (${publisher:sqlstring})\n    GROUP BY d.dq_run_id\n    ORDER BY MAX(d.checked_at) DESC, d.dq_run_id DESC\n    LIMIT 1\n  )",
+          "format": "table"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {}
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "Rows with at least one soft flag",
+      "description": "How many distinct articles in the current published snapshot have at least one soft quality flag?",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "warehouse"
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 8,
+        "x": 8,
+        "y": 18
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "warehouse"
+          },
+          "refId": "A",
+          "rawSql": "SELECT COUNT(*) AS flagged_articles\nFROM serving.fact_article f\nWHERE f.publisher IN (${publisher:sqlstring})\n  AND f.dq_flag_count > 0",
+          "format": "table"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {}
+    },
+    {
+      "id": 5,
+      "type": "stat",
+      "title": "DQ runs recorded",
+      "description": "How many distinct data-quality runs have been recorded for this publisher?",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "warehouse"
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 8,
+        "x": 16,
+        "y": 18
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "warehouse"
+          },
+          "refId": "A",
+          "rawSql": "SELECT COUNT(DISTINCT dq_run_id) AS dq_runs\nFROM ops.dq_results\nWHERE publisher IN (${publisher:sqlstring})",
+          "format": "table"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {}
+    }
+  ]
+}

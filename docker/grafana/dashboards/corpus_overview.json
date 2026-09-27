@@ -1,0 +1,441 @@
+{
+  "id": null,
+  "uid": "pl-corpus",
+  "title": "Corpus overview",
+  "tags": [
+    "publisher-lakehouse"
+  ],
+  "timezone": "browser",
+  "schemaVersion": 41,
+  "version": 1,
+  "editable": false,
+  "graphTooltip": 0,
+  "time": {
+    "from": "now-7d",
+    "to": "now"
+  },
+  "templating": {
+    "list": [
+      {
+        "name": "publisher",
+        "label": "Publisher",
+        "type": "query",
+        "datasource": {
+          "type": "grafana-postgresql-datasource",
+          "uid": "warehouse"
+        },
+        "definition": "SELECT DISTINCT publisher FROM serving.fact_article ORDER BY 1",
+        "query": "SELECT DISTINCT publisher FROM serving.fact_article ORDER BY 1",
+        "refresh": 1,
+        "sort": 1,
+        "multi": false,
+        "includeAll": false,
+        "options": [],
+        "current": {
+          "text": "sciencedirect",
+          "value": "sciencedirect"
+        }
+      },
+      {
+        "name": "content_class",
+        "label": "Content class",
+        "type": "query",
+        "datasource": {
+          "type": "grafana-postgresql-datasource",
+          "uid": "warehouse"
+        },
+        "definition": "SELECT DISTINCT content_class FROM serving.dim_article_type WHERE article_type_sk <> -1 ORDER BY 1",
+        "query": "SELECT DISTINCT content_class FROM serving.dim_article_type WHERE article_type_sk <> -1 ORDER BY 1",
+        "refresh": 1,
+        "sort": 1,
+        "multi": true,
+        "includeAll": true,
+        "options": [],
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        }
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "Scholarly articles",
+      "description": "How many known-type scholarly articles are in the selected publisher's current corpus?",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "warehouse"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "warehouse"
+          },
+          "refId": "A",
+          "rawSql": "SELECT COUNT(*) AS scholarly_articles\nFROM serving.fact_article f\nJOIN serving.dim_article_type at ON at.article_type_sk = f.article_type_sk\nWHERE f.publisher IN (${publisher:sqlstring})\n  AND at.is_scholarly\n  AND at.article_type_sk <> -1",
+          "format": "table"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {}
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "Journals",
+      "description": "How many known journals have at least one article for this publisher?",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "warehouse"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "warehouse"
+          },
+          "refId": "A",
+          "rawSql": "SELECT COUNT(DISTINCT jc.journal_url) AS journals\nFROM serving.fact_article f\nJOIN serving.dim_journal j ON j.journal_sk = f.journal_sk\nJOIN serving.dim_journal jc ON jc.publisher = j.publisher\n                           AND jc.journal_url = j.journal_url\n                           AND jc.is_current\nWHERE f.publisher IN (${publisher:sqlstring})\n  AND f.journal_sk <> -1",
+          "format": "table"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {}
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Authors (scholarly)",
+      "description": "How many distinct known authors contributed to scholarly articles?",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "warehouse"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "warehouse"
+          },
+          "refId": "A",
+          "rawSql": "SELECT COUNT(DISTINCT b.author_sk) AS authors\nFROM serving.fact_article f\nJOIN serving.dim_article_type at ON at.article_type_sk = f.article_type_sk\nJOIN serving.bridge_article_author b ON b.article_sk = f.article_sk\nWHERE f.publisher IN (${publisher:sqlstring})\n  AND at.is_scholarly\n  AND at.article_type_sk <> -1\n  AND b.role = 'author'\n  AND b.author_sk <> -1",
+          "format": "table"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {}
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "CC-licensed share (scholarly)",
+      "description": "What share of scholarly articles has a Creative Commons license?",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "warehouse"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "warehouse"
+          },
+          "refId": "A",
+          "rawSql": "SELECT ROUND(\n  (COUNT(*) FILTER (WHERE f.has_cc_license) * 1.0 / NULLIF(COUNT(*), 0))::numeric,\n  2\n) AS cc_share\nFROM serving.fact_article f\nJOIN serving.dim_article_type at ON at.article_type_sk = f.article_type_sk\nWHERE f.publisher IN (${publisher:sqlstring})\n  AND at.is_scholarly\n  AND at.article_type_sk <> -1",
+          "format": "table"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto"
+      }
+    },
+    {
+      "id": 5,
+      "type": "barchart",
+      "title": "Articles per journal by content class",
+      "description": "How does each current journal's article count break down by content class?",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "warehouse"
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 4
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "warehouse"
+          },
+          "refId": "A",
+          "rawSql": "SELECT jc.journal_title AS journal,\n       at.content_class,\n       COUNT(*) AS articles\nFROM serving.fact_article f\nJOIN serving.dim_journal j ON j.journal_sk = f.journal_sk\nJOIN serving.dim_journal jc ON jc.publisher = j.publisher\n                           AND jc.journal_url = j.journal_url\n                           AND jc.is_current\nJOIN serving.dim_article_type at ON at.article_type_sk = f.article_type_sk\nWHERE f.publisher IN (${publisher:sqlstring})\n  AND f.journal_sk <> -1\n  AND at.article_type_sk <> -1\n  AND at.content_class IN (${content_class:sqlstring})\nGROUP BY jc.journal_title, at.content_class\nORDER BY jc.journal_title, at.content_class",
+          "format": "table"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {
+        "orientation": "horizontal",
+        "stacking": "normal",
+        "xField": "journal",
+        "showValue": "auto"
+      },
+      "transformations": [
+        {
+          "id": "groupingToMatrix",
+          "options": {
+            "columnField": "content_class",
+            "rowField": "journal",
+            "valueField": "articles"
+          }
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "type": "barchart",
+      "title": "Scholarly articles per publication month",
+      "description": "How many scholarly articles fall in each known publication month, including future months?",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "warehouse"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 16,
+        "x": 0,
+        "y": 14
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "warehouse"
+          },
+          "refId": "A",
+          "rawSql": "SELECT to_char(d.date, 'YYYY-MM') AS publication_month,\n       COUNT(*) AS articles\nFROM serving.fact_article f\nJOIN serving.dim_article_type at ON at.article_type_sk = f.article_type_sk\nJOIN serving.dim_date d ON d.date_sk = f.pub_month_date_sk\nWHERE f.publisher IN (${publisher:sqlstring})\n  AND at.is_scholarly\n  AND at.article_type_sk <> -1\n  AND f.pub_month_date_sk <> -1\nGROUP BY to_char(d.date, 'YYYY-MM')\nORDER BY publication_month",
+          "format": "table"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {
+        "orientation": "vertical",
+        "xField": "publication_month",
+        "stacking": "none",
+        "showValue": "always"
+      }
+    },
+    {
+      "id": 7,
+      "type": "stat",
+      "title": "Scholarly articles with unknown publication month",
+      "description": "How many scholarly articles lack a publication month, as can happen with book-series records?",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "warehouse"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 16,
+        "y": 14
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "warehouse"
+          },
+          "refId": "A",
+          "rawSql": "SELECT COUNT(*) AS unknown_publication_month\nFROM serving.fact_article f\nJOIN serving.dim_article_type at ON at.article_type_sk = f.article_type_sk\nWHERE f.publisher IN (${publisher:sqlstring})\n  AND at.is_scholarly\n  AND at.article_type_sk <> -1\n  AND f.pub_month_date_sk = -1",
+          "format": "table"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {}
+    },
+    {
+      "id": 8,
+      "type": "table",
+      "title": "Top authors (weighted)",
+      "description": "Which scholarly authors lead after each coauthored article is split by its author weights?",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "warehouse"
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 12,
+        "x": 0,
+        "y": 23
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "warehouse"
+          },
+          "refId": "A",
+          "rawSql": "SELECT a.display_name,\n       ROUND(SUM(b.weight)::numeric, 2) AS weighted_articles,\n       COUNT(DISTINCT f.article_sk) AS article_count\nFROM serving.fact_article f\nJOIN serving.dim_article_type at ON at.article_type_sk = f.article_type_sk\nJOIN serving.bridge_article_author b ON b.article_sk = f.article_sk\nJOIN serving.dim_author a ON a.author_sk = b.author_sk\nWHERE f.publisher IN (${publisher:sqlstring})\n  AND at.is_scholarly\n  AND at.article_type_sk <> -1\n  AND b.role = 'author'\n  AND b.author_sk <> -1\nGROUP BY b.author_sk, a.display_name\nORDER BY weighted_articles DESC, article_count DESC, a.display_name\nLIMIT 15",
+          "format": "table"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {}
+    },
+    {
+      "id": 9,
+      "type": "bargauge",
+      "title": "CC-licensed share by journal (scholarly)",
+      "description": "What share of each known journal's scholarly articles has a Creative Commons license?",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "warehouse"
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 12,
+        "x": 12,
+        "y": 23
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "warehouse"
+          },
+          "refId": "A",
+          "rawSql": "SELECT jc.journal_title AS journal,\n       ROUND(\n         (COUNT(*) FILTER (WHERE f.has_cc_license) * 1.0 / NULLIF(COUNT(*), 0))::numeric,\n         2\n       ) AS cc_share\nFROM serving.fact_article f\nJOIN serving.dim_journal j ON j.journal_sk = f.journal_sk\nJOIN serving.dim_journal jc ON jc.publisher = j.publisher\n                           AND jc.journal_url = j.journal_url\n                           AND jc.is_current\nJOIN serving.dim_article_type at ON at.article_type_sk = f.article_type_sk\nWHERE f.publisher IN (${publisher:sqlstring})\n  AND at.is_scholarly\n  AND at.article_type_sk <> -1\n  AND f.journal_sk <> -1\nGROUP BY jc.journal_title\nORDER BY cc_share DESC, jc.journal_title",
+          "format": "table"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "horizontal",
+        "displayMode": "gradient",
+        "showUnfilled": true,
+        "minVizWidth": 10,
+        "minVizHeight": 10
+      }
+    },
+    {
+      "id": 10,
+      "type": "row",
+      "title": "Classification review",
+      "description": "Which non-scholarly articles need a closer look at their source classification?",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "warehouse"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 34
+      },
+      "collapsed": true,
+      "panels": [
+        {
+          "id": 11,
+          "type": "table",
+          "title": "Non-scholarly articles",
+          "description": "Which non-scholarly articles and source types are present under each journal's current title?",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "warehouse"
+          },
+          "gridPos": {
+            "h": 12,
+            "w": 24,
+            "x": 0,
+            "y": 35
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "grafana-postgresql-datasource",
+                "uid": "warehouse"
+              },
+              "refId": "A",
+              "rawSql": "SELECT jc.journal_title,\n       at.article_type_key,\n       at.content_class,\n       f.english_title,\n       f.doi\nFROM serving.fact_article f\nJOIN serving.dim_journal j ON j.journal_sk = f.journal_sk\nJOIN serving.dim_journal jc ON jc.publisher = j.publisher\n                           AND jc.journal_url = j.journal_url\n                           AND jc.is_current\nJOIN serving.dim_article_type at ON at.article_type_sk = f.article_type_sk\nWHERE f.publisher IN (${publisher:sqlstring})\n  AND NOT at.is_scholarly\nORDER BY at.content_class, at.article_type_key, jc.journal_title, f.english_title",
+              "format": "table"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
+          },
+          "options": {}
+        }
+      ]
+    }
+  ]
+}

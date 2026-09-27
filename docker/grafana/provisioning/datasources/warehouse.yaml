@@ -1,0 +1,15 @@
+apiVersion: 1
+datasources:
+  - name: Warehouse
+    uid: warehouse
+    type: grafana-postgresql-datasource
+    access: proxy
+    url: warehouse:5432
+    user: grafana_ro
+    editable: false
+    jsonData:
+      database: ${WAREHOUSE_DB}
+      sslmode: disable
+      postgresVersion: 1700
+    secureJsonData:
+      password: ${GRAFANA_DB_PASSWORD}

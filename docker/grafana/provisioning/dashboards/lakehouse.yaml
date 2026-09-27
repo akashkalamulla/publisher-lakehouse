@@ -1,0 +1,11 @@
+apiVersion: 1
+providers:
+  - name: Publisher Lakehouse
+    orgId: 1
+    folder: Publisher Lakehouse
+    type: file
+    disableDeletion: true
+    allowUiUpdates: false
+    updateIntervalSeconds: 30
+    options:
+      path: /etc/grafana/dashboards
