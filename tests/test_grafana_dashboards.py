@@ -123,15 +123,16 @@ def test_scraper_health_row_sits_below_the_publish_panels_and_reads_scrape_table
         ("stat", "Last run status"),
         ("table", "Last 10 runs"),
         ("barchart", "Manifest rows by type and status"),
-        ("table", "Journals needing attention"),
+        ("table", "Journal freshness"),
     ]
     row_y = row["gridPos"]["y"]
     assert all(p["gridPos"]["y"] + p["gridPos"]["h"] <= row_y for p in existing)
     assert all(p["gridPos"]["y"] > row_y for p in scraper)
 
     sql = {panel["title"]: panel["targets"][0]["rawSql"] for panel in scraper}
-    for query in sql.values():
-        assert re.search(r"\bFROM ops\.scrape_(?:runs|status|journals)\b", query), query
+    for title, query in sql.items():
+        if title != "Journal freshness":
+            assert re.search(r"\bFROM ops\.scrape_(?:runs|status|journals)\b", query), query
         assert len(re.findall(r"\bROUND\(", query)) == len(re.findall(r"::numeric,", query))
     assert scraper[0]["fieldConfig"]["defaults"]["unit"] == "dateTimeFromNow"
     assert "MAX(finished_at)" in sql["Last scrape finished"]
@@ -142,9 +143,80 @@ def test_scraper_health_row_sits_below_the_publish_panels_and_reads_scrape_table
         "fetch_failed", "blocked_gave_up", "parse_failed",
     ):
         assert counter in sql["Last 10 runs"]
-    attention = sql["Journals needing attention"]
-    assert "WHERE status <> 'ok'\n   OR last_seen_at < now() - interval '7 days'" in attention
-    assert "ORDER BY last_seen_at ASC" in attention
+
+
+def test_every_stat_panel_selects_the_fields_it_draws():
+    # A stat panel reduces only numeric fields unless reduceOptions.fields
+    # selects the time or text field it displays; then it shows "No data".
+    for dashboard in dashboards().values():
+        for panel in panels(dashboard["panels"]):
+            if panel["type"] != "stat":
+                continue
+            fields = panel.get("options", {}).get("reduceOptions", {}).get("fields")
+            assert isinstance(fields, str) and fields.strip(), panel["title"]
+            pattern = re.fullmatch(r"/(.+)/", fields)
+            assert pattern and pattern.group(1) != ".*", (panel["title"], fields)
+            # Grafana matches the regex against display names, so a field
+            # renamed by an override must be selected by its new name.
+            renamed = {
+                override["matcher"]["options"]: prop["value"]
+                for override in panel["fieldConfig"].get("overrides", [])
+                if override["matcher"]["id"] == "byName"
+                for prop in override["properties"]
+                if prop["id"] == "displayName"
+            }
+            names = {
+                renamed.get(name, name)
+                for name in re.findall(r"\w+", panel["targets"][0]["rawSql"])
+            }
+            assert any(re.fullmatch(pattern.group(1), name) for name in names), (
+                panel["title"], fields,
+            )
+
+    health = {panel["title"]: panel for panel in panels(dashboards()["pl-pipeline-health"]["panels"])}
+    for title in ("Last successful publish", "Last scrape finished"):
+        assert health[title]["fieldConfig"]["defaults"]["unit"] == "dateTimeFromNow"
+    for title in ("Last publish status", "Last run status"):
+        assert health[title]["options"]["textMode"] in {"value", "value_and_name"}
+        assert health[title]["options"]["colorMode"] == "value"
+
+
+def test_journal_freshness_replaces_journals_needing_attention():
+    titles = [
+        panel["title"]
+        for dashboard in dashboards().values()
+        for panel in panels(dashboard["panels"])
+    ]
+    assert "Journals needing attention" not in titles
+    assert titles.count("Journal freshness") == 1
+
+    health = dashboards()["pl-pipeline-health"]["panels"]
+    freshness = next(panel for panel in health if panel["title"] == "Journal freshness")
+    assert freshness["type"] == "table"
+    query = freshness["targets"][0]["rawSql"]
+    targets = re.findall(r"\b(?:FROM|JOIN)\s+([A-Za-z_][\w.]*)", query, re.I)
+    assert targets and all(target.startswith("serving.") for target in targets), targets
+    assert "ops." not in query
+    assert {"serving.dim_journal", "serving.dim_issue", "serving.fact_article",
+            "serving.dim_date"} <= set(targets)
+    assert re.search(r"WHERE jc\.is_current\b", query)
+    for column in ("journal", "latest_issue", "articles_in_lake",
+                   "newest_first_seen", "days_since_newest"):
+        assert re.search(rf"\bAS {column}\b", query), column
+    assert query.rstrip().endswith("ORDER BY days_since_newest DESC NULLS FIRST, jc.journal_title")
+
+    days = next(
+        override for override in freshness["fieldConfig"]["overrides"]
+        if override["matcher"] == {"id": "byName", "options": "days_since_newest"}
+    )
+    properties = {item["id"]: item["value"] for item in days["properties"]}
+    # Whole days: green < 45, amber 45-90, red > 90 (from 91).
+    assert properties["thresholds"]["steps"] == [
+        {"color": "green", "value": None},
+        {"color": "orange", "value": 45},
+        {"color": "red", "value": 91},
+    ]
+    assert properties["custom.cellOptions"] == {"type": "color-background"}
 
 
 def test_provisioning_is_read_only_and_credentials_are_interpolated():

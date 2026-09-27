@@ -11,7 +11,7 @@ Steps:
      next run's `lake land` mirrors them.
   3. lake land --publisher <p>
   4. ops push-scrape-health --publisher <p> --run-log <ingest.err.log>
-     --ingest-exit-code <code>
+     --ingest-exit-code <code> (a dry run omits both options)
 
 Land and push run even after a failed ingest: what was written is durable,
 and the push records the run as incomplete.
@@ -34,8 +34,9 @@ Exit codes, highest priority first when several steps fail:
   0  success
 
 PL_PRODUCER_DRY_RUN=1 skips the ingest step with exit code 0 and still runs
-the preflight, land and push. It exists only to verify these mechanics
-without scraping.
+the preflight, land and push. The push omits --run-log, so a dry run
+records no ops.scrape_runs row and only refreshes the manifest snapshot. It
+exists only to verify these mechanics without scraping.
 
 .PARAMETER Publisher
 Publisher to run. Default: sciencedirect.
@@ -295,10 +296,12 @@ try {
             $marker = if ($markerLine) { 'written' } else { 'none' }
             if ($markerLine) { Write-ProducerLog $markerLine }
 
-            $pushArgs = @(
-                'ops', 'push-scrape-health', '--publisher', $Publisher,
-                '--run-log', $ingestErr, '--ingest-exit-code', [string]$ingest
-            )
+            $pushArgs = @('ops', 'push-scrape-health', '--publisher', $Publisher)
+            if (-not $dryRun) {
+                # A dry run scraped nothing, so it records no run: the push
+                # only refreshes the manifest snapshot.
+                $pushArgs += @('--run-log', $ingestErr, '--ingest-exit-code', [string]$ingest)
+            }
             $pushCode = Invoke-PythonStep 'push' $pushArgs (Join-Path $runDir 'push.log')
             $push = if ($pushCode -eq 0) { 'ok' } else { 'failed' }
 

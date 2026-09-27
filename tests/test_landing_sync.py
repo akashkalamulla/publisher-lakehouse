@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import re
+from dataclasses import replace
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -190,3 +191,74 @@ def test_marker_name_and_schema_for_a_replacement(tmp_path: Path) -> None:
     assert marker["jsonl_keys"] == [
         "landing/bronze_jsonl/sciencedirect/ingest_date=2026-09-26/part-run.jsonl"
     ]
+
+
+def _empty_part(bronze: Path, name: str = "part-empty.jsonl") -> Path:
+    part = bronze / "sciencedirect" / "ingest_date=2026-09-27" / name
+    part.parent.mkdir(parents=True, exist_ok=True)
+    part.write_bytes(b"")
+    return part
+
+
+def _object_keys(client) -> list[str]:
+    return [
+        obj["Key"]
+        for obj in client.list_objects_v2(Bucket="lakehouse").get("Contents", [])
+    ]
+
+
+@mock_aws
+def test_only_an_empty_part_uploads_nothing_and_writes_no_marker(tmp_path: Path) -> None:
+    bronze, raw = tmp_path / "bronze", tmp_path / "raw_html"
+    _empty_part(bronze)
+    client = _moto_client()
+    counters, marker_key = land_publisher(client, "lakehouse", "sciencedirect", bronze, raw)
+    assert (counters.files_seen, counters.uploaded, counters.replaced) == (1, 0, 0)
+    assert counters.empty_skipped == 1
+    assert counters.bytes_uploaded == 0 and counters.jsonl_keys == ()
+    assert marker_key is None
+    assert _object_keys(client) == []
+
+
+@mock_aws
+def test_empty_part_next_to_a_real_part_lands_only_the_real_one(tmp_path: Path) -> None:
+    bronze, raw, part = _tree(tmp_path)
+    empty = _empty_part(bronze)
+    client = _moto_client()
+    counters, marker_key = land_publisher(
+        client, "lakehouse", "sciencedirect", bronze, raw,
+        now=datetime(2026, 9, 27, 12, 0, 0, tzinfo=timezone.utc),
+    )
+    assert (counters.uploaded, counters.replaced, counters.empty_skipped) == (2, 0, 1)
+    real_key = "landing/bronze_jsonl/sciencedirect/ingest_date=2026-09-26/part-run.jsonl"
+    empty_key = "landing/bronze_jsonl/sciencedirect/ingest_date=2026-09-27/" + empty.name
+    assert counters.jsonl_keys == (real_key,)
+    keys = _object_keys(client)
+    assert real_key in keys and empty_key not in keys
+    assert marker_key == "landing/_markers/sciencedirect/20260927T120000Z.json"
+    marker = json.loads(client.get_object(Bucket="lakehouse", Key=marker_key)["Body"].read())
+    assert marker["jsonl_keys"] == [real_key]
+    assert (marker["uploaded"], marker["replaced"]) == (2, 0)
+    assert part.stat().st_size > 0
+
+
+@mock_aws
+def test_counters_balance_with_empty_skipped_counted_separately(tmp_path: Path) -> None:
+    bronze, raw, part = _tree(tmp_path)
+    _empty_part(bronze, "part-a.jsonl")
+    _empty_part(bronze, "part-b.jsonl")
+    client = _moto_client()
+
+    first = sync_publisher(client, "lakehouse", "sciencedirect", bronze, raw)
+    assert first.files_seen == 4
+    assert (first.uploaded, first.unchanged, first.replaced, first.empty_skipped) == (2, 0, 0, 2)
+    first.assert_balanced()
+
+    part.write_text('{"id": 3}\n', encoding="utf-8")
+    second = sync_publisher(client, "lakehouse", "sciencedirect", bronze, raw)
+    assert (second.uploaded, second.unchanged, second.replaced, second.empty_skipped) == (0, 1, 1, 2)
+    second.assert_balanced()
+
+    # An empty part is never counted as uploaded, even when it is new.
+    with pytest.raises(RuntimeError, match="do not balance"):
+        replace(second, empty_skipped=0).assert_balanced()

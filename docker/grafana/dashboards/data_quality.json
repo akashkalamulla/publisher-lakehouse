@@ -172,7 +172,15 @@
         "defaults": {},
         "overrides": []
       },
-      "options": {}
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^quarantined_rows$/",
+          "values": false
+        }
+      }
     },
     {
       "id": 4,
@@ -204,7 +212,15 @@
         "defaults": {},
         "overrides": []
       },
-      "options": {}
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^flagged_articles$/",
+          "values": false
+        }
+      }
     },
     {
       "id": 5,
@@ -236,7 +252,15 @@
         "defaults": {},
         "overrides": []
       },
-      "options": {}
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^dq_runs$/",
+          "values": false
+        }
+      }
     }
   ]
 }

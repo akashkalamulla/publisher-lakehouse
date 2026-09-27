@@ -80,7 +80,7 @@ def lake_land(
     typer.echo(
         f"Landed {publisher}: {jsonl} JSONL + {html} HTML | "
         f"uploaded {counters.uploaded} | unchanged {counters.unchanged} | "
-        f"replaced {counters.replaced} | "
+        f"replaced {counters.replaced} | empty skipped {counters.empty_skipped} | "
         f"{counters.bytes_uploaded / (1024 * 1024):.1f} MB"
     )
     typer.echo(f"marker: {marker_key}" if marker_key else "no marker: nothing new landed")

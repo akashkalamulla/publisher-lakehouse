@@ -1,10 +1,17 @@
-"""Verify provisioned Grafana dashboards through the live Grafana API."""
+"""Verify provisioned Grafana dashboards through the live Grafana API.
+
+Every panel query runs exactly as the dashboard defines it.  The data checks
+assert relationships between panels, so they hold as the corpus grows.  Pass
+``--baseline FILE`` to also pin exact values for a known dataset; the file is
+a JSON object whose keys are a subset of the "observed values" line.
+"""
 
 from __future__ import annotations
 
 import argparse
 import base64
 import json
+import math
 import secrets
 import sys
 from datetime import datetime, timedelta, timezone
@@ -23,9 +30,26 @@ DASHBOARDS = {
     "pl-pipeline-health": ROOT / "docker/grafana/dashboards/pipeline_health.json",
 }
 DATASOURCE = {"type": "grafana-postgresql-datasource", "uid": "warehouse"}
-# Panels whose healthy state is no rows; the scraper-health check asserts them.
-MAY_BE_EMPTY = {("pl-pipeline-health", "Journals needing attention")}
 PUBLISHER = "sciencedirect"
+LAKE_TABLES = 11
+CC_SHARE_TOLERANCE = 0.005
+
+# Per-journal CC and scholarly counts behind "CC-licensed share by journal":
+# the panel's FROM and WHERE clauses, returning counts instead of the share.
+CC_COUNTS_SQL = """SELECT jc.journal_title AS journal,
+       COUNT(*) FILTER (WHERE f.has_cc_license) AS cc_count,
+       COUNT(*) AS scholarly
+FROM serving.fact_article f
+JOIN serving.dim_journal j ON j.journal_sk = f.journal_sk
+JOIN serving.dim_journal jc ON jc.publisher = j.publisher
+                           AND jc.journal_url = j.journal_url
+                           AND jc.is_current
+JOIN serving.dim_article_type at ON at.article_type_sk = f.article_type_sk
+WHERE f.publisher IN (${publisher:sqlstring})
+  AND at.is_scholarly
+  AND at.article_type_sk <> -1
+  AND f.journal_sk <> -1
+GROUP BY jc.journal_title"""
 
 
 class GrafanaSettings(BaseSettings):
@@ -157,9 +181,50 @@ def manifest_counts(publisher: str) -> dict[tuple[str, str], int]:
         engine.dispose()
 
 
+def number(value) -> float:
+    if value is None:
+        raise AssertionError("value is NULL")
+    return float(value)
+
+
+def load_baseline(path: Path) -> dict:
+    baseline = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(baseline, dict) or not baseline:
+        raise ValueError(f"{path} must hold a non-empty JSON object")
+    return baseline
+
+
+def same_value(expected, observed) -> bool:
+    if isinstance(expected, dict) and isinstance(observed, dict):
+        return expected.keys() == observed.keys() and all(
+            same_value(expected[key], observed[key]) for key in expected
+        )
+    if isinstance(expected, bool) or isinstance(observed, bool):
+        return expected is observed
+    if isinstance(expected, (int, float)) and isinstance(observed, (int, float)):
+        return math.isclose(expected, observed, rel_tol=0, abs_tol=1e-9)
+    return expected == observed
+
+
+def baseline_mismatches(expected: dict, observed: dict) -> list[str]:
+    problems = []
+    for key, value in sorted(expected.items()):
+        if key not in observed:
+            problems.append(f"{key}: not an observed value")
+        elif not same_value(value, observed[key]):
+            problems.append(f"{key}: expected {value!r}, observed {observed[key]!r}")
+    return problems
+
+
 def main() -> int:
+    # Redirected output on Windows is cp1252; journal titles are not.
+    sys.stdout.reconfigure(errors="backslashreplace")
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--url", default="http://127.0.0.1:3000")
+    parser.add_argument(
+        "--baseline", type=Path, metavar="FILE",
+        help="JSON file of exact expected values; without it only invariants run",
+    )
     args = parser.parse_args()
     try:
         api = GrafanaAPI(args.url, GrafanaSettings())
@@ -252,51 +317,171 @@ def main() -> int:
                         format=target.get("format", "table"),
                         start_ms=start_ms, end_ms=end_ms,
                     )
-                    if (uid, item["title"]) not in MAY_BE_EMPTY:
-                        assert rows, "panel returned no data"
+                    assert rows, "panel returned no data"
                     results[(uid, item["title"])] = rows
                     return row_count(rows)
 
                 check(label, query_panel)
 
-    def headline():
-        corpus = lambda title: results[("pl-corpus", title)]
-        quality = lambda title: results[("pl-data-quality", title)]
-        pipeline = lambda title: results[("pl-pipeline-health", title)]
-        assert only_value(corpus("Scholarly articles"), "scholarly_articles") == 204
-        assert only_value(corpus("Journals"), "journals") == 11
+    corpus = lambda title: results[("pl-corpus", title)]
+    quality = lambda title: results[("pl-data-quality", title)]
+    pipeline = lambda title: results[("pl-pipeline-health", title)]
+    observed: dict = {}
+
+    def extra_query(sql: str) -> list[dict]:
+        return api.query(substitute(sql, classes), start_ms=start_ms, end_ms=end_ms)
+
+    def publication_months():
+        scholarly = int(only_value(corpus("Scholarly articles"), "scholarly_articles"))
         months = {
-            row["publication_month"]: row["articles"]
+            row["publication_month"]: int(row["articles"])
             for row in corpus("Scholarly articles per publication month")
         }
-        assert months == {"2026-07": 32, "2026-08": 10, "2026-09": 14, "2026-10": 145}, months
-        assert only_value(
+        unknown = int(only_value(
             corpus("Scholarly articles with unknown publication month"),
             "unknown_publication_month",
-        ) == 3
-        assert float(corpus("Top authors (weighted)")[0]["weighted_articles"]) == 1.0
-        dairy = next(
-            row for row in corpus("CC-licensed share by journal (scholarly)")
-            if row["journal"] == "Journal of Dairy Science"
+        ))
+        assert sum(months.values()) + unknown == scholarly, (
+            f"months {sum(months.values())} + unknown {unknown} != scholarly {scholarly}"
         )
-        assert float(dairy["cc_share"]) == 1.0
-        assert only_value(quality("DQ runs recorded"), "dq_runs") == 3
-        assert len(quality("Latest check per rule")) == 12
-        assert len(pipeline("Lake tables")) == 11
-        assert only_value(
-            api.query(
-                "SELECT COUNT(*) AS dq_rows FROM ops.dq_results",
-                start_ms=start_ms, end_ms=end_ms,
+        observed.update(
+            scholarly_articles=scholarly, publication_months=months,
+            unknown_publication_month=unknown,
+        )
+        return f"{sum(months.values())} across {len(months)} months + {unknown} unknown = {scholarly} scholarly"
+
+    check("Invariant: publication months + unknown = scholarly", publication_months)
+
+    def journals():
+        stat = int(only_value(corpus("Journals"), "journals"))
+        charted = {row["journal"] for row in corpus("Articles per journal by content class")}
+        assert stat == len(charted), f"stat {stat} != {len(charted)} charted journals"
+        observed.update(journals=stat)
+        return f"{stat} = {len(charted)} charted journals"
+
+    check("Invariant: journals stat = journals charted", journals)
+
+    def cc_share():
+        stat = number(only_value(corpus("CC-licensed share (scholarly)"), "cc_share"))
+        assert 0 <= stat <= 1, f"CC share {stat} is outside [0, 1]"
+        shares = {
+            row["journal"]: number(row["cc_share"])
+            for row in corpus("CC-licensed share by journal (scholarly)")
+        }
+        counts = {row["journal"]: row for row in extra_query(CC_COUNTS_SQL)}
+        assert counts.keys() == shares.keys(), "per-journal counts and shares list different journals"
+        for journal, share in shares.items():
+            row = counts[journal]
+            assert 0 <= share <= 1, f"{journal} CC share {share} is outside [0, 1]"
+            exact = row["cc_count"] / row["scholarly"]
+            assert abs(share - exact) <= CC_SHARE_TOLERANCE, f"{journal}: panel {share} != {exact:.4f}"
+        cc_total = sum(int(row["cc_count"]) for row in counts.values())
+        scholarly_total = sum(int(row["scholarly"]) for row in counts.values())
+        assert scholarly_total > 0, "no scholarly articles in any journal"
+        ratio = cc_total / scholarly_total
+        assert abs(stat - ratio) <= CC_SHARE_TOLERANCE, (
+            f"stat {stat} != {cc_total}/{scholarly_total} = {ratio:.4f}"
+        )
+        observed.update(cc_share=stat)
+        return f"stat {stat:.2f} vs {cc_total}/{scholarly_total} = {ratio:.4f} across {len(shares)} journals"
+
+    check("Invariant: CC share = sum cc / sum scholarly", cc_share)
+
+    def top_author():
+        scholarly = int(only_value(corpus("Scholarly articles"), "scholarly_articles"))
+        top = number(corpus("Top authors (weighted)")[0]["weighted_articles"])
+        assert top <= scholarly, f"top weighted value {top} > scholarly {scholarly}"
+        if scholarly > 0:
+            assert top > 0, "top weighted value is not positive"
+        observed.update(top_author_weighted_articles=top)
+        return f"{top:.2f} <= {scholarly} scholarly"
+
+    check("Invariant: top weighted author <= scholarly", top_author)
+
+    def data_quality():
+        runs = int(only_value(quality("DQ runs recorded"), "dq_runs"))
+        assert runs >= 1, "no DQ runs recorded"
+        latest = quality("Latest check per rule")
+        rules_per_run = len({row["rule"] for row in latest})
+        assert len(latest) == rules_per_run, (
+            f"latest run has {len(latest)} rows for {rules_per_run} distinct rules"
+        )
+        from publisher_lakehouse.transform.schemas import DQ_RULES
+
+        declared = {name for name, _ in DQ_RULES}
+        assert {row["rule"] for row in latest} == declared, (
+            "latest run's rules differ from transform/schemas.py"
+        )
+        rows = int(only_value(
+            extra_query(
+                "SELECT COUNT(*) AS dq_rows FROM ops.dq_results "
+                "WHERE publisher IN (${publisher:sqlstring})"
             ),
             "dq_rows",
-        ) == 36
-        return "204 scholarly; 11 journals; months 32/10/14/145; 3 unknown; top weight 1.00; Dairy CC 1.00; 36 DQ rows; 3 DQ runs; 11 lake tables"
+        ))
+        assert rows == rules_per_run * runs, (
+            f"{rows} DQ rows != {rules_per_run} rules x {runs} runs"
+        )
+        observed.update(
+            dq_runs=runs, dq_rows=rows, dq_rules_per_run=rules_per_run,
+            quarantined_rows=int(only_value(quality("Quarantined rows (latest run)"), "quarantined_rows")),
+            flagged_articles=int(only_value(quality("Rows with at least one soft flag"), "flagged_articles")),
+        )
+        return f"{rows} rows = {rules_per_run} rules x {runs} runs; latest run has {rules_per_run} rules"
 
-    check("Known headline values", headline)
+    check("Invariant: DQ rows = rules per run x runs", data_quality)
+
+    def layer_status():
+        rows = pipeline("Lake tables")
+        assert len(rows) == LAKE_TABLES, f"{len(rows)} layer_status rows, expected {LAKE_TABLES}"
+        negative = [row for row in rows if row["row_count"] is None or row["row_count"] < 0]
+        assert not negative, f"invalid row counts: {negative}"
+        observed.update(lake_table_rows={
+            f"{row['layer']}/{row['table_name']}": int(row["row_count"]) for row in rows
+        })
+        return f"{len(rows)} tables, all row counts >= 0"
+
+    check("Invariant: layer_status", layer_status)
+
+    def publish_log():
+        successes = int(only_value(
+            extra_query(
+                "SELECT COUNT(*) AS successes FROM ops.publish_log WHERE status = 'success'"
+            ),
+            "successes",
+        ))
+        assert successes >= 1, "ops.publish_log has no success row"
+        assert only_value(pipeline("Last successful publish"), "last_successful_publish") is not None
+        latest = only_value(pipeline("Last publish status"), "status")
+        assert latest == "success", f"latest publish status is {latest}"
+        history = pipeline("Publish history")
+        assert history[0]["status"] == latest, "publish history disagrees with the status stat"
+        observed.update(last_publish_status=latest)
+        return f"{successes} success rows; latest {latest}"
+
+    check("Invariant: publish log", publish_log)
+
+    def journal_freshness():
+        rows = pipeline("Journal freshness")
+        with_articles = [row for row in rows if row["articles_in_lake"] > 0]
+        stat = int(only_value(corpus("Journals"), "journals"))
+        assert len(with_articles) == stat, (
+            f"{len(with_articles)} journals with articles != Journals stat {stat}"
+        )
+        days = [row["days_since_newest"] for row in rows]
+        assert all(day is None or day >= 0 for day in days), f"negative ages: {days}"
+        known = [day for day in days if day is not None]
+        assert days[: len(days) - len(known)] == [None] * (len(days) - len(known)), (
+            "journals without articles are not listed first"
+        )
+        assert known == sorted(known, reverse=True), "not sorted stalest first"
+        observed.update(freshness_journals=len(rows))
+        return f"{len(rows)} current journals; stalest {known[0] if known else 'n/a'} days"
+
+    check("Invariant: journal freshness", journal_freshness)
 
     def scraper_health():
-        pipeline = lambda title: results[("pl-pipeline-health", title)]
-        finished = only_value(pipeline("Last scrape finished"), "last_scrape_finished")
+        finished =only_value(pipeline("Last scrape finished"), "last_scrape_finished")
         assert finished is not None, "ops.scrape_runs has no finished run"
         status = pipeline("Last run status")
         assert len(status) == 1, f"expected one last run, got {len(status)}"
@@ -330,16 +515,25 @@ def main() -> int:
         assert journals == manifest_journals, (
             f"ops.scrape_journals has {journals} rows, manifest has {manifest_journals}"
         )
-        attention = pipeline("Journals needing attention")
-        assert len(attention) <= journals, "more journals need attention than exist"
         return (
             f"last run {status[0]['status']} (exit {status[0]['ingest_exit_code']}); "
             f"{len(runs)} recent runs; scrape_status matches manifest "
             f"({sum(counts.values())} rows); {journals} journal rows = manifest "
-            f"{manifest_journals}; {len(attention)} need attention"
+            f"{manifest_journals}"
         )
 
     check("Scraper health", scraper_health)
+    print(f"INFO observed values: {json.dumps(observed, sort_keys=True)}")
+
+    if args.baseline is not None:
+
+        def baseline():
+            expected = load_baseline(args.baseline)
+            problems = baseline_mismatches(expected, observed)
+            assert not problems, "; ".join(problems)
+            return f"{len(expected)} values match {args.baseline.name}"
+
+        check("Baseline values", baseline)
 
     def anonymous_refused():
         status, _ = api.request("GET", "/api/search", authenticate=False)

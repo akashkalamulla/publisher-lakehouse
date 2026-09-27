@@ -89,7 +89,15 @@
         "defaults": {},
         "overrides": []
       },
-      "options": {}
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^scholarly_articles$/",
+          "values": false
+        }
+      }
     },
     {
       "id": 2,
@@ -121,7 +129,15 @@
         "defaults": {},
         "overrides": []
       },
-      "options": {}
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^journals$/",
+          "values": false
+        }
+      }
     },
     {
       "id": 3,
@@ -153,7 +169,15 @@
         "defaults": {},
         "overrides": []
       },
-      "options": {}
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^authors$/",
+          "values": false
+        }
+      }
     },
     {
       "id": 4,
@@ -192,7 +216,7 @@
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "",
+          "fields": "/^cc_share$/",
           "values": false
         },
         "orientation": "auto"
@@ -312,7 +336,15 @@
         "defaults": {},
         "overrides": []
       },
-      "options": {}
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^unknown_publication_month$/",
+          "values": false
+        }
+      }
     },
     {
       "id": 8,

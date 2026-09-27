@@ -78,11 +78,25 @@
       ],
       "fieldConfig": {
         "defaults": {
-          "unit": "dateTimeFromNow"
+          "unit": "dateTimeFromNow",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "text"
+          }
         },
         "overrides": []
       },
-      "options": {}
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^last_successful_publish$/",
+          "values": false
+        },
+        "textMode": "value",
+        "colorMode": "value"
+      }
     },
     {
       "id": 3,
@@ -130,7 +144,17 @@
         },
         "overrides": []
       },
-      "options": {}
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^status$/",
+          "values": false
+        },
+        "textMode": "value",
+        "colorMode": "value"
+      }
     },
     {
       "id": 4,
@@ -375,10 +399,11 @@
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "/.*/",
+          "fields": "/^(Status|Ingest exit code)$/",
           "values": false
         },
-        "textMode": "value_and_name"
+        "textMode": "value_and_name",
+        "colorMode": "value"
       }
     },
     {
@@ -605,8 +630,8 @@
     {
       "id": 11,
       "type": "table",
-      "title": "Journals needing attention",
-      "description": "Which journal pages are not ok or unseen for seven days, oldest first? The table is empty when none are.",
+      "title": "Journal freshness",
+      "description": "When was each current journal's newest article first seen in the lake, with its latest issue and article count, stalest first?",
       "datasource": {
         "type": "grafana-postgresql-datasource",
         "uid": "warehouse"
@@ -624,13 +649,100 @@
             "uid": "warehouse"
           },
           "refId": "A",
-          "rawSql": "SELECT publisher,\n       journal_url,\n       status,\n       last_seen_at,\n       ROUND((EXTRACT(EPOCH FROM now() - last_seen_at) / 86400)::numeric, 1) AS days_since_seen,\n       last_changed_at,\n       last_http_status,\n       fetch_count,\n       last_run_id\nFROM ops.scrape_journals\nWHERE status <> 'ok'\n   OR last_seen_at < now() - interval '7 days'\nORDER BY last_seen_at ASC NULLS FIRST, journal_url",
+          "rawSql": "SELECT jc.journal_title AS journal,\n       concat_ws(' / ', li.volume, NULLIF(li.issue, '')) AS latest_issue,\n       COALESCE(a.articles, 0) AS articles_in_lake,\n       to_char(a.newest_first_seen, 'YYYY-MM-DD') AS newest_first_seen,\n       (now() AT TIME ZONE 'UTC')::date - a.newest_first_seen AS days_since_newest\nFROM serving.dim_journal jc\nLEFT JOIN (\n  SELECT j.publisher,\n         j.journal_url,\n         COUNT(*) AS articles,\n         MAX(d.date) AS newest_first_seen\n  FROM serving.fact_article f\n  JOIN serving.dim_journal j ON j.journal_sk = f.journal_sk\n  LEFT JOIN serving.dim_date d ON d.date_sk = f.first_seen_date_sk\n  WHERE f.journal_sk <> -1\n  GROUP BY j.publisher, j.journal_url\n) a ON a.publisher = jc.publisher\n   AND a.journal_url = jc.journal_url\nLEFT JOIN (\n  SELECT DISTINCT ON (i.publisher, i.journal_url)\n         i.publisher,\n         i.journal_url,\n         i.volume,\n         i.issue\n  FROM serving.dim_issue i\n  WHERE i.issue_sk <> -1\n  ORDER BY i.publisher, i.journal_url,\n           i.issue_pub_month_start DESC NULLS LAST,\n           i.volume_num DESC NULLS LAST,\n           i.issue_num DESC NULLS LAST,\n           i.issue_url DESC\n) li ON li.publisher = jc.publisher\n    AND li.journal_url = jc.journal_url\nWHERE jc.is_current\n  AND jc.journal_sk <> -1\nORDER BY days_since_newest DESC NULLS FIRST, jc.journal_title",
           "format": "table"
         }
       ],
       "fieldConfig": {
         "defaults": {},
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "journal"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Journal"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "latest_issue"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Latest issue (volume / issue)"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "articles_in_lake"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Articles in lake"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "newest_first_seen"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Newest article first seen (UTC date)"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "days_since_newest"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Days since newest"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "orange",
+                      "value": 45
+                    },
+                    {
+                      "color": "red",
+                      "value": 91
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              }
+            ]
+          }
+        ]
       },
       "options": {}
     }

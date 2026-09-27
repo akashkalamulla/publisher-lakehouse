@@ -29,9 +29,13 @@ class LandingCounters:
     bytes_uploaded: int = 0
     jsonl_keys: tuple[str, ...] = ()
     html_count: int = 0
+    empty_skipped: int = 0
 
     def assert_balanced(self) -> None:
-        if self.uploaded + self.unchanged + self.replaced != self.files_seen:
+        if (
+            self.uploaded + self.unchanged + self.replaced + self.empty_skipped
+            != self.files_seen
+        ):
             raise RuntimeError("Landing counters do not balance")
 
 
@@ -100,13 +104,23 @@ def sync_publisher(
     bronze_dir: str | Path,
     raw_html_dir: str | Path,
 ) -> LandingCounters:
-    """Upload new and changed files, verifying each single PUT with MD5."""
+    """Upload new and changed files, verifying each single PUT with MD5.
+
+    A 0-byte file is not new data: the bronze writer opens a run part before
+    it knows whether the run will write any records.  Such files are counted
+    in ``empty_skipped`` and never uploaded, so they cannot trigger a marker.
+    Objects landed empty before this rule stay in place; bronze reads them as
+    empty.
+    """
 
     planned = plan_uploads(publisher, bronze_dir, raw_html_dir)
-    uploaded = unchanged = replaced = bytes_uploaded = html_count = 0
+    uploaded = unchanged = replaced = bytes_uploaded = html_count = empty_skipped = 0
     jsonl_keys: list[str] = []
     for path, key in planned:
         size = path.stat().st_size
+        if size == 0:
+            empty_skipped += 1
+            continue
         if size > MAX_SINGLE_PUT_BYTES:
             raise ValueError(f"File exceeds 100 MB single-upload limit: {path}")
 
@@ -153,6 +167,7 @@ def sync_publisher(
         bytes_uploaded=bytes_uploaded,
         jsonl_keys=tuple(jsonl_keys),
         html_count=html_count,
+        empty_skipped=empty_skipped,
     )
     counters.assert_balanced()
     return counters

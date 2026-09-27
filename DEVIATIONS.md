@@ -3,6 +3,78 @@
 This file is cumulative and will be updated at each implementation review
 gate.
 
+## Gate 11c — v1.0 hardening
+
+This gate closes the Gate 11b concerns listed at the end of the next section.
+
+- **Empty files are not new data.** The frozen `BronzeWriter` still opens a
+  0-byte `part-<run>.jsonl` for a run that writes no records. `lake land` now
+  skips every 0-byte local file: it neither uploads it nor counts it as
+  uploaded or replaced. It counts it in `empty_skipped`, shown in the summary
+  line, and the counters balance as `uploaded + unchanged + replaced +
+  empty_skipped = files_seen`. The marker rule is unchanged: a marker is
+  written only when `uploaded + replaced > 0`. A part that later gains records
+  is uploaded normally. The one object landed empty before this rule
+  (`part-20260927171938.jsonl`) stays in place; bronze reads it as empty.
+- **Dry runs record no run.** With `PL_PRODUCER_DRY_RUN=1` the producer pushes
+  without `--run-log`, so only the manifest snapshot refreshes. The two
+  earlier dry-run rows were deleted once from `ops.scrape_runs`.
+- **Every stat panel selects its field.** Each stat sets
+  `options.reduceOptions.fields`. Grafana matches that regex against the
+  *display* name, so "Last run status", whose fields are renamed by overrides,
+  selects `/^(Status|Ingest exit code)$/`. Selecting the raw column names made
+  it render "No data" in the headless check. "Last successful publish" also
+  gets the fixed text colour that "Last scrape finished" uses; otherwise the
+  default thresholds colour an epoch timestamp red.
+- **`check_grafana.py` asserts invariants, not pinned numbers.** The checks
+  cover: publication months plus the unknown month equal the scholarly total;
+  the Journals stat equals the charted journals; the CC share and every
+  per-journal share agree with summed counts within 0.005 and lie in [0, 1];
+  the top weighted author is at most the scholarly total and positive; DQ
+  rows equal rules per run times runs; `layer_status` has 11 rows with
+  non-negative counts; the latest publish succeeded. The per-journal panel
+  returns only rounded shares, so the CC check runs one extra counts query
+  that copies that panel's `FROM` and `WHERE`. Beyond the brief, the DQ check
+  also requires the latest run's rules to equal `DQ_RULES` in
+  `transform/schemas.py`, and a freshness check requires the journals with
+  articles to equal the Journals stat, sorted stalest first. `--baseline FILE`
+  optionally pins exact values; the check prints the observed values as one
+  JSON line to copy into such a file. The script now writes non-encodable
+  characters as escapes: redirected output on Windows is cp1252.
+- **Journal freshness replaces "Journals needing attention".** That panel read
+  `ops.scrape_journals`, which can never have rows while the manifest records
+  only article rows. The replacement reads only `serving.*`, one row per
+  current journal. Gold keeps an article's first-seen *date*
+  (`first_seen_date_sk`), not its timestamp, so the panel shows the newest
+  first-seen UTC date and whole days since then. The latest issue is the
+  journal's `dim_issue` row with the latest issue month, then the highest
+  volume and issue numbers. The thresholds are green below 45, amber
+  (`orange`) from 45 and red from 91, which is "above 90" in whole days.
+  `ops.scrape_journals` and its push are unchanged.
+- **Maintenance compacts and never vacuums by default.** `OPTIMIZE` runs when
+  a table has more than one file averaging under 32 MB. Each table is
+  measured at a pinned version, and an order-independent SHA-256 over every
+  row's JSON must match before and after. `VACUUM` runs only with
+  `--vacuum-hours` of at least 168, and Delta's retention check is never
+  touched. The job gets only the four S3 variables, not the warehouse
+  credentials, and runs with `retries=0` so a failed verification is looked
+  at rather than repeated. The schedule is a `CronTriggerTimetable` in
+  `Asia/Colombo`, the host's zone.
+- **Unpausing the maintenance DAG runs the latest missed slot.** With
+  `catchup=False`, Airflow 3 schedules the most recent past Sunday 03:00 when
+  the DAG is first unpaused. It did so here after the two manual runs,
+  skipped all 11 tables, and created no versions. The DAG was left unpaused.
+
+Found at this gate and left unchanged because they are outside its write set:
+
+- "CC-licensed share by journal (scholarly)" is a bar gauge that reduces the
+  whole result to one value (`reduceOptions.values` is false), so it draws a
+  single bar with the last journal's share (currently 0%). Its query and the
+  new check are correct. The fix is one option on a non-stat panel.
+- Stat panels without their own thresholds use Grafana's default red at 80,
+  so counts such as "Scholarly articles 204" render red.
+- Spark's console progress bars fill the Airflow task logs of every job.
+
 ## Gate 11b — producer, scraper health
 
 - The scraper stays on Windows Task Scheduler, not Airflow, for the reason in
